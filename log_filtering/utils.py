@@ -1,14 +1,14 @@
 import json
 import traceback
+
 from pm4py.algo.discovery.dfg import factory as dfg_factory
+from pm4py.algo.filtering.log.attributes import attributes_filter
 from pm4py.objects.conversion.log import factory as conversion_factory
 from pm4py.objects.log.exporter.xes import factory as xes_exporter
 from pm4py.objects.log.importer.csv import factory as csv_importer
 from pm4py.objects.log.importer.xes import factory as xes_import_factory
-from pm4py.visualization.dfg import factory as dfg_vis_factory
-from pm4py.algo.filtering.log.attributes import attributes_filter
 from pm4py.util import constants
-import os
+from pm4py.visualization.dfg import factory as dfg_vis_factory
 
 
 def import_csv(file):
@@ -47,7 +47,7 @@ def add_classifier(log):
             if 'timestamp' in k.lower() or ('time:timestamp' in k.lower()):
                 timestamp = k
 
-	# there is no candidates
+    # there is no candidates
     if (activity is None) or (timestamp is None):
         print("activity and/or timestamp cannot be found in the given log")
         return None
@@ -91,9 +91,9 @@ def clean_lifecycle_events(log):
         if 'lifecycle:transition' in log[0][0].keys():
             if len(set([e['lifecycle:transition'] for e in log[0]])) > 1:
                 log = attributes_filter.apply_events(log, ["start"],
-                                                  parameters={constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY:
-                                                              "lifecycle:transition",
-                                                              "positive": True})
+                                                     parameters={constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY:
+                                                                     "lifecycle:transition",
+                                                                 "positive": True})
     except Exception as e:
         print('An exception occured during cleaning of lifecycle events')
         print(e)
@@ -206,10 +206,10 @@ def export_process_model(dfgModel, log, filename):
     # dfg = dfg_factory.apply(log, variant="performance")
     parameters = {"format": "svg"}
     gviz = dfg_vis_factory.apply(
-                                dfgModel, log=log,
-                                variant="frequency",
-                                parameters=parameters
-                                )
+        dfgModel, log=log,
+        variant="frequency",
+        parameters=parameters
+    )
     dfg_vis_factory.save(gviz, filename)
 
 

@@ -1,23 +1,17 @@
-import shutil
-
-from django.shortcuts import render
-from django.conf import settings
+import json
 import os
-from os import path
-from datetime import datetime
-from django.http import HttpResponseRedirect, HttpResponse
-from wsgiref.util import FileWrapper
-from pm4py.algo.discovery.alpha import algorithm as alpha_miner
-from pm4py.objects.log.importer.xes import importer
+import re
+
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from pm4py.algo.discovery.dfg import algorithm as dfg_discovery
 from pm4py.algo.discovery.dfg import factory as dfg_factory
-import json
-import re
+from pm4py.objects.log.importer.xes import importer
+
 import log_filtering.abstraction_support_functions as asf
-import log_filtering.utils as utils
 import log_filtering.transformation as trans
-
-
+import log_filtering.utils as utils
 
 
 # Create your views here.
@@ -28,7 +22,7 @@ def filter(request):
     log = importer.apply(event_log)
 
     dfg = dfg_factory.apply(log)
-    this_data,temp_file = dfg_to_g6(dfg)
+    this_data, temp_file = dfg_to_g6(dfg)
     temp_path = os.path.join(settings.MEDIA_ROOT, "temp")
 
     if request.method == 'POST':
@@ -39,7 +33,7 @@ def filter(request):
         if settings.EVENT_LOG_NAME == ':notset:':
             return HttpResponseRedirect(request.path_info)
 
-        return render(request,'filter.html', {'log_name': settings.EVENT_LOG_NAME, 'data':this_data})
+        return render(request, 'filter.html', {'log_name': settings.EVENT_LOG_NAME, 'data': this_data})
 
     else:
         if "groupButton" in request.GET:
@@ -67,7 +61,6 @@ def filter(request):
                 #     print("label = ", nodes['label'])
             print(pattern)
 
-
             pattern_list = [{'ID': 0, 'Name': groupname, 'Pattern': pattern}]
             print(pattern_list)
             log = utils.import_log_XES(event_log)
@@ -75,18 +68,18 @@ def filter(request):
 
             abstracted_traces, abstracted_timestamps = \
                 asf.perform_abstractions(
-                                [0], pattern_list,
-                                concatenated_traces,
-                                concatenated_timestamps
-                                )
+                    [0], pattern_list,
+                    concatenated_traces,
+                    concatenated_timestamps
+                )
             print("absracted pattern = ", abstracted_traces)
 
             log_content = trans.generate_transformed_log_XES(
-                                                event_log,
-                                                abstracted_traces,
-                                                abstracted_timestamps,
-                                                event_log[:-4] + "_header.XES"
-                                                )
+                event_log,
+                abstracted_traces,
+                abstracted_timestamps,
+                event_log[:-4] + "_header.XES"
+            )
 
             print("log_content = ", log_content)
 
@@ -99,7 +92,7 @@ def filter(request):
             dfg = dfg_factory.apply(log)
             this_data, temp_file = dfg_to_g6(dfg)
 
-            return render(request,'filter.html', {'log_name': settings.EVENT_LOG_NAME, 'data':this_data})
+            return render(request, 'filter.html', {'log_name': settings.EVENT_LOG_NAME, 'data': this_data})
 
 
         else:
@@ -116,12 +109,14 @@ def filter(request):
             log = importer.apply(event_log)
             dfg = dfg_factory.apply(log)
             print(dfg)
-            this_data,temp_file = dfg_to_g6(dfg)
+            this_data, temp_file = dfg_to_g6(dfg)
 
             re.escape(temp_file)
             network = {}
 
-            return render(request,'filter.html', {'log_name': settings.EVENT_LOG_NAME, 'json_file': temp_file, 'data':json.dumps(this_data)})
+            return render(request, 'filter.html',
+                          {'log_name': settings.EVENT_LOG_NAME, 'json_file': temp_file, 'data': json.dumps(this_data)})
+
 
 def dfg_to_g6(dfg):
     unique_nodes = []

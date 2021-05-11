@@ -13,19 +13,16 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
-from django.urls import path
-from django.contrib import admin
-from blog_app import views
-from django.contrib import admin
-from django.urls import path, include
 from django.conf.urls.static import static
+from django.urls import path, include
+
+from blog_app import views
 from bootstrapdjango import settings
 
 urlpatterns = [
-    path('',views.home, name= 'home'),
-    #url(r'^rolemining/', include(role_mining.urls))
+    path('', views.home, name='home'),
+    # url(r'^rolemining/', include(role_mining.urls))
     path('upload/', include('upload_eventlog.urls')),
     path('filter', include('log_filtering.urls')),
 ]
-urlpatterns = urlpatterns + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
+urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,8 +1,5 @@
-import json
 import argparse
-import os
-import sys
-import log_filtering.utils as utils
+import json
 
 
 def print_traces_stamps(traces, stamps, message):
@@ -90,11 +87,11 @@ def check_pattern(patterns, pattern_dic):
 
 
 def perform_abstraction(
-                    pattern,
-                    abstraction,
-                    con_traces,
-                    con_timestamps,
-                    start=0
+        pattern,
+        abstraction,
+        con_traces,
+        con_timestamps,
+        start=0
 ):
     """
     desc    the pattern in traces are abstracted
@@ -126,36 +123,36 @@ def perform_abstraction(
     # print(con_traces[idx:idx+len(pattern)], pattern, idx )
 
     # if found in the pattern, it replaced with the abstraction
-    if con_traces[idx:idx+len(pattern)] == pattern:
+    if con_traces[idx:idx + len(pattern)] == pattern:
 
         # the first timestamp of the activities will represent the group
         group_time = [
             con_timestamps[idx],
-            con_timestamps[idx+len(pattern)-1]
+            con_timestamps[idx + len(pattern) - 1]
         ]
-        del con_traces[idx:idx+len(pattern)]
-        del con_timestamps[idx:idx+len(pattern)]
+        del con_traces[idx:idx + len(pattern)]
+        del con_timestamps[idx:idx + len(pattern)]
         con_traces.insert(idx, abstraction)
         con_timestamps.insert(idx, group_time)
 
         # then recursive call for further abstraction
         con_traces, con_timestamps = perform_abstraction(
-                                        pattern,
-                                        abstraction,
-                                        con_traces,
-                                        con_timestamps,
-                                        start=0
-                                    )
+            pattern,
+            abstraction,
+            con_traces,
+            con_timestamps,
+            start=0
+        )
 
     # if pattern is not matched, to further search (start position = idx + 1)
     else:
         con_traces, con_timestamps = perform_abstraction(
-                                        pattern,
-                                        abstraction,
-                                        con_traces,
-                                        con_timestamps,
-                                        start=idx+1
-                                    )
+            pattern,
+            abstraction,
+            con_traces,
+            con_timestamps,
+            start=idx + 1
+        )
 
     return con_traces, con_timestamps
 

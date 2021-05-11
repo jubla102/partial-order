@@ -1,23 +1,23 @@
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
-from pm4py.objects.log.importer.xes import factory as xes_importer_factory
-from django.conf import settings
+import json
 import os
 from os import listdir
 from os.path import isfile, join
-from django.http import HttpResponse
-from mimetypes import guess_type
 from wsgiref.util import FileWrapper
-import json
+
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from pm4py.objects.log.importer.xes import factory as xes_importer_factory
 
 
 # Create your views here.
 
 def upload_page(request):
     log_attributes = {}
-    event_logs_path = os.path.join(settings.MEDIA_ROOT,"event_logs")
-    n_event_logs_path = os.path.join(settings.MEDIA_ROOT,"none_event_logs")
+    event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
+    n_event_logs_path = os.path.join(settings.MEDIA_ROOT, "none_event_logs")
 
     if request.method == 'POST':
         if request.is_ajax():  # currently is not being used (get commented in html file)
@@ -32,8 +32,8 @@ def upload_page(request):
             log_attributes['no_traces'] = no_traces
             log_attributes['no_events'] = no_events
             print(log_attributes)
-            json_respone = {'log_attributes': log_attributes, 'eventlog_list':eventlogs}
-            return HttpResponse(json.dumps(json_respone),content_type='application/json')
+            json_respone = {'log_attributes': log_attributes, 'eventlog_list': eventlogs}
+            return HttpResponse(json.dumps(json_respone), content_type='application/json')
             # return render(request, 'upload.html', {'log_attributes': log_attributes, 'eventlog_list':eventlogs})
         else:
             if "uploadButton" in request.POST:
@@ -56,9 +56,9 @@ def upload_page(request):
                 # log_attributes['no_traces'] = no_traces
                 # log_attributes['no_events'] = no_events
 
-                return render(request, 'upload.html', {'eventlog_list':eventlogs})
+                return render(request, 'upload.html', {'eventlog_list': eventlogs})
 
-            elif "deleteButton" in request.POST: #for event logs
+            elif "deleteButton" in request.POST:  # for event logs
                 if "log_list" not in request.POST:
                     return HttpResponseRedirect(request.path_info)
 
@@ -72,10 +72,10 @@ def upload_page(request):
                 eventlogs.remove(filename)
                 file_dir = os.path.join(event_logs_path, filename)
                 os.remove(file_dir)
-                return render(request, 'upload.html',{'eventlog_list': eventlogs, 'n_eventlog_list': n_eventlogs})
+                return render(request, 'upload.html', {'eventlog_list': eventlogs, 'n_eventlog_list': n_eventlogs})
 
 
-            elif "n_deleteButton" in request.POST: #for none event logs
+            elif "n_deleteButton" in request.POST:  # for none event logs
                 if "n_log_list" not in request.POST:
                     return HttpResponseRedirect(request.path_info)
 
@@ -106,9 +106,10 @@ def upload_page(request):
 
                 eventlogs = [f for f in listdir(event_logs_path) if isfile(join(event_logs_path, f))]
 
-                return render(request, 'upload.html',{'eventlog_list': eventlogs, 'log_name':filename, 'log_attributes':log_attributes})
+                return render(request, 'upload.html',
+                              {'eventlog_list': eventlogs, 'log_name': filename, 'log_attributes': log_attributes})
 
-            elif "downloadButton" in request.POST: #for event logs
+            elif "downloadButton" in request.POST:  # for event logs
                 if "log_list" not in request.POST:
                     return HttpResponseRedirect(request.path_info)
 
@@ -123,7 +124,7 @@ def upload_page(request):
                 except Exception as e:
                     return None
 
-            elif "n_downloadButton" in request.POST: #for none event logs
+            elif "n_downloadButton" in request.POST:  # for none event logs
                 if "n_log_list" not in request.POST:
                     return HttpResponseRedirect(request.path_info)
 
@@ -149,7 +150,6 @@ def upload_page(request):
         eventlogs = [f for f in listdir(event_logs_path) if isfile(join(event_logs_path, f))]
         n_eventlogs = [f for f in listdir(n_event_logs_path) if isfile(join(n_event_logs_path, f))]
 
-        return render(request, 'upload.html', {'eventlog_list':eventlogs, 'n_eventlog_list': n_eventlogs})
+        return render(request, 'upload.html', {'eventlog_list': eventlogs, 'n_eventlog_list': n_eventlogs})
 
-        #return render(request, 'upload.html')
-
+        # return render(request, 'upload.html')
