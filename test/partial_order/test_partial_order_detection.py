@@ -22,7 +22,3 @@ class TestPartialOrderDetection(unittest.TestCase):
         number_of_partial_orders = len(partial_order_detection.get_partial_orders_from_event_log(event_log))
 
         self.assertEqual(expected_size, number_of_partial_orders)
-
-
-if __name__ == '__main__':
-    unittest.main()
