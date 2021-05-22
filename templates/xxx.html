@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <style>
+
+            .link {
+                stroke: #000;
+                stroke-width: 1.5px;
+            }
+
+            .node {
+                cursor: move;
+                fill: #ccc;
+                stroke: #000;
+                stroke-width: 1.5px;
+            }
+
+            .node.fixed {
+                fill: #f00;
+            }
+
+            #mynetwork {
+                width: 800px;
+                height: 800px;
+                background-color: #ffffff;
+                border: 1px solid lightgray;
+                position: relative;
+                float: left;
+                overflow: auto;
+            }
+
+
+            .canvas {
+                width: 800px;
+                height: 800px;
+            }
+        </style>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.css" type="text/css"/>
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script type='text/javascript' src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <script type='text/javascript' src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <link rel="stylesheet" href="../static/css/timepicker.css">
+        <script type='text/javascript' src="../static/js/timepicker.js"></script>
+
+
+    </head>
+    <body>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="po_groups_tab" data-toggle="tab" href="#po_groups" role="tab"
+               aria-controls="po_groups" aria-selected="true">Partial Order Groups</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="po_combinations_tab" data-toggle="tab" href="#po_combinations" role="tab"
+               aria-controls="po_combinations" aria-selected="false">Combinations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="po_delays_tab" data-toggle="tab" href="#po_delays" role="tab"
+               aria-controls="po_delays" aria-selected="false">Add Delays</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="po_final_tab" data-toggle="tab" href="#po_final" role="tab"
+               aria-controls="po_final" aria-selected="false">Final Order</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="po_groups" role="tabpanel" aria-labelledby="po_groups_tab">
+
+            <div class="container-fluid">
+                <h4 class="mt-4" style="color:#0f0f0f;">Please select a Partial Order Group</h4>
+                <h6 class="mt-4" style="color:#00529F;">All possible combinations of the selected group will be
+                    displayed in the <i>'Combinations'</i> tab.</h6>
+
+                <form name="p-o-p" action="p-o-p" method="POST">
+
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-7 col-lg-8">
+                            {% if log_name != ':notset:' %}
+                                <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
+                            {% else %}
+                                <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
+                                    to set
+                                    an event log as input!</p>
+                            {% endif %}
+
+                            {% csrf_token %}
+
+                        </div>
+                    </div>
+                    <br>
+
+
+                </form>
+
+                <form action="" method="get">
+                    {% csrf_token %}
+                    <div id="mynetwork"></div>
+                    <p>Use ctrl+click to select multiple nodes to group!</p>
+                    <!--<label for="new_name">Group name: </label>
+                    <input id="new_name" type="text" name="new_name" value="{{ current_name }}"> -->
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="po_combinations" role="tabpanel" aria-labelledby="po_combinations_tab">
+
+            <div class="container-fluid">
+                <h4 class="mt-4" style="color:#0f0f0f;">Please select a combination</h4>
+                <h6 class="mt-4" style="color:#00529F;">You can modify the combination by adding delays in the
+                    <i>'Add Delays'</i> tab. </h6>
+
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="po_delays" role="tabpanel" aria-labelledby="po_delays_tab">
+
+            <div class="container-fluid">
+                <h4 class="mt-4" style="color:#0f0f0f;">Add Delays to the Combination</h4>
+                <h6 class="mt-4" style="color:#00529F;">Please add delays using the scroll bar. The final combination
+                    will be displayed in the <i>'Final Order'</i> tab. </h6>
+                <!--<input id="flatpickr" value="Select date and time...">-->
+
+            </div>
+
+            <div class="container-fluid" id="xxx">
+                <input type="text">
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="po_final" role="tabpanel" aria-labelledby="po_final_tab">
+
+            <div class="container-fluid">
+                <h4 class="mt-4" style="color:#0f0f0f;">Final Order</h4>
+                <h6 class="mt-4" style="color:#00529F;">This is the final order</h6>
+                <h6 class="mt-4" style="color:#00529F;"><i>'Save'</i> will add the combination to the original log.</h6>
+                <h6 class="mt-4" style="color:#00529F;"><i>'Discard'</i> will delete the combination. You can redo the
+                    process by either selecting a new group or a new combination.</h6>
+                <input type="submit" class="btn btn-success" name="groupButton" value="Save" id='save_po'
+                       onclick="saved()"/>
+                <input type="submit" class="btn btn-danger" name="groupButton" value="Discard" id='discard_po'
+                       onclick="discarded()"/>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+<script type="text/javascript">
+
+    var data = "{{data | escapejs}}";
+    data = JSON.parse(data);
+
+
+    const options = {
+        layout: {randomSeed: 2},
+        interaction: {
+            hover: true,
+            dragNodes: false,
+            multiselect: true,
+            selectable: true,
+        },
+        edges: {
+            arrows: {
+                to: {enabled: true, scaleFactor: 1, type: 'arrow'},
+                from: {enabled: false, scaleFactor: 1, type: 'arrow'},
+                length: 1000
+            }
+        },
+        manipulation: {
+            enabled: true
+        }
+    };
+
+    // Everything is in there
+    const makeMeMultiSelect = (container, network, nodes) => {
+        const NO_CLICK = 0;
+        const RIGHT_CLICK = 3;
+
+        // Disable default right-click dropdown menu
+        container[0].oncontextmenu = () => false;
+
+        // State
+
+        let drag = false, DOMRect = {};
+
+        // Selector
+
+        const canvasify = (DOMx, DOMy) => {
+            const {x, y} = network.DOMtoCanvas({x: DOMx, y: DOMy});
+            return [x, y];
+        };
+
+        const correctRange = (start, end) =>
+            start < end ? [start, end] : [end, start];
+
+        const selectFromDOMRect = () => {
+            const [sX, sY] = canvasify(DOMRect.startX, DOMRect.startY);
+            const [eX, eY] = canvasify(DOMRect.endX, DOMRect.endY);
+            const [startX, endX] = correctRange(sX, eX);
+            const [startY, endY] = correctRange(sY, eY);
+
+            network.selectNodes(nodes.get().reduce(
+                (selected, {id}) => {
+                    const {x, y} = network.getPositions(id)[id];
+                    return (startX <= x && x <= endX && startY <= y && y <= endY) ?
+                        selected.concat(id) : selected;
+                }, []
+            ));
+        }
+        // Listeners
+
+        var mySelectionOrder = [];
+        var previouslySelected = {};
+        network.on('click', function (properties) {
+
+            selection = properties.nodes
+            document.getElementById('values').value = selection;
+
+            drag = false;
+
+            if (selection > 0) {
+                var node_sel = nodes.get([selection])[0];
+                if (node_sel['selected']) {
+                    alert('add you buttons');
+                } else {
+                    alert('change the style here');
+                    node_sel['selected'] = true;
+                    node_sel['shape'] = 'box';
+                    nodes.update(node_sel);
+                    var msg = JSON.stringify(nodes.get([selection]))
+                    alert(msg);
+                }
+            }
+        });
+
+        network.on("deselectNode", function (params) {
+            console.log('deselectNode Event:', params.nodes[0]);
+        });
+
+
+        // Drawer
+
+        network.on('afterDrawing', ctx => {
+            if (drag) {
+                const [startX, startY] = canvasify(DOMRect.startX, DOMRect.startY);
+                const [endX, endY] = canvasify(DOMRect.endX, DOMRect.endY);
+
+                ctx.setLineDash([5]);
+                ctx.strokeStyle = 'rgba(78, 146, 237, 0.75)';
+                ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+                ctx.setLineDash([]);
+                ctx.fillStyle = 'rgba(151, 194, 252, 0.45)';
+                ctx.fillRect(startX, startY, endX - startX, endY - startY);
+            }
+        });
+    }; // end makeMeMultiSelect
+
+    $(document).ready(() => {
+        const container = $("#mynetwork");
+        const network = new vis.Network(container[0], data, options);
+        makeMeMultiSelect(container, network, data.nodes);
+    });
+
+    //dont need this for our code
+    function getSelectedNodes() {
+        alert(selection);
+        document.getElementById('values').value = selection;
+        return selection;
+
+    }
+
+    //SECTION: Partial Order Groups
+
+    //############################################################################################################
+    //SECTION: Combinations
+
+
+    //############################################################################################################
+    //SECTION: Add Delays
+
+    var example1 = flatpickr('#flatpickr', {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i:s",
+        enableSeconds: true,
+    });
+
+    $('input').timepicker();
+
+
+    //############################################################################################################
+    //SECTION: Final Order
+
+    //confirm message for saved or discarded orders in 'final order' tab
+    //todo: add what happens (backend) after you click 'OK' and 'CANCEL'
+    function saved() {
+        if (confirm("The order will be saved and added to the original log"))
+            alert("The order was saved");
+        else
+            ;
+    }
+
+    function discarded() {
+        if (confirm("Doing this will discard all the changes and delete modifications so far, do you wish to proceed?"))
+            alert("The order was discarded");
+        else
+            ;
+    }
+
+    //############################################################################################################
+
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
