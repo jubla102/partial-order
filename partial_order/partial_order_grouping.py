@@ -4,6 +4,10 @@ from pm4py.util.constants import CASE_CONCEPT_NAME
 
 from partial_order_detection import get_partial_orders_from_selected_file as get_partial_orders
 
+CONCEPT_INDEX = 'concept:index'
+CONCEPT_NAME = 'concept:name'
+LIFECYCLE_TRANSITION = 'lifecycle:transition'
+
 
 def get_partial_order_dataframes():
     partial_order_log = get_partial_orders()
@@ -40,13 +44,13 @@ def get_partial_order_dataframes():
 
         partial_order_dataframes[i].index = ind_list
         partial_order_dataframes[i].reset_index(inplace=True)
-        partial_order_dataframes[i] = partial_order_dataframes[i].rename(columns={'index': 'concept:index'})
-        partial_order_dataframes[i].astype({'concept:index': 'int64'}).dtypes
+        partial_order_dataframes[i] = partial_order_dataframes[i].rename(columns={'index': CONCEPT_INDEX})
+        partial_order_dataframes[i].astype({CONCEPT_INDEX: 'int64'}).dtypes
 
         for i in range(0, len(partial_order_dataframes)):
-            partial_order_dataframes[i] = partial_order_dataframes[i].sort_values(['concept:index'], ascending=True) \
-                .groupby(['concept:index'], sort=False) \
-                .apply(lambda x: x.sort_values(['concept:name'], ascending=True)) \
+            partial_order_dataframes[i] = partial_order_dataframes[i].sort_values([CONCEPT_INDEX], ascending=True) \
+                .groupby([CONCEPT_INDEX], sort=False) \
+                .apply(lambda x: x.sort_values([CONCEPT_NAME], ascending=True)) \
                 .reset_index(drop=True)
 
     return partial_order_dataframes
@@ -55,8 +59,8 @@ def get_partial_order_dataframes():
 def get_partial_order_groups():
     partial_order_dataframes = get_partial_order_dataframes()
 
-    order_attributes = ['concept:index', 'concept:name', 'lifecycle:transition', 'case:concept:name']
-    group_attributes = ['concept:index', 'concept:name', 'lifecycle:transition']
+    order_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION, CASE_CONCEPT_NAME]
+    group_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION]
 
     partial_orders = list()
 
@@ -74,34 +78,35 @@ def get_partial_order_groups():
         partial_order_groups[g].append([])
         partial_order_groups[g][0] = pd.DataFrame()
         partial_order_groups[g][0] = partial_orders[0][group_attributes]
-        partial_order_groups[g][0] = partial_order_groups[g][0].sort_values(['concept:index'], ascending=True) \
-            .groupby(['concept:index'], sort=False) \
-            .apply(lambda x: x.sort_values(['concept:name'], ascending=True)) \
+        partial_order_groups[g][0] = partial_order_groups[g][0].sort_values([CONCEPT_INDEX], ascending=True) \
+            .groupby([CONCEPT_INDEX], sort=False) \
+            .apply(lambda x: x.sort_values([CONCEPT_INDEX], ascending=True)) \
             .reset_index(drop=True)
 
         partial_order_groups[g].append([])
-        partial_order_groups[g][1] = pd.DataFrame(columns=['case:concept:name'])
-        val = pd.Series([partial_orders[0]['case:concept:name'][0]], dtype='str')
-        partial_order_groups[g][1]['case:concept:name'] = \
-            partial_order_groups[g][1]['case:concept:name'].append(val, ignore_index=True)
+        partial_order_groups[g][1] = pd.DataFrame(columns=[CASE_CONCEPT_NAME])
+        val = pd.Series([partial_orders[0][CASE_CONCEPT_NAME][0]], dtype='str')
+        partial_order_groups[g][1][CASE_CONCEPT_NAME] = \
+            partial_order_groups[g][1][CASE_CONCEPT_NAME].append(val, ignore_index=True)
 
         partial_orders.remove(partial_orders[0])
 
         for case in range(0, len(partial_orders)):
             if partial_order_groups[g][0].equals(partial_orders[case][group_attributes]):
-                if partial_orders[case]['case:concept:name'][0] not in \
-                        partial_order_groups[g][0]['case:concept:name']:
-                    partial_order_groups[g][1]['case:concept:name'].append(
-                        [partial_orders[case]['case:concept:name'][0]], ignore_index=True)
+                if partial_orders[case][CASE_CONCEPT_NAME][0] not in \
+                        partial_order_groups[g][0][CASE_CONCEPT_NAME]:
+                    partial_order_groups[g][1][CASE_CONCEPT_NAME].append(
+                        [partial_orders[case][CASE_CONCEPT_NAME][0]], ignore_index=True)
                 partial_orders.remove(partial_orders[case])
                 case -= 1
         g += 1
 
-    return [partial_order_groups, partial_order_dataframes]
+    return partial_order_groups
 
 
 if __name__ == '__main__':
-    [partial_order_groups_main, partial_order_dataframes_main] = get_partial_order_groups()
+    partial_order_groups_main = get_partial_order_groups()
+    partial_orders_main = get_partial_order_dataframes()
     for i in range(0, len(partial_order_groups_main)):
         print('Group ', i + 1)
         """
