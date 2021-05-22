@@ -101,15 +101,15 @@ def get_partial_order_groups():
 
 
 if __name__ == '__main__':
-    [partial_order_groups, partial_order_dataframes] = get_partial_order_groups()
-    for i in range(0, len(partial_order_groups)):
+    [partial_order_groups_main, partial_order_dataframes_main] = get_partial_order_groups()
+    for i in range(0, len(partial_order_groups_main)):
         print('Group ', i + 1)
         """
-        partial_order_groups[i][j]
+        partial_order_groups_main[i][j]
         i = group index
         j = 0: dataframe with group information
         j = 1: dataframe with case ID's corresponding to the group
         """
-        print(partial_order_groups[i][0])
+        print(partial_order_groups_main[i][0])
         print('Corresponding cases')
-        print(partial_order_groups[i][1])
+        print(partial_order_groups_main[i][1])
