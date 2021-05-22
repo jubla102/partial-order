@@ -3,16 +3,14 @@
     display: none;
 }
 
-.my-list-group
-{
-max-height: 300px;
-margin-bottom: 10px;
-overflow:scroll;
--webkit-overflow-scrolling: touch;
+.my-list-group {
+    max-height: 300px;
+    margin-bottom: 10px;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
-.navbar
-{
+.navbar {
     padding-top: 0rem !important;
     padding-right: 0rem !important;
     padding-bottom: 0rem !important;
