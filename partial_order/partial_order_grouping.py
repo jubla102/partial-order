@@ -48,11 +48,11 @@ def get_partial_order_sequences():
         partial_order_dataframes[i] = partial_order_dataframes[i].rename(columns={'index': CONCEPT_INDEX})
         partial_order_dataframes[i].astype({CONCEPT_INDEX: 'int64'}).dtypes
 
-        for j in range(0, len(partial_order_dataframes)):
-            partial_order_dataframes[j] = partial_order_dataframes[j].sort_values([CONCEPT_INDEX], ascending=True) \
-                .groupby([CONCEPT_INDEX], sort=False) \
-                .apply(lambda x: x.sort_values([CONCEPT_NAME], ascending=True)) \
-                .reset_index(drop=True)
+    for j in range(0, len(partial_order_dataframes)):
+        partial_order_dataframes[j] = partial_order_dataframes[j].sort_values([CONCEPT_INDEX], ascending=True) \
+            .groupby([CONCEPT_INDEX], sort=False) \
+            .apply(lambda x: x.sort_values([CONCEPT_NAME], ascending=True)) \
+            .reset_index(drop=True)
 
     return partial_order_dataframes
 
