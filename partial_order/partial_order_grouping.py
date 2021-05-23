@@ -113,6 +113,7 @@ def write_to_text_file():
     file = open("partial_order_grouping_output.txt", "w")
     file.write('All partial orders with sequencing information and timestamps')
     file.writelines('\n')
+    file.writelines('\n')
     for order in range(0, len(partial_orders_file)):
         case_num = 'Case ' + str(partial_orders_file[order][CASE_CONCEPT_NAME].iloc[0])
         file.write(case_num)
@@ -122,7 +123,8 @@ def write_to_text_file():
         file.writelines('\n')
 
     file.writelines('\n')
-    print('Partial order groups with sequencing information and corresponding case ID\'s')
+    file.write('Partial order groups with sequencing information and corresponding case ID\'s')
+    file.writelines('\n')
     file.writelines('\n')
 
     for group in range(0, len(partial_order_groups_file)):

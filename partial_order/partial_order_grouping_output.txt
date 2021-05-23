@@ -1,4 +1,5 @@
 All partial orders with sequencing information and timestamps
+
 Case 1
  concept:index concept:name lifecycle:transition             time:timestamp
              0            a             complete  2021-05-04 12:00:00+02:00
@@ -46,6 +47,7 @@ Case 9
              1            d             complete  2021-05-08 08:59:00+02:00
 
 
+Partial order groups with sequencing information and corresponding case ID's
 
 Group1
  concept:index concept:name lifecycle:transition
