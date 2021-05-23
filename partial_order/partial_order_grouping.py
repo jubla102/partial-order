@@ -10,7 +10,7 @@ LIFECYCLE_TRANSITION = 'lifecycle:transition'
 TIME_TIMESTAMP = 'time:timestamp'
 
 
-def get_partial_order_dataframes():
+def get_partial_order_sequences():
     partial_order_log = get_partial_orders()
     df = log_converter.apply(partial_order_log, variant=log_converter.Variants.TO_DATA_FRAME)
     cases = df[CASE_CONCEPT_NAME].unique()
@@ -57,8 +57,8 @@ def get_partial_order_dataframes():
     return partial_order_dataframes
 
 
-def get_partial_order_groups():
-    partial_order_dataframes = get_partial_order_dataframes()
+def get_partial_order_group_sequences():
+    partial_order_dataframes = get_partial_order_sequences()
 
     order_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION, CASE_CONCEPT_NAME]
     group_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION]
@@ -105,16 +105,16 @@ def get_partial_order_groups():
     return partial_order_groups
 
 
-def write_to_file():
+def write_to_text_file():
     case_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION, TIME_TIMESTAMP]
 
-    partial_order_groups_file = get_partial_order_groups()
-    partial_orders_file = get_partial_order_dataframes()
+    partial_order_groups_file = get_partial_order_group_sequences()
+    partial_orders_file = get_partial_order_sequences()
     file = open("partial_order_grouping_output.txt", "w")
     file.write('All partial orders with sequencing information and timestamps')
     file.writelines('\n')
     for order in range(0, len(partial_orders_file)):
-        case_num = 'Case ' + str(partial_orders_file[order].iloc[1][CASE_CONCEPT_NAME])
+        case_num = 'Case ' + str(partial_orders_file[order][CASE_CONCEPT_NAME].iloc[0])
         file.write(case_num)
         file.writelines('\n')
         file.write(partial_orders_file[order][case_attributes].to_string(index=False))
@@ -143,9 +143,9 @@ def write_to_file():
 
 
 if __name__ == '__main__':
-    write_to_file()
-    partial_order_groups_main = get_partial_order_groups()
-    partial_orders_main = get_partial_order_dataframes()
+    write_to_text_file()
+    partial_order_groups_main = get_partial_order_group_sequences()
+    partial_orders_main = get_partial_order_sequences()
     print('All partial orders with sequencing information and timestamps')
     print(partial_orders_main)
     print('Partial order groups with sequencing information and corresponding case ID\'s')
