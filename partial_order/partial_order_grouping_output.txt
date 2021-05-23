@@ -46,6 +46,14 @@ Case 9
              0            b             complete  2021-05-08 08:00:00+02:00
              1            d             complete  2021-05-08 08:59:00+02:00
 
+Case 10
+ concept:index concept:name lifecycle:transition             time:timestamp
+             0            a             complete  2021-05-04 12:00:00+02:00
+             1            b             complete  2021-05-04 12:01:00+02:00
+             1            c             complete  2021-05-04 12:01:00+02:00
+             2            e             complete  2021-05-04 12:03:00+02:00
+             3            l             complete  2021-05-04 12:04:00+02:00
+
 
 Partial order groups with sequencing information and corresponding case ID's
 
@@ -112,4 +120,15 @@ Group6
 
 Group6 cases
  9
+
+Group7
+ concept:index concept:name lifecycle:transition
+             0            a             complete
+             1            b             complete
+             1            c             complete
+             2            e             complete
+             3            l             complete
+
+Group7 cases
+ 10
 

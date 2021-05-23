@@ -67,6 +67,7 @@ def get_partial_order_group_sequences():
 
     for k in range(0, len(partial_order_dataframes)):
         partial_orders.append([])
+        partial_orders[k] = pd.DataFrame()
         partial_orders[k] = partial_order_dataframes[k][order_attributes]
 
     partial_order_groups = list()
@@ -93,11 +94,11 @@ def get_partial_order_group_sequences():
         partial_orders.remove(partial_orders[0])
 
         for case in range(0, len(partial_orders)):
+            print(case)
             if partial_order_groups[g][0].equals(partial_orders[case][group_attributes]):
                 if partial_orders[case][CASE_CONCEPT_NAME][0] not in \
-                        partial_order_groups[g][0][CASE_CONCEPT_NAME]:
-                    partial_order_groups[g][1][CASE_CONCEPT_NAME].append(
-                        [partial_orders[case][CASE_CONCEPT_NAME][0]], ignore_index=True)
+                        partial_order_groups[g][1][CASE_CONCEPT_NAME]:
+                    partial_order_groups[g][1].append([partial_orders[case][CASE_CONCEPT_NAME][0]], ignore_index=True)
                 partial_orders.remove(partial_orders[case])
                 case -= 1
         g += 1
@@ -145,20 +146,20 @@ def write_to_text_file():
 
 
 if __name__ == '__main__':
-    write_to_text_file()
+    # write_to_text_file()
     partial_order_groups_main = get_partial_order_group_sequences()
-    partial_orders_main = get_partial_order_sequences()
-    print('All partial orders with sequencing information and timestamps')
-    print(partial_orders_main)
-    print('Partial order groups with sequencing information and corresponding case ID\'s')
-    for g in range(0, len(partial_order_groups_main)):
-        print('Group ', g + 1)
-        """
-        partial_order_groups_main[i][j]
-        i = group index
-        j = 0: dataframe with group information
-        j = 1: dataframe with case ID's corresponding to the group
-        """
-        print(partial_order_groups_main[g][0])
-        print('Corresponding cases')
-        print(partial_order_groups_main[g][1])
+    # partial_orders_main = get_partial_order_sequences()
+    # print('All partial orders with sequencing information and timestamps')
+    # print(partial_orders_main)
+    # print('Partial order groups with sequencing information and corresponding case ID\'s')
+    # for g in range(0, len(partial_order_groups_main)):
+    # print('Group ', g + 1)
+    """
+    partial_order_groups_main[i][j]
+    i = group index
+    j = 0: dataframe with group information
+    j = 1: dataframe with case ID's corresponding to the group
+    """
+    # print(partial_order_groups_main[g][0])
+    # print('Corresponding cases')
+    # print(partial_order_groups_main[g][1])
