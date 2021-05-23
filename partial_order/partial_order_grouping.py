@@ -7,6 +7,7 @@ from partial_order_detection import get_partial_orders_from_selected_file as get
 CONCEPT_INDEX = 'concept:index'
 CONCEPT_NAME = 'concept:name'
 LIFECYCLE_TRANSITION = 'lifecycle:transition'
+TIME_TIMESTAMP = 'time:timestamp'
 
 
 def get_partial_order_dataframes():
@@ -47,8 +48,8 @@ def get_partial_order_dataframes():
         partial_order_dataframes[i] = partial_order_dataframes[i].rename(columns={'index': CONCEPT_INDEX})
         partial_order_dataframes[i].astype({CONCEPT_INDEX: 'int64'}).dtypes
 
-        for i in range(0, len(partial_order_dataframes)):
-            partial_order_dataframes[i] = partial_order_dataframes[i].sort_values([CONCEPT_INDEX], ascending=True) \
+        for j in range(0, len(partial_order_dataframes)):
+            partial_order_dataframes[j] = partial_order_dataframes[j].sort_values([CONCEPT_INDEX], ascending=True) \
                 .groupby([CONCEPT_INDEX], sort=False) \
                 .apply(lambda x: x.sort_values([CONCEPT_NAME], ascending=True)) \
                 .reset_index(drop=True)
@@ -64,9 +65,9 @@ def get_partial_order_groups():
 
     partial_orders = list()
 
-    for i in range(0, len(partial_order_dataframes)):
+    for k in range(0, len(partial_order_dataframes)):
         partial_orders.append([])
-        partial_orders[i] = partial_order_dataframes[i][order_attributes]
+        partial_orders[k] = partial_order_dataframes[k][order_attributes]
 
     partial_order_groups = list()
 
@@ -104,17 +105,58 @@ def get_partial_order_groups():
     return partial_order_groups
 
 
+def write_to_file():
+    case_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION, TIME_TIMESTAMP]
+
+    partial_order_groups_file = get_partial_order_groups()
+    partial_orders_file = get_partial_order_dataframes()
+    file = open("partial_order_grouping_output.txt", "w")
+    file.write('All partial orders with sequencing information and timestamps')
+    file.writelines('\n')
+    for order in range(0, len(partial_orders_file)):
+        case_num = 'Case ' + str(partial_orders_file[order].iloc[1][CASE_CONCEPT_NAME])
+        file.write(case_num)
+        file.writelines('\n')
+        file.write(partial_orders_file[order][case_attributes].to_string(index=False))
+        file.writelines('\n')
+        file.writelines('\n')
+
+    file.writelines('\n')
+    print('Partial order groups with sequencing information and corresponding case ID\'s')
+    file.writelines('\n')
+
+    for group in range(0, len(partial_order_groups_file)):
+        group_num = 'Group' + str(group + 1)
+        file.write(group_num)
+        file.writelines('\n')
+        file.write(partial_order_groups_file[group][0].to_string(index=False))
+        file.writelines('\n')
+        file.writelines('\n')
+        cases = group_num + ' cases'
+        file.write(cases)
+        file.writelines('\n')
+        file.write(partial_order_groups_file[group][1][CASE_CONCEPT_NAME].to_string(index=False))
+        file.writelines('\n')
+        file.writelines('\n')
+
+    file.close()
+
+
 if __name__ == '__main__':
+    write_to_file()
     partial_order_groups_main = get_partial_order_groups()
     partial_orders_main = get_partial_order_dataframes()
-    for i in range(0, len(partial_order_groups_main)):
-        print('Group ', i + 1)
+    print('All partial orders with sequencing information and timestamps')
+    print(partial_orders_main)
+    print('Partial order groups with sequencing information and corresponding case ID\'s')
+    for g in range(0, len(partial_order_groups_main)):
+        print('Group ', g + 1)
         """
         partial_order_groups_main[i][j]
         i = group index
         j = 0: dataframe with group information
         j = 1: dataframe with case ID's corresponding to the group
         """
-        print(partial_order_groups_main[i][0])
+        print(partial_order_groups_main[g][0])
         print('Corresponding cases')
-        print(partial_order_groups_main[i][1])
+        print(partial_order_groups_main[g][1])
