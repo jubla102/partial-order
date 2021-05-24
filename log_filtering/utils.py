@@ -24,7 +24,7 @@ def import_csv(file):
 
     # handling the exceptions occuring during the import and converting
     except Exception as e:
-        print("Error occur, please check the csv file", e)
+        print("Error occurred, please check the csv file", e)
         return None
     return log
 
@@ -33,26 +33,26 @@ def add_classifier(log):
     '''
     check the column names and add them as classifier of log object
     input log object from pm4py
-    output log with clasisfier attributes
+    output log with classifier attributes
     '''
     activity = None
     timestamp = None
 
-    # check if the columns includes the keyword for activity / timestamps
+    # check if the columns include the keyword for activity / timestamps
     for k in log[0][0].keys():
         if activity is None:
             if ('concept:name' == k) or ('activity' in k.lower()):
                 activity = k
         if timestamp is None:
-            if 'timestamp' in k.lower() or ('time:timestamp' in k.lower()):
+            if ('time:timestamp' in k.lower()) or ('timestamp' in k.lower()):
                 timestamp = k
 
-    # there is no candidates
+    # there are no candidates
     if (activity is None) or (timestamp is None):
         print("activity and/or timestamp cannot be found in the given log")
         return None
 
-    # adding clasisifer attributes to log objects
+    # adding classifier attributes to log objects
     log.classifiers['activity classifier'] = activity
     log.classifiers['timestamp'] = timestamp
     print("successful in adding classifier")
