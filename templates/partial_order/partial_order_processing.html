@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if message %}
+        <script>
+            alert({{message}})
+        </script>
+    {% endif %}
     <body>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -31,33 +36,25 @@
                 <h6 class="mt-4" style="color:#00529F;">All possible combinations of the selected group will be
                     displayed in the <i>'Combinations'</i> tab.</h6>
 
-                <form name="p-o-p" action="p-o-p" method="POST">
 
-                    <div class="row">
-                        <div class=" col-sm-6 col-md-7 col-lg-8">
-                            {% if log_name != ':notset:' %}
-                                <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
-                            {% else %}
-                                <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
-                                    to set
-                                    an event log as input!</p>
-                            {% endif %}
+                <div class="row">
+                    <div class=" col-sm-6 col-md-7 col-lg-8">
+                        {% if log_name != ':notset:' %}
+                            <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
+                        {% else %}
+                            <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
+                                to set
+                                an event log as input!</p>
+                        {% endif %}
 
-                            {% csrf_token %}
+                        {% csrf_token %}
 
-                        </div>
                     </div>
-                    <br>
+                </div>
 
 
-                </form>
-
-                <form action="" method="get">
-                    {% csrf_token %}
-                    {% block partial_order_groups %}
-                    {% endblock %}
-                </form>
-
+                {% block partial_order_groups %}
+                {% endblock %}
             </div>
 
         </div>
