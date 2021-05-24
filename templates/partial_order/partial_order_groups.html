@@ -4,6 +4,25 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript">
+
+        //confirm message for saved or discarded orders in 'final order' tab
+        //todo: add what happens (backend) after you click 'OK' and 'CANCEL'
+        function saved() {
+            if (confirm("The order will be saved and added to the original log"))
+                alert("The order was saved");
+            else
+                ;
+        }
+
+        function discarded() {
+            if (confirm("Doing this will discard all the changes and delete modifications so far, do you wish to proceed?"))
+                alert("The order was discarded");
+            else
+                ;
+        }
+    </script>
+
 {% endblock %}
 
 {% block partial_order_groups %}
