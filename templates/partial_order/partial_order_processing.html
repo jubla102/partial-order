@@ -102,10 +102,8 @@
 
                 <form action="" method="get">
                     {% csrf_token %}
-                    <div id="mynetwork"></div>
-                    <p>Use ctrl+click to select multiple nodes to group!</p>
-                    <!--<label for="new_name">Group name: </label>
-                    <input id="new_name" type="text" name="new_name" value="{{ current_name }}"> -->
+                    {% block partial_order_groups %}
+                    {% endblock %}
                 </form>
 
             </div>

@@ -3,8 +3,9 @@ import os
 import re
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.template import loader
 from pm4py.algo.discovery.dfg import algorithm as dfg_discovery
 from pm4py.algo.discovery.dfg import factory as dfg_factory
 from pm4py.objects.log.importer.xes import importer
@@ -15,6 +16,10 @@ import log_filtering.utils as utils
 
 
 # Create your views here.
+def test(request):
+    template = loader.get_template('partial_order/partial_order_groups.html')
+    return HttpResponse(template.render({}, request))
+
 
 def partial_order_processing(request):
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
@@ -33,7 +38,7 @@ def partial_order_processing(request):
         if settings.EVENT_LOG_NAME == ':notset:':
             return HttpResponseRedirect(request.path_info)
 
-        return render(request, 'partial_order_processing.html',
+        return render(request, 'partial_order/partial_order_groups.html',
                       {'log_name': settings.EVENT_LOG_NAME, 'data': this_data})
 
     else:
@@ -93,7 +98,7 @@ def partial_order_processing(request):
             dfg = dfg_factory.apply(log)
             this_data, temp_file = dfg_to_g6(dfg)
 
-            return render(request, 'partial_order_processing.html',
+            return render(request, 'partial_order/partial_order_groups.html',
                           {'log_name': settings.EVENT_LOG_NAME, 'data': this_data})
 
 
@@ -116,7 +121,7 @@ def partial_order_processing(request):
             re.escape(temp_file)
             network = {}
 
-            return render(request, 'partial_order_processing.html',
+            return render(request, 'partial_order/partial_order_groups.html',
                           {'log_name': settings.EVENT_LOG_NAME, 'json_file': temp_file, 'data': json.dumps(this_data)})
 
 

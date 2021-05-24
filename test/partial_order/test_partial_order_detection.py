@@ -5,7 +5,7 @@ import pandas as pd
 from parameterized import parameterized
 from pm4py.objects.conversion.log import converter as log_converter
 
-from partial_order import partial_order_detection
+from partial_order_processing import partial_order_detection
 
 
 class TestPartialOrderDetection(unittest.TestCase):
