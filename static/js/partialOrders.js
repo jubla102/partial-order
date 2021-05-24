@@ -21,6 +21,10 @@ hospitalData = [
     {
         name: 'LacticAcid',
         color: '#69a3b2'
+    },
+    {
+        name: 'Avinash',
+        color: '#69a3b2'
     }
 ]
 

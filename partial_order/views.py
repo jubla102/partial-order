@@ -3,6 +3,5 @@ from django.template import loader
 
 
 def test(request):
-    template = loader.get_template('test.html')
-    data = "partial order visualization"
-    return HttpResponse(template.render({'data': data}, request))
+    template = loader.get_template('partial_order/partial_order_groups.html')
+    return HttpResponse(template.render({}, request))
