@@ -1,13 +1,12 @@
 import pandas as pd
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.util.constants import CASE_CONCEPT_NAME
+from pm4py.util.xes_constants import DEFAULT_NAME_KEY
+from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
 from partial_order_detection import get_partial_orders_from_selected_file as get_partial_orders
 
 CONCEPT_INDEX = 'concept:index'
-CONCEPT_NAME = 'concept:name'
-LIFECYCLE_TRANSITION = 'lifecycle:transition'
-TIME_TIMESTAMP = 'time:timestamp'
 INDEX = 'index'
 INT = 'int64'
 STRING = 'str'
@@ -54,7 +53,7 @@ def get_partial_order_sequences():
     for j in range(0, len(partial_order_dataframes)):
         partial_order_dataframes[j] = partial_order_dataframes[j].sort_values([CONCEPT_INDEX], ascending=True) \
             .groupby([CONCEPT_INDEX], sort=False) \
-            .apply(lambda x: x.sort_values([CONCEPT_NAME], ascending=True)) \
+            .apply(lambda x: x.sort_values([DEFAULT_NAME_KEY], ascending=True)) \
             .reset_index(drop=True)
 
     return partial_order_dataframes
@@ -63,8 +62,8 @@ def get_partial_order_sequences():
 def get_partial_order_group_sequences():
     partial_order_dataframes = get_partial_order_sequences()
 
-    order_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION, CASE_CONCEPT_NAME]
-    group_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION]
+    order_attributes = [CONCEPT_INDEX, DEFAULT_NAME_KEY, CASE_CONCEPT_NAME]
+    group_attributes = [CONCEPT_INDEX, DEFAULT_NAME_KEY]
 
     partial_orders = list()
 
@@ -111,7 +110,7 @@ def get_partial_order_group_sequences():
 
 
 def write_to_text_file():
-    case_attributes = [CONCEPT_INDEX, CONCEPT_NAME, LIFECYCLE_TRANSITION, TIME_TIMESTAMP]
+    case_attributes = [CONCEPT_INDEX, DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]
 
     partial_order_groups_file = get_partial_order_group_sequences()
     partial_orders_file = get_partial_order_sequences()
@@ -153,6 +152,19 @@ if __name__ == '__main__':
     write_to_text_file()
     partial_order_groups_main = get_partial_order_group_sequences()
     partial_orders_main = get_partial_order_sequences()
+    temp = partial_order_groups_main[0][1][CASE_CONCEPT_NAME][0]
+    for case in range(0, len(partial_orders_main)):
+        if partial_orders_main[case][CASE_CONCEPT_NAME][0] == temp:
+            print(partial_orders_main[case])
+
+    """
+    group[i]
+    i = Group index
+    
+    Call group[i]['cases']
+    'cases' = List of cases (with all information)
+    *** cases must not be in data frame. use dictionary ***
+    """
     # print('All partial orders with sequencing information and timestamps')
     # print(partial_orders_main)
     # print('Partial order groups with sequencing information and corresponding case ID\'s')
@@ -167,6 +179,52 @@ if __name__ == '__main__':
     """
     partial_orders_main[i]
     i = dataframe with partial order information
+    """
+
+    """
+    [
+	{
+		"groupId": 1,
+		"numerOfCases": 2,
+		"percentage": 0.21,
+		"cases": [
+			{
+				"caseId": 1,
+				"events": [
+					{
+						"activity": "c",
+						"timestamp": "2021-05-11 12:00"
+					},
+					{
+						"activity": "a",
+						"timestamp": "2021-05-11 12:00"
+					},
+					{
+						"activity": "d",
+						"timestamp": "2021-05-11 12:00"
+					}
+				]
+			},
+			{
+				"caseId": 2,
+				"events": [
+					{
+						"activity": "c",
+						"timestamp": "2021-05-11 13:00"
+					},
+					{
+						"activity": "a",
+						"timestamp": "2021-05-11 13:00"
+					},
+					{
+						"activity": "d",
+						"timestamp": "2021-05-11 13:00"
+					}
+				]
+			}
+		]
+	},
+]
     """
     # print(partial_order_groups_main[g][0])
     # print('Corresponding cases')
