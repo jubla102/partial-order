@@ -48,16 +48,16 @@ Case 9
 
 Case 10
  concept:index concept:name lifecycle:transition             time:timestamp
-             0            a             complete  2021-05-04 12:00:00+02:00
-             1            b             complete  2021-05-04 12:01:00+02:00
-             1            c             complete  2021-05-04 12:01:00+02:00
-             2            e             complete  2021-05-04 12:03:00+02:00
-             3            l             complete  2021-05-04 12:04:00+02:00
+             0            a             complete  2021-05-04 13:00:00+02:00
+             1            b             complete  2021-05-04 13:02:00+02:00
+             1            c             complete  2021-05-04 13:02:00+02:00
+             2            e             complete  2021-05-04 13:03:00+02:00
+             3            f             complete  2021-05-04 13:04:00+02:00
 
 
 Partial order groups with sequencing information and corresponding case ID's
 
-Group1
+Group 1
  concept:index concept:name lifecycle:transition
              0            a             complete
              1            b             complete
@@ -65,10 +65,11 @@ Group1
              2            e             complete
              3            f             complete
 
-Group1 cases
- 1
+Group 1 cases
+  1
+ 10
 
-Group2
+Group 2
  concept:index concept:name lifecycle:transition
              0            a             complete
              1            b             complete
@@ -76,10 +77,10 @@ Group2
              1            d             complete
              2            g             complete
 
-Group2 cases
+Group 2 cases
  4
 
-Group3
+Group 3
  concept:index concept:name lifecycle:transition
              0            a             complete
              1            c             complete
@@ -87,10 +88,10 @@ Group3
              1            g             complete
              2            b             complete
 
-Group3 cases
+Group 3 cases
  6
 
-Group4
+Group 4
  concept:index concept:name lifecycle:transition
              0            b             complete
              1            a             complete
@@ -98,10 +99,10 @@ Group4
              1            e             complete
              2            f             complete
 
-Group4 cases
+Group 4 cases
  7
 
-Group5
+Group 5
  concept:index concept:name lifecycle:transition
              0            c             complete
              0            e             complete
@@ -109,26 +110,15 @@ Group5
              1            b             complete
              2            a             complete
 
-Group5 cases
+Group 5 cases
  8
 
-Group6
+Group 6
  concept:index concept:name lifecycle:transition
              0            a             complete
              0            b             complete
              1            d             complete
 
-Group6 cases
+Group 6 cases
  9
-
-Group7
- concept:index concept:name lifecycle:transition
-             0            a             complete
-             1            b             complete
-             1            c             complete
-             2            e             complete
-             3            l             complete
-
-Group7 cases
- 10
 

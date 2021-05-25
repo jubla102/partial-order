@@ -8,6 +8,9 @@ CONCEPT_INDEX = 'concept:index'
 CONCEPT_NAME = 'concept:name'
 LIFECYCLE_TRANSITION = 'lifecycle:transition'
 TIME_TIMESTAMP = 'time:timestamp'
+INDEX = 'index'
+INT = 'int64'
+STRING = 'str'
 
 
 def get_partial_order_sequences():
@@ -45,8 +48,8 @@ def get_partial_order_sequences():
 
         partial_order_dataframes[i].index = ind_list
         partial_order_dataframes[i].reset_index(inplace=True)
-        partial_order_dataframes[i] = partial_order_dataframes[i].rename(columns={'index': CONCEPT_INDEX})
-        partial_order_dataframes[i].astype({CONCEPT_INDEX: 'int64'}).dtypes
+        partial_order_dataframes[i] = partial_order_dataframes[i].rename(columns={INDEX: CONCEPT_INDEX})
+        partial_order_dataframes[i].astype({CONCEPT_INDEX: INT}).dtypes
 
     for j in range(0, len(partial_order_dataframes)):
         partial_order_dataframes[j] = partial_order_dataframes[j].sort_values([CONCEPT_INDEX], ascending=True) \
@@ -75,7 +78,6 @@ def get_partial_order_group_sequences():
     g = 0
 
     while len(partial_orders):
-
         partial_order_groups.append([])
         partial_order_groups[g].append([])
         partial_order_groups[g][0] = pd.DataFrame()
@@ -86,21 +88,23 @@ def get_partial_order_group_sequences():
             .reset_index(drop=True)
 
         partial_order_groups[g].append([])
-        partial_order_groups[g][1] = pd.DataFrame(columns=[CASE_CONCEPT_NAME])
-        val = pd.Series([partial_orders[0][CASE_CONCEPT_NAME][0]], dtype='str')
-        partial_order_groups[g][1][CASE_CONCEPT_NAME] = \
-            partial_order_groups[g][1][CASE_CONCEPT_NAME].append(val, ignore_index=True)
+        partial_order_groups[g][1] = pd.DataFrame()
+        case_id = pd.Series(partial_orders[0][CASE_CONCEPT_NAME][0], index=[CASE_CONCEPT_NAME])
+        partial_order_groups[g][1] = partial_order_groups[g][1].append(case_id, ignore_index=True)
 
         partial_orders.remove(partial_orders[0])
 
-        for case in range(0, len(partial_orders)):
-            print(case)
+        case = 0
+
+        while case < len(partial_orders):
             if partial_order_groups[g][0].equals(partial_orders[case][group_attributes]):
-                if partial_orders[case][CASE_CONCEPT_NAME][0] not in \
-                        partial_order_groups[g][1][CASE_CONCEPT_NAME]:
-                    partial_order_groups[g][1].append([partial_orders[case][CASE_CONCEPT_NAME][0]], ignore_index=True)
-                partial_orders.remove(partial_orders[case])
-                case -= 1
+                exists = partial_orders[case][CASE_CONCEPT_NAME][0] in partial_order_groups[g][1][CASE_CONCEPT_NAME]
+                if not exists:
+                    case_val = pd.Series(partial_orders[case][CASE_CONCEPT_NAME][0], index=[CASE_CONCEPT_NAME])
+                    partial_order_groups[g][1] = partial_order_groups[g][1].append(case_val, ignore_index=True)
+
+                del partial_orders[case]
+            case += 1
         g += 1
 
     return partial_order_groups
@@ -129,7 +133,7 @@ def write_to_text_file():
     file.writelines('\n')
 
     for group in range(0, len(partial_order_groups_file)):
-        group_num = 'Group' + str(group + 1)
+        group_num = 'Group ' + str(group + 1)
         file.write(group_num)
         file.writelines('\n')
         file.write(partial_order_groups_file[group][0].to_string(index=False))
@@ -146,9 +150,9 @@ def write_to_text_file():
 
 
 if __name__ == '__main__':
-    # write_to_text_file()
+    write_to_text_file()
     partial_order_groups_main = get_partial_order_group_sequences()
-    # partial_orders_main = get_partial_order_sequences()
+    partial_orders_main = get_partial_order_sequences()
     # print('All partial orders with sequencing information and timestamps')
     # print(partial_orders_main)
     # print('Partial order groups with sequencing information and corresponding case ID\'s')
