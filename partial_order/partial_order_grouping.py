@@ -164,6 +164,10 @@ if __name__ == '__main__':
     j = 0: dataframe with group information
     j = 1: dataframe with case ID's corresponding to the group
     """
+    """
+    partial_orders_main[i]
+    i = dataframe with partial order information
+    """
     # print(partial_order_groups_main[g][0])
     # print('Corresponding cases')
     # print(partial_order_groups_main[g][1])
