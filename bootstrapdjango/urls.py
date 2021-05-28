@@ -24,6 +24,6 @@ urlpatterns = [
     # url(r'^rolemining/', include(role_mining.urls))
     path('upload/', include('upload_eventlog.urls')),
     path('filter', include('log_filtering.urls')),
-    path('partial_order_processing', include('partial_order_processing.urls')),
+    path('partial_order', include('partial_order_processing.urls')),
 ]
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 {% extends 'partial_order/partial_order_processing.html' %}
 
 {% block script %}
+    {{ value|json_script:"hello-data" }}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
