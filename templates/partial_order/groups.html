@@ -5,6 +5,7 @@
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript">
+
         let ids = ["groups_tab", "combinations_tab", "delays_tab"];
         ids.forEach(function (id) {
             let element = document.getElementById(id);
@@ -13,47 +14,34 @@
         let element = document.getElementById("groups_tab");
         element.classList.add("active");
 
-        //todo: add what happens (backend) after you click 'OK' and 'CANCEL'
-        function saved() {
-            if (confirm("The order will be saved and added to the original log"))
-                alert("The order was saved");
-            else
-                ;
-        }
-
-        function discarded() {
-            if (confirm("Doing this will discard all the changes and delete modifications so far, do you wish to proceed?"))
-                alert("The order was discarded");
-            else
-                ;
-        }
     </script>
 
 {% endblock %}
 
 {% block tab_content %}
+    <div class="tab-pane fade show active">
+        <div class="container-fluid">
+            <h4 class="mt-4" style="color:#0f0f0f;">Please select a Partial Order Group</h4>
+            <h6 class="mt-4" style="color:#00529F;">All possible combinations of the selected group will be
+                displayed in the <i>'Combinations'</i> tab.
+            </h6>
+            <div class="row">
+                <div class=" col-sm-6 col-md-7 col-lg-8">
+                    {% if log_name != ':notset:' %}
+                        <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
+                    {% else %}
+                        <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
+                            to set
+                            an event log as input!</p>
+                    {% endif %}
 
-    <div class="container-fluid">
-        <h4 class="mt-4" style="color:#0f0f0f;">Please select a Partial Order Group</h4>
-        <h6 class="mt-4" style="color:#00529F;">All possible combinations of the selected group will be
-            displayed in the <i>'Combinations'</i> tab.
-        </h6>
-        <div class="row">
-            <div class=" col-sm-6 col-md-7 col-lg-8">
-                {% if log_name != ':notset:' %}
-                    <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
-                {% else %}
-                    <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
-                        to set
-                        an event log as input!</p>
-                {% endif %}
+                    {% csrf_token %}
 
-                {% csrf_token %}
-
+                </div>
             </div>
+            <div class="rect"></div>
+            <div class="rect"></div>
         </div>
-        <div class="rect"></div>
-        <div class="rect"></div>
     </div>
 
 {% endblock %}
