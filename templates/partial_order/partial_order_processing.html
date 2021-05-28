@@ -10,90 +10,21 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="po_groups_tab" data-toggle="tab" href="/groups" role="tab"
-               aria-controls="po_groups" aria-selected="true">Partial Order Groups</a>
+            <a class="nav-link active" id="groups_tab" data-toggle="page" href="groups">Partial Order Groups</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="po_combinations_tab" data-toggle="tab" href="/combinations" role="tab"
-               aria-controls="po_combinations" aria-selected="false">Combinations</a>
+            <a class="nav-link" id="combinations_tab" href="combinations">Combinations</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="po_delays_tab" data-toggle="tab" href="/delays" role="tab"
-               aria-controls="po_delays" aria-selected="false">Add Delays</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="po_final_tab" data-toggle="tab" href="/final" role="tab"
-               aria-controls="po_final" aria-selected="false">Final Order</a>
+            <a class="nav-link" id="delays_tab" href="delays">Add Delays</a>
         </li>
     </ul>
 
 
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="po_groups" role="tabpanel" aria-labelledby="po_groups_tab">
-
-            <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Please select a Partial Order Group</h4>
-                <h6 class="mt-4" style="color:#00529F;">All possible combinations of the selected group will be
-                    displayed in the <i>'Combinations'</i> tab.</h6>
-
-
-                <div class="row">
-                    <div class=" col-sm-6 col-md-7 col-lg-8">
-                        {% if log_name != ':notset:' %}
-                            <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
-                        {% else %}
-                            <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
-                                to set
-                                an event log as input!</p>
-                        {% endif %}
-
-                        {% csrf_token %}
-
-                    </div>
-                </div>
-
-
-                {% block partial_order_groups %}
-                {% endblock %}
-            </div>
-
-        </div>
-
-        <div class="tab-pane fade" id="po_combinations" role="tabpanel" aria-labelledby="po_combinations_tab">
-
-            <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Please select a combination</h4>
-                <h6 class="mt-4" style="color:#00529F;">You can modify the combination by adding delays in the
-                    <i>'Add Delays'</i> tab. </h6>
-
-            </div>
-
-        </div>
-
-        <div class="tab-pane fade" id="po_delays" role="tabpanel" aria-labelledby="po_delays_tab">
-
-            <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Add Delays to the Combination</h4>
-                <h6 class="mt-4" style="color:#00529F;">Please add delays using the scroll bar. The final combination
-                    will be displayed in the <i>'Final Order'</i> tab. </h6>
-
-            </div>
-
-        </div>
-
-        <div class="tab-pane fade" id="po_final" role="tabpanel" aria-labelledby="po_final_tab">
-
-            <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Final Order</h4>
-                <h6 class="mt-4" style="color:#00529F;">This is the final order</h6>
-                <h6 class="mt-4" style="color:#00529F;"><i>'Save'</i> will add the combination to the original log.</h6>
-                <h6 class="mt-4" style="color:#00529F;"><i>'Discard'</i> will delete the combination. You can redo the
-                    process by either selecting a new group or a new combination.</h6>
-                <input type="submit" class="btn btn-success" name="groupButton" value="Save" id='submitresEL'
-                       onclick="saved()"/>
-                <input type="submit" class="btn btn-danger" name="groupButton" value="Discard" id='submitresEL'
-                       onclick="discarded()"/>
-            </div>
+            {% block tab_content %}
+            {% endblock %}
         </div>
     </div>
 {% endblock %}
