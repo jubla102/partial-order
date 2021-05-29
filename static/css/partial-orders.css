@@ -1,0 +1,12 @@
+.scrollable-outer {
+    background-color: white;
+    width: 1250px;
+    overflow: scroll;
+}
+
+.scrollable-inner {
+    background-color: white;
+    height: 170px;
+    overflow: scroll;
+    overflow-y: hidden;
+}

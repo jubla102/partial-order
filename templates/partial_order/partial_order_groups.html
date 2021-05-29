@@ -1,6 +1,8 @@
 {% extends 'partial_order/partial_order_processing.html' %}
 
 {% block script %}
+    <link href="../../static/css/partial-orders.css" rel="stylesheet">
+    <link href="../../static/css/popup.css" rel="stylesheet">
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
@@ -21,11 +23,32 @@
             else
                 ;
         }
+
+        function popup() {
+            const popup = document.getElementById("combination");
+            popup.classList.toggle("show");
+        }
+
+
     </script>
 
 {% endblock %}
 
 {% block partial_order_groups %}
-    <div class="rect"></div>
-    <div class="rect"></div>
+    <div class="scrollable-outer">
+        <div class="rect scrollable-inner" id="1" onclick="to_combination(this)"></div>
+        <div class="rect scrollable-inner" id="2" onclick="to_combination(this)"></div>
+        <div class="rect scrollable-inner" id="3" onclick="to_combination(this)"></div>
+        <div class="rect scrollable-inner" id="4" onclick="to_combination(this)"></div>
+        <div class="rect scrollable-inner" id="5" onclick="to_combination(this)"></div>
+    </div>
+    <script>
+        //todo: Link it to combinations tab (if OK is received)
+        function to_combination(ele) {
+            id = ele.id;
+            confirm("You have chosen this (" + id + ") partial order group:\nIf yes please click OK and check the " +
+                "'Combinations' tab to proceed further, else click CANCEL");
+            location.href = "www.yoursite.com";
+        }
+    </script>
 {% endblock %}

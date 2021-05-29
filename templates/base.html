@@ -24,7 +24,6 @@
 
     <link href="{% static 'css/mystyle.css' %}" rel="stylesheet">
 
-
 </head>
 
 <body>
@@ -38,7 +37,8 @@
             <div class="sidebar-heading"><img style='height: 100%; width:100%;object-fit: contain '
                                               src="{% static 'images/PADSLOGO.png' %}"/></div>
             <a href="/upload" class="list-group-item list-group-item-action bg-light">Event Data</a>
-            <a href="/partial_order_processing" class="list-group-item list-group-item-action bg-light">Partial Order
+            <a href="/partial_order_processing/groups" class="list-group-item list-group-item-action bg-light">Partial
+                Order
                 Processing</a>
             <a href="/filter" class="list-group-item list-group-item-action bg-light">Pre-Processing</a>
             <a href="/trial" class="list-group-item list-group-item-action bg-light">Pattern Abstraction Test</a>
@@ -96,12 +96,12 @@
 <script src="{% static 'css/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'css/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-
 <!-- Menu Toggle Script -->
 
 {% block script %}
 
 {% endblock %}
+
 
 </body>
 

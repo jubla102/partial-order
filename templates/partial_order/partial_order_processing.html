@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends '../base.html' %}
 
 {% block content %}
     {% if message %}
@@ -6,6 +6,20 @@
             alert({{message}})
         </script>
     {% endif %}
+    <!DOCTYPE html>
+    <meta charset="utf-8">
+
+    <head>
+        <script type='text/javascript'
+                src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js?ver=1.4.2'></script>
+        <link href="../../static/css/partial-orders.css" rel="stylesheet">
+
+        <link href="../../static/css/time_picker.css" rel="stylesheet">
+
+        <script src="../../static/js/time_picker.js" async></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    </head>
     <body>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -32,10 +46,17 @@
         <div class="tab-pane fade show active" id="po_groups" role="tabpanel" aria-labelledby="po_groups_tab">
 
             <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Please select a Partial Order Group</h4>
+                <div class="form-row justify-content-center">
+                    <div class="col">
+                        <h4 class="mt-4" style="color:#0f0f0f;">Please select a Partial Order Group</h4>
+                    </div>
+                    <div class="col mt-3">
+                        <button type="button" class="btn btn-info float-right">Info</button>
+                    </div>
+                </div>
+
                 <h6 class="mt-4" style="color:#00529F;">All possible combinations of the selected group will be
                     displayed in the <i>'Combinations'</i> tab.</h6>
-
 
                 <div class="row">
                     <div class=" col-sm-6 col-md-7 col-lg-8">
@@ -52,42 +73,75 @@
                     </div>
                 </div>
 
-
                 {% block partial_order_groups %}
                 {% endblock %}
+
             </div>
 
         </div>
 
-        <div class="tab-pane fade" id="po_combinations" role="tabpanel" aria-labelledby="po_combinations_tab">
+        <div class="tab-pane fade" id="po_combinations" role="tabpanel" aria-labelledby="po_combinations_tab"
+             href="/po_groups">
 
             <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Please select a combination</h4>
+                <div class="form-row justify-content-center">
+                    <div class="col">
+                        <h4 class="mt-4" style="color:#0f0f0f;">Please select a combination</h4>
+                    </div>
+                    <div class="col mt-3">
+
+                        <button type="button" id="combination" class="btn btn-info float-right">Info
+                        </button>
+
+                    </div>
+                </div>
+
                 <h6 class="mt-4" style="color:#00529F;">You can modify the combination by adding delays in the
                     <i>'Add Delays'</i> tab. </h6>
 
             </div>
+            {% block partial_order_comb %}
+            {% endblock %}
 
         </div>
 
         <div class="tab-pane fade" id="po_delays" role="tabpanel" aria-labelledby="po_delays_tab">
 
             <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Add Delays to the Combination</h4>
-                <h6 class="mt-4" style="color:#00529F;">Please add delays using the scroll bar. The final combination
-                    will be displayed in the <i>'Final Order'</i> tab. </h6>
+                <div class="form-row justify-content-center">
+                    <div class="col">
+                        <h4 class="mt-4 mb-4" style="color:#0f0f0f;">Add Delays to the Combination</h4>
+                    </div>
+                    <div class="col mt-3">
+                        <button type="button" class="btn btn-info float-right">Info</button>
+                    </div>
+                </div>
 
+                <!--<h6 class="mt-4" style="color:#00529F;">Please add delays using the scroll bar. The final combination
+                    will be displayed in the <i>'Final Order'</i> tab. </h6>-->
             </div>
-
+            <!--<input type="text" id="demoA" placeholder="time please"/>-->
+            {% block add_delays %}
+            {% endblock %}
         </div>
 
         <div class="tab-pane fade" id="po_final" role="tabpanel" aria-labelledby="po_final_tab">
 
             <div class="container-fluid">
-                <h4 class="mt-4" style="color:#0f0f0f;">Final Order</h4>
+                <div class="form-row justify-content-center ">
+                    <div class="col">
+                        <h4 class="mt-4" style="color:#0f0f0f;">Final Order</h4>
+                    </div>
+                    <div class="col mt-3">
+                        <button type="button" class="btn btn-info float-right">Info</button>
+                    </div>
+                </div>
+
                 <h6 class="mt-4" style="color:#00529F;">This is the final order</h6>
-                <h6 class="mt-4" style="color:#00529F;"><i>'Save'</i> will add the combination to the original log.</h6>
-                <h6 class="mt-4" style="color:#00529F;"><i>'Discard'</i> will delete the combination. You can redo the
+                <h6 class="mt-4" style="color:#00529F;"><i>'Save'</i> will add the combination to the original log.
+                </h6>
+                <h6 class="mt-4" style="color:#00529F;"><i>'Discard'</i> will delete the combination. You can redo
+                    the
                     process by either selecting a new group or a new combination.</h6>
                 <input type="submit" class="btn btn-success" name="groupButton" value="Save" id='submitresEL'
                        onclick="saved()"/>
@@ -96,4 +150,25 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
+
+
+{% block script %}
+
+    <script type="text/javascript">
+
+        window.addEventListener("load", function () {
+            tp.attach({
+                target: "demoA"
+            });
+            tp.attach({
+                target: "demoB1",
+                wrap: "demoB2"
+            });
+        });
+
+
+    </script>
+{% endblock %}
+
