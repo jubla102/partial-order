@@ -3,6 +3,8 @@
 {% block script %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab"];
@@ -28,16 +30,227 @@
 
 {% block tab_content %}
     <div class="tab-pane fade show active">
-        <div class="container-fluid">
-            <h4 class="mt-4 tab-subtitle">Add Delays to the Combination</h4>
-            <h6 class="mt-4 tab-subtitle">Please add delays using the scroll bar.</h6>
-            <h6 class="mt-4 tab-subtitle"><i>'Save'</i> will add the combination to the original log.</h6>
-            <h6 class="mt-4 tab-subtitle"><i>'Discard'</i> will delete the combination. You can redo the
-                process by either selecting a new group or a new combination.</h6>
+        <div class="container-fluid background">
+            <div class="form-row justify-content-center" id="header">
+                <div class="col">
+                    <h4 class="mt-4 white">Add Delays to the Combination</h4>
+                </div>
+                <div class="col mt-3">
+                    <button type="button" class="btn btn-info float-right">Info</button>
+                </div>
+            </div>
+            <br>
+            <!--<h6 class="form-inline"> Original Delays:</h6>-->
+            <div class="scrollable-outer shadow">
+                <!-- todo: new visualization where it shows the time stamp-->
+                <div class="scrollable-inner" id="rect1"></div>
+            </div>
+
+            <br>
+
+            <div id="container" class="container-delay shadow">
+                <div class="form-row">
+                    <div class="col-xs-1 activity-margin">
+                        <label> <b> </b> </label>
+                    </div>
+                    <div class="col-xs-1 mt-sm-5">
+                        <label class=" white"> <b> Activity: </b> </label>
+                    </div>
+                    <div class=" col-xs-1 mt-sm-5 name-margin">
+                        <!--todo: get color from the activity list-->
+                        <label class="green"> Name </label>
+                    </div>
+                    <div class="col-xs-1 mt-2 days-width">
+                        <label class="white" for="exampleFormControlTextarea1"> <b> Days </b> </label>
+                        <input type="number" class="form-control" placeholder="0">
+                    </div>
+                    <div class="col-xs-1 mt-2">
+                        <label class="white" for="exampleFormControlSelect1"> <b> Hours </b> </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+
+                        </select>
+                    </div>
+                    <div class="col-xs-1 mt-2">
+                        <label class="white" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                            <option>32</option>
+                            <option>33</option>
+                            <option>34</option>
+                            <option>35</option>
+                            <option>36</option>
+                            <option>37</option>
+                            <option>38</option>
+                            <option>39</option>
+                            <option>40</option>
+                            <option>41</option>
+                            <option>42</option>
+                            <option>43</option>
+                            <option>44</option>
+                            <option>45</option>
+                            <option>46</option>
+                            <option>47</option>
+                            <option>48</option>
+                            <option>49</option>
+                            <option>50</option>
+                            <option>51</option>
+                            <option>52</option>
+                            <option>53</option>
+                            <option>54</option>
+                            <option>55</option>
+                            <option>56</option>
+                            <option>57</option>
+                            <option>58</option>
+                            <option>59</option>
+                            <option>60</option>
+
+                        </select>
+                    </div>
+                    <div class="col-xs-1 mt-2">
+                        <label class="white" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                            <option>32</option>
+                            <option>33</option>
+                            <option>34</option>
+                            <option>35</option>
+                            <option>36</option>
+                            <option>37</option>
+                            <option>38</option>
+                            <option>39</option>
+                            <option>40</option>
+                            <option>41</option>
+                            <option>42</option>
+                            <option>43</option>
+                            <option>44</option>
+                            <option>45</option>
+                            <option>46</option>
+                            <option>47</option>
+                            <option>48</option>
+                            <option>49</option>
+                            <option>50</option>
+                            <option>51</option>
+                            <option>52</option>
+                            <option>53</option>
+                            <option>54</option>
+                            <option>55</option>
+                            <option>56</option>
+                            <option>57</option>
+                            <option>58</option>
+                            <option>59</option>
+                            <option>60</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-1 mt-4 centered">
+                    <button type="button" class="btn purple-dark" id="add_delay">Add Delay</button>
+                </div>
+            </div>
+
+            <div class="container-confirm-combination shadow centered">
+
+                <h6 class="mt-4 white"><i>'Save'</i> will add the combination to the original log.</h6>
+                <h6 class="white"><i>'Discard'</i> will delete the combination. You can redo the
+                    process by either selecting a new group or a new combination.</h6>
+                <br>
+                <input type="submit" class="btn btn-success centered mr-5" name="groupButton" value="Save"
+                       id='save' onclick="saved()"/>
+                <input type="submit" class="btn btn-danger centered" name="groupButton" value="Discard" id='discard'
+                       onclick="discarded()"/>
+            </div>
+
         </div>
-        <input type="submit" class="btn btn-success" name="groupButton" value="Save" id='submitresEL'
-               onclick="saved()"/>
-        <input type="submit" class="btn btn-danger" name="groupButton" value="Discard" id='submitresEL'
-               onclick="discarded()"/>
+
     </div>
 {% endblock %}
