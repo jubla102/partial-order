@@ -109,11 +109,40 @@ def get_partial_order_group_sequences():
     return partial_order_groups
 
 
+def get_partial_order_groups():
+    group_attributes = [DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]
+
+    partial_order_groups = list()
+    groups = get_partial_order_group_sequences()
+    orders = get_partial_order_sequences()
+
+    for group in range(0, len(groups)):
+        case_list = list()
+        t = -1
+        for case in range(0, len(orders)):
+            event_list = list()
+            if orders[case][CASE_CONCEPT_NAME][0] in groups[group][1].values:
+                for event in range(0, len(orders[case])):
+                    event_list.append([])
+                    event_list[event] = dict({"activity": orders[case][DEFAULT_NAME_KEY][event],
+                                              "timestamp": orders[case][DEFAULT_TIMESTAMP_KEY][event]})
+                case_list.append([])
+                t += 1
+                case_list[t] = dict({"case_id": orders[case][CASE_CONCEPT_NAME][0], "events": event_list})
+        partial_order_groups.append([])
+        partial_order_groups[group] = dict(
+            {"group_id": int(group + 1), "num_cases": len(groups[group][1]), "percentage": 0,
+             "cases": case_list})
+
+    return partial_order_groups
+
+
 def write_to_text_file():
     case_attributes = [CONCEPT_INDEX, DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]
 
     partial_order_groups_file = get_partial_order_group_sequences()
     partial_orders_file = get_partial_order_sequences()
+
     file = open("partial_order_grouping_output.txt", "w")
     file.write('All partial orders with sequencing information and timestamps')
     file.writelines('\n')
@@ -150,82 +179,13 @@ def write_to_text_file():
 
 if __name__ == '__main__':
     write_to_text_file()
-    partial_order_groups_main = get_partial_order_group_sequences()
-    partial_orders_main = get_partial_order_sequences()
-    temp = partial_order_groups_main[0][1][CASE_CONCEPT_NAME][0]
-    for case in range(0, len(partial_orders_main)):
-        if partial_orders_main[case][CASE_CONCEPT_NAME][0] == temp:
-            print(partial_orders_main[case])
-
-    """
-    group[i]
-    i = Group index
+    partial_order_groups_main = get_partial_order_groups()
     
-    Call group[i]['cases']
-    'cases' = List of cases (with all information)
-    *** cases must not be in data frame. use dictionary ***
     """
-    # print('All partial orders with sequencing information and timestamps')
-    # print(partial_orders_main)
-    # print('Partial order groups with sequencing information and corresponding case ID\'s')
-    # for g in range(0, len(partial_order_groups_main)):
-    # print('Group ', g + 1)
-    """
-    partial_order_groups_main[i][j]
-    i = group index
-    j = 0: dataframe with group information
-    j = 1: dataframe with case ID's corresponding to the group
-    """
-    """
-    partial_orders_main[i]
-    i = dataframe with partial order information
-    """
+        partial_order_groups[i]
+        i = Group index
 
+        Call partial_order_groups[i]['cases']
+        'cases' = List of cases (with all information)
+        *** cases must not be in data frame. use dictionary ***
     """
-    [
-	{
-		"groupId": 1,
-		"numerOfCases": 2,
-		"percentage": 0.21,
-		"cases": [
-			{
-				"caseId": 1,
-				"events": [
-					{
-						"activity": "c",
-						"timestamp": "2021-05-11 12:00"
-					},
-					{
-						"activity": "a",
-						"timestamp": "2021-05-11 12:00"
-					},
-					{
-						"activity": "d",
-						"timestamp": "2021-05-11 12:00"
-					}
-				]
-			},
-			{
-				"caseId": 2,
-				"events": [
-					{
-						"activity": "c",
-						"timestamp": "2021-05-11 13:00"
-					},
-					{
-						"activity": "a",
-						"timestamp": "2021-05-11 13:00"
-					},
-					{
-						"activity": "d",
-						"timestamp": "2021-05-11 13:00"
-					}
-				]
-			}
-		]
-	},
-]
-    """
-    # print(partial_order_groups_main[g][0])
-    # print('Corresponding cases')
-    # print(partial_order_groups_main[g][1])
