@@ -1,6 +1,6 @@
 from django.urls import path
 
-from partial_order_processing import partial_order_detection
+from partial_order import partial_order_detection
 from . import views
 
 urlpatterns = [
