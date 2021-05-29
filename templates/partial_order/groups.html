@@ -1,0 +1,49 @@
+{% extends 'partial_order/partial_order_processing.html' %}
+
+{% block script %}
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript">
+
+        let ids = ["groups_tab", "combinations_tab", "delays_tab"];
+        ids.forEach(function (id) {
+            let element = document.getElementById(id);
+            element.classList.remove("active");
+        });
+        let element = document.getElementById("groups_tab");
+        element.classList.add("active");
+
+    </script>
+
+{% endblock %}
+
+{% block tab_content %}
+
+    <div class="tab-pane fade show active">
+        <div class="container-fluid">
+            <h4 class="mt-4">Please select a Partial Order Group</h4>
+            <h6 class="mt-4 tab-subtitle">All possible combinations of the selected group will be
+                displayed in the <i>'Combinations'</i> tab.
+            </h6>
+            <div class="row">
+                <div class=" col-sm-6 col-md-7 col-lg-8">
+                    {% if log_name != ':notset:' %}
+                        <p style="color:green;"> '{{ log_name }}' is being used as the input.</p>
+                    {% else %}
+                        <p style="color:red;"> You have not set any event log as input. Use the "Event Data" tab
+                            to set
+                            an event log as input!</p>
+                    {% endif %}
+
+                    {% csrf_token %}
+
+                </div>
+            </div>
+            <div class="po-container" id="rect0"></div>
+            <div class="po-container" id="rect1"></div>
+        </div>
+    </div>
+
+{% endblock %}
