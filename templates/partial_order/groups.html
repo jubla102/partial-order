@@ -29,7 +29,7 @@
         <div class="container-fluid background">
             <div class="form-row justify-content-center shadow" id="header">
                 <div class="col">
-                    <h4 class="mt-4 white">Please select a Partial Order Group</h4>
+                    <h4 class="mt-4 text-light">Please select a Partial Order Group</h4>
                 </div>
                 <div class="col mt-3">
                     <button type="button" class="btn btn-info float-right">Info</button>
@@ -38,9 +38,9 @@
 
             <div class="row justify-content-center">
                 {% if log_name != ':notset:' %}
-                    <p class="green"><b>'{{ log_name }}' is being used as the input.</b></p>
+                    <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
                 {% else %}
-                    <p class="red"><b>You have not set any event log as input. Use the "Event Data" tab
+                    <p class="text-danger"><b>You have not set any event log as input. Use the "Event Data" tab
                         to set an event log as input!</b></p>
                 {% endif %}
 

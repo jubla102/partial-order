@@ -1,18 +1,8 @@
-.transparent {
-    background-color: rgba(13, 20, 41, 0.6);
-}
-
-.background {
-    background-image: url("../images/7.jpg");
-    background-color: transparent !important
-}
-
 .tab-subtitle {
     color: black;
 }
 
 .scrollable-outer {
-    background-color: rgba(0%, 0%, 0%, 0.4);
     width: 1250px;
     max-height: 490px;
     overflow: scroll;
@@ -20,26 +10,9 @@
 }
 
 .scrollable-inner {
-    background-color: rgba(0%, 0%, 0%, 0.4);
     height: 150px;
     overflow: scroll;
     overflow-y: hidden;
-}
-
-.green {
-    color: lawngreen;
-}
-
-.black {
-    color: black;
-}
-
-.white {
-    color: white;
-}
-
-.red {
-    color: red;
 }
 
 .purple-dark {
