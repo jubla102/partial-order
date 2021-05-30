@@ -133,7 +133,6 @@ def get_partial_orders_from_selected_file():
 def get_partial_orders_from_event_log(event_log):
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
     case_identifiers = df[CASE_CONCEPT_NAME].unique()
-
     partial_orders = pd.DataFrame()
     for case_id in case_identifiers:
         case = df.loc[df[CASE_CONCEPT_NAME] == case_id]

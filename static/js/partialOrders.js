@@ -11,7 +11,10 @@ axios.get('/partial-order/po-groups')
     );
 
 function drawPartialOrder(groupNumber, group, colorMap) {
-    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 800).attr("height", 200)
+    //todo: get the length of the longest trace for width
+
+    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 8000).attr("height", 200)
+
     svg.append('polygon')
         .attr('points', "50,50 150,50 175,75 150,100 50,100")
         .attr('fill', colorMap.get(group['cases'][0]['events'][0]['activity']))

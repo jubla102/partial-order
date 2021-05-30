@@ -19,9 +19,16 @@
 {% endblock %}
 
 {% block tab_content %}
-    <div class="tab-pane fade show active">
+    <div class="tab-pane fade show active background">
         <div class="container-fluid">
-            <h4 class="mt-4">Please select a combination</h4>
+            <div class="form-row justify-content-center" id="header">
+                <div class="col">
+                    <h4 class="mt-4">Please select a combination</h4>
+                </div>
+                <div class="col mt-3">
+                    <button type="button" class="btn btn-info float-right">Info</button>
+                </div>
+            </div>
             <h6 class="mt-4 tab-subtitle">You can modify the combination by adding delays in the
                 <i>'Add Delays'</i> tab. </h6>
         </div>
