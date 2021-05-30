@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.util.constants import CASE_CONCEPT_NAME
@@ -177,10 +179,16 @@ def write_to_text_file():
     file.close()
 
 
+def write_to_json_file():
+    partial_order_groups_json = get_partial_order_groups()
+    with open('partial_order_groups_output.json', 'w') as fp:
+        json.dump(partial_order_groups_json, fp)
+
+
 if __name__ == '__main__':
     write_to_text_file()
     partial_order_groups_main = get_partial_order_groups()
-    
+
     """
         partial_order_groups[i]
         i = Group index
