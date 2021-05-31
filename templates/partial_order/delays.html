@@ -25,13 +25,17 @@
                 alert("The order was discarded");
         }
 
+        var input = document.getElementById('input');
+        var picker = new Picker(input, {
+            format: 'YYYY/MM/DD HH:mm',
+        });
     </script>
 {% endblock %}
 
 {% block tab_content %}
     <div class="tab-pane fade show active">
         <div class="container-fluid background">
-            <div class="form-row justify-content-center" id="header">
+            <div class="form-row justify-content-center shadow" id="header">
                 <div class="col">
                     <h4 class="mt-4 white">Add Delays to the Combination</h4>
                 </div>
@@ -62,11 +66,11 @@
                     </div>
                     <div class="col-xs-1 mt-2 days-width">
                         <label class="white" for="exampleFormControlTextarea1"> <b> Days </b> </label>
-                        <input type="number" class="form-control" placeholder="0">
+                        <input type="number" min="0" class="form-control picker" placeholder="0">
                     </div>
                     <div class="col-xs-1 mt-2">
                         <label class="white" for="exampleFormControlSelect1"> <b> Hours </b> </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <select class="form-control picker" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -98,7 +102,7 @@
                     </div>
                     <div class="col-xs-1 mt-2">
                         <label class="white" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <select class="form-control picker" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -166,7 +170,7 @@
                     </div>
                     <div class="col-xs-1 mt-2">
                         <label class="white" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <select class="form-control picker" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -238,7 +242,7 @@
                 </div>
             </div>
 
-            <div class="container-confirm-combination shadow centered">
+            <div class="container-confirm-combination centered">
 
                 <h6 class="mt-4 white"><i>'Save'</i> will add the combination to the original log.</h6>
                 <h6 class="white"><i>'Discard'</i> will delete the combination. You can redo the
