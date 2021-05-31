@@ -17,8 +17,7 @@
     width: 1250px;
     max-height: 490px;
     overflow: scroll;
-    border-radius: 10px 10px 10px 10px;
-
+    border-radius: 5px 5px 5px 5px;
 }
 
 .scrollable-inner {

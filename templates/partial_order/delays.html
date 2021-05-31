@@ -25,19 +25,15 @@
                 alert("The order was discarded");
         }
 
-        var input = document.getElementById('input');
-        var picker = new Picker(input, {
-            format: 'YYYY/MM/DD HH:mm',
-        });
     </script>
 {% endblock %}
 
 {% block tab_content %}
     <div class="tab-pane fade show active">
         <div class="container-fluid background">
-            <div class="form-row justify-content-center shadow" id="header">
+            <div class="form-row justify-content-center" id="header">
                 <div class="col">
-                    <h4 class="mt-4 white">Add Delays to the Combination</h4>
+                    <h4 class="mt-4 text-light">Add Delays to the Combination</h4>
                 </div>
                 <div class="col mt-3">
                     <button type="button" class="btn btn-info float-right">Info</button>
@@ -58,19 +54,19 @@
                         <label> <b> </b> </label>
                     </div>
                     <div class="col-xs-1 mt-sm-5">
-                        <label class=" white"> <b> Activity: </b> </label>
+                        <label class="text-light"> <b> Activity: </b> </label>
                     </div>
                     <div class=" col-xs-1 mt-sm-5 name-margin">
                         <!--todo: get color from the activity list-->
-                        <label class="green"> Name </label>
+                        <label class="text-success"> Name </label>
                     </div>
                     <div class="col-xs-1 mt-2 days-width">
-                        <label class="white" for="exampleFormControlTextarea1"> <b> Days </b> </label>
-                        <input type="number" min="0" class="form-control picker" placeholder="0">
+                        <label class="text-light" for="exampleFormControlTextarea1"> <b> Days </b> </label>
+                        <input type="number" class="form-control" placeholder="0">
                     </div>
                     <div class="col-xs-1 mt-2">
-                        <label class="white" for="exampleFormControlSelect1"> <b> Hours </b> </label>
-                        <select class="form-control picker" id="exampleFormControlSelect1">
+                        <label class="text-light" for="exampleFormControlSelect1"> <b> Hours </b> </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -101,8 +97,8 @@
                         </select>
                     </div>
                     <div class="col-xs-1 mt-2">
-                        <label class="white" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
-                        <select class="form-control picker" id="exampleFormControlSelect1">
+                        <label class="text-light" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -169,8 +165,8 @@
                         </select>
                     </div>
                     <div class="col-xs-1 mt-2">
-                        <label class="white" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
-                        <select class="form-control picker" id="exampleFormControlSelect1">
+                        <label class="text-light" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -242,10 +238,10 @@
                 </div>
             </div>
 
-            <div class="container-confirm-combination centered">
+            <div class="container-confirm-combination shadow centered">
 
-                <h6 class="mt-4 white"><i>'Save'</i> will add the combination to the original log.</h6>
-                <h6 class="white"><i>'Discard'</i> will delete the combination. You can redo the
+                <h6 class="mt-4 text-light"><i>'Save'</i> will add the combination to the original log.</h6>
+                <h6 class="text-light"><i>'Discard'</i> will delete the combination. You can redo the
                     process by either selecting a new group or a new combination.</h6>
                 <br>
                 <input type="submit" class="btn btn-success centered mr-5" name="groupButton" value="Save"
