@@ -37,7 +37,8 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         i = i + j
     }
 
-    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 8000).attr("height", maxParallelEvents * (EVENT_HEIGHT + GAP))
+    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
+    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 8000).attr("height", height)
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
 }
 
