@@ -50,33 +50,31 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         baseY = Math.floor(maxParallelEvents / 2) * (EVENT_HEIGHT + GAP)
     }
 
+    let xOffset = 0
     for (let i = 0; i < eventList.length; i++) {
+        if ((i !== 0 && eventList[i].length % 2 === 0 && (eventList[i - 1].length % 2 !== 0)) ||
+            (i !== 0 && eventList[i].length % 2 !== 0 && (eventList[i - 1].length % 2 === 0))
+        ) {
+            xOffset = xOffset + GAP * 2
+        }
         for (let j = 0; j < eventList[i].length; j++) {
+            let yOffset
             if (eventList[i].length % 2 === 0) {
-                let yOffset = (eventList[i].length / 2 - 0.5) - j
-                svg.append('polygon')
-                    .attr('points', `${START_X + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(START_X + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${START_X + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${START_X + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${START_X + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${START_X + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER}`)
-                    .attr('fill', colorMap.get(eventList[i][j]['activity']))
-
-                svg.append('text')
-                    .attr('x', 80 + i * 110)
-                    .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
-                    .attr('stroke', 'black')
-                    .text(eventList[i][j]['activity'])
+                yOffset = (eventList[i].length / 2 - 0.5) - j
             } else {
-                let yOffset = Math.floor(eventList[i].length / 2) - j
-                svg.append('polygon')
-                    .attr('points', `${START_X + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(START_X + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${START_X + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${START_X + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${START_X + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${START_X + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER}`)
-                    .attr('fill', colorMap.get(eventList[i][j]['activity']))
-
-                svg.append('text')
-                    .attr('x', 80 + i * 110)
-                    .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
-                    .attr('stroke', 'black')
-                    .text(eventList[i][j]['activity'])
+                yOffset = Math.floor(eventList[i].length / 2) - j
             }
 
+            console.log(`${eventList[i][j]['activity']}: ${xOffset}`)
+            svg.append('polygon')
+                .attr('points', `${START_X + xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(START_X + xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${START_X + xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${START_X + xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${START_X + xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${START_X + xOffset + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER}`)
+                .attr('fill', colorMap.get(eventList[i][j]['activity']))
 
+            svg.append('text')
+                .attr('x', 80 + xOffset + i * 110)
+                .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
+                .attr('stroke', 'black')
+                .text(eventList[i][j]['activity'])
         }
     }
 }
