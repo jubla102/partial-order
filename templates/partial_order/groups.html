@@ -7,7 +7,7 @@
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript">
 
-        let ids = ["groups_tab", "combinations_tab", "delays_tab"];
+        let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
             let element = document.getElementById(id);
             element.classList.remove("active");
@@ -37,7 +37,7 @@
                     </button>
                 </div>
             </div>
-
+            <br>
             <div class="row justify-content-center">
                 {% if log_name != ':notset:' %}
                     <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
@@ -49,6 +49,7 @@
                 {% csrf_token %}
 
             </div>
+            <br>
             <div class="scrollable-outer custom-shadow">
                 <div class="scrollable-inner" id="rect0"></div>
                 <div class="scrollable-inner" id="rect1"></div>

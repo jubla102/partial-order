@@ -3,7 +3,7 @@
 }
 
 .background {
-    /*background-image: url("../images/.jpg");*/
+    /*background-image: url("../images/8.jpg");*/
     background-repeat: no-repeat;
     background-color: transparent !important;
     -webkit-background-size: cover;
@@ -32,10 +32,24 @@
     border-radius: 10px 10px 10px 10px;
 }
 
+.scrollable-inner-delay {
+
+    background-color: rgba(256%, 256%, 256%, 0);
+    /*background-color: rgba(0%, 0%, 0%, 0);*/
+    height: 170px;
+    overflow: scroll;
+    overflow-y: hidden;
+    border-radius: 10px 10px 10px 10px;
+}
+
 .purple-dark {
     background-color: rgb(139, 2, 194);
     color: white;
     border-color: black;
+}
+
+.text-purple {
+    color: rgb(139, 2, 194);
 }
 
 .tab-headline {
@@ -72,7 +86,7 @@
     border-radius: 3px/6px;
 }
 
-.container-delay {
+.custom-container {
     margin: 0 auto;
     margin-top: 10px;;
 
@@ -82,13 +96,22 @@
     border-radius: 10px 10px 10px 10px;
 }
 
-.container-confirm-combination {
+#confirm-final.custom-container {
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 10px;;
 
+    height: 27vh;
+    background-color: rgba(256, 256, 256, 0.4);
+    /*background-color: rgba(0, 0, 0, 1);*/
+    border-radius: 10px 10px 10px 10px;
+}
 
-    height: 30vh;
-    background-color: rgba(256, 256, 256, 1);
+#export-final.custom-container {
+    margin: 0 auto;
+    margin-top: 10px;;
+
+    height: 20vh;
+    background-color: rgba(256, 256, 256, 0.4);
     /*background-color: rgba(0, 0, 0, 1);*/
     border-radius: 10px 10px 10px 10px;
 }

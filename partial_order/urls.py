@@ -7,5 +7,6 @@ urlpatterns = [
     path('groups', views.groups, name='groups'),
     path('combinations', views.combinations, name='combinations'),
     path('delays', views.delays, name='delays'),
+    path('final_order', views.final_order, name='final_order'),
     path('po-groups', partial_order_detection.test_data_structure, name='test')
 ]
