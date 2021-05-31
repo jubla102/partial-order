@@ -80,7 +80,7 @@ def test_data_structure(request):
                         "events": [
                             {
                                 "activity": "a",
-                                "timestamp": "2021-05-11 12:00"
+                                "timestamp": "2021-05-11 12:01"
                             },
                             {
                                 "activity": "b",
@@ -104,7 +104,7 @@ def test_data_structure(request):
                             },
                             {
                                 "activity": "g",
-                                "timestamp": "2021-05-11 12:04"
+                                "timestamp": "2021-05-11 12:03"
                             }
                         ]
                     }

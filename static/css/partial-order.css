@@ -4,15 +4,14 @@
 
 .scrollable-outer {
     width: 1250px;
-    max-height: 490px;
     overflow: scroll;
     border-radius: 5px 5px 5px 5px;
 }
 
 .scrollable-inner {
-    height: 500px;
     overflow: scroll;
     overflow-y: hidden;
+    padding: 20px;
 }
 
 .purple-dark {

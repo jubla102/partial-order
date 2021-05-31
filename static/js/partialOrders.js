@@ -18,8 +18,6 @@ axios.get('/partial-order/po-groups')
 
 function drawPartialOrders(groupNumber, events, colorMap) {
     //todo: get the length of the longest trace for width
-    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 8000).attr("height", 500)
-
     let partialOrders = []
     let maxParallelEvents = 1
     for (let i = 0; i < events.length;) {
@@ -39,6 +37,7 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         i = i + j
     }
 
+    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 8000).attr("height", maxParallelEvents * (EVENT_HEIGHT + GAP))
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
 }
 
