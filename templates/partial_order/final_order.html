@@ -1,0 +1,95 @@
+{% extends 'partial_order/partial_order_processing.html' %}
+
+{% block script %}
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript">
+
+        let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
+        ids.forEach(function (id) {
+            let element = document.getElementById(id);
+            element.classList.remove("active");
+        });
+        let element = document.getElementById("final_tab");
+        element.classList.add("active");
+
+        function saved() {
+            if (confirm("The order will be saved and added to the original log"))
+                alert("The order was saved");
+        }
+
+        function discarded() {
+            if (confirm("Doing this will discard all the changes and delete modifications so far, do you wish to proceed?"))
+                alert("The order was discarded");
+        }
+
+    </script>
+{% endblock %}
+
+{% block tab_content %}
+
+    <div class="tab-pane fade show active">
+        <div class="container-fluid background">
+            <div class="form-row justify-content-center">
+                <div class=" col">
+                    <h4 class="mt-4 tab-headline">Confirm the Order</h4>
+                </div>
+                <div class="col mt-3">
+                    <button type="button" class="btn btn-info float-right" data-toggle="modal"
+                            data-target="#exampleModalLong">Info
+                    </button>
+                </div>
+            </div>
+            <br>
+            <div class="scrollable-outer custom-shadow">
+                <div class="scrollable-inner" id="rect1"></div>
+            </div>
+            <br>
+            <div class="custom-container custom-shadow centered" id="confirm-final">
+                <br>
+                <h6 class="mt-2 text-dark"><i class="text-success">'Save'</i> will add the combination to the
+                    original log.</h6>
+                <h6 class="text-dark"><i class="text-danger">'Discard'</i> will delete the combination.</h6>
+                <h6 class="text-dark"> You can redo the process by either selecting a new group or a new
+                    combination.</h6>
+                <br>
+                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
+                       id='save' onclick="saved()"/>
+                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
+                       id='discard'
+                       onclick="discarded()"/>
+            </div>
+
+            <div class="custom-container custom-shadow centered" id="export-final">
+                <br>
+                <h6 class="mt-2 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
+                    the XES file of the modified event log.</h6>
+                <br>
+                <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
+                       id='save' onclick=""/>
+            </div>
+
+        </div>
+
+        <!-- Info Popup Section -->
+        <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Final Order</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
