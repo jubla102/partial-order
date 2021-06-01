@@ -10,6 +10,154 @@ from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 from bootstrapdjango import settings
 
 
+def test_data_structure(request):
+    ds = {
+        "colorMap": {
+            "ER Registr.": "#EE6352",
+            "ER Triage": "#59CD90",
+            "Leucocytes": "#3FA7D6",
+            "CRP": "#FAC05E",
+            "IV Antibiotics": "#F79D84",
+            "Release A": "#53A548",
+            "Lactic Acid": "#804E49",
+            "IV Liquid": "#A69CAC",
+            "Admission NC": "#BAF2D8",
+            "Return ER": "#9F2042",
+            "ER Sepsis": "#788585",
+            "l": "#478978",
+            "m": "#FA7921",
+            "n": "#5BC0EB"
+        },
+        "groups": [
+            {
+                "groupId": 1,
+                "numerOfCases": 2,
+                "percentage": 0.21,
+                "cases": [
+                    {
+                        "caseId": 1,
+                        "events": [
+                            {
+                                "activity": "ER Registr.",
+                                "timestamp": "2021-05-11 12:00"
+                            },
+                            {
+                                "activity": "ER Triage",
+                                "timestamp": "2021-05-11 12:00"
+                            },
+                            {
+                                "activity": "Leucocytes",
+                                "timestamp": "2021-05-11 12:00"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "groupId": 2,
+                "numerOfCases": 1,
+                "percentage": 0.1,
+                "cases": [
+                    {
+                        "caseId": 1,
+                        "events": [
+                            {
+                                "activity": "ER Registr.",
+                                "timestamp": "2021-05-11 12:01"
+                            },
+                            {
+                                "activity": "CRP",
+                                "timestamp": "2021-05-11 12:02"
+                            },
+                            {
+                                "activity": "ER Triage",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Leucocytes",
+                                "timestamp": "2021-05-11 12:04"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:05"
+                            },
+                            {
+                                "activity": "Lactic Acid",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "ER Sepsis",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "Release A",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "CRP",
+                                "timestamp": "2021-05-11 12:07"
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "groupId": 2,
+                "numerOfCases": 1,
+                "percentage": 0.1,
+                "cases": [
+                    {
+                        "caseId": 1,
+                        "events": [
+                            {
+                                "activity": "ER Registr.",
+                                "timestamp": "2021-05-11 12:01"
+                            },
+                            {
+                                "activity": "Admission NC",
+                                "timestamp": "2021-05-11 12:02"
+                            },
+                            {
+                                "activity": "Return ER",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Lactic Acid",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Release A",
+                                "timestamp": "2021-05-11 12:04"
+                            },
+                            {
+                                "activity": "Leucocytes",
+                                "timestamp": "2021-05-11 12:04"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+    return JsonResponse(ds, safe=False)
+
+
+def get_partial_orders_from_selected_file():
+    """
+    simple-test.xes event log contains 9 cases.
+    The following case ids are partial orders: 1, 4, 6, 7, 8, 9
+    The groups are: (1, 7, 8), (4, 6), (9)
+
+    TODO Replace hard coded file by user selection
+    """
 def get_partial_orders_from_selected_file(request):
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
     absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')

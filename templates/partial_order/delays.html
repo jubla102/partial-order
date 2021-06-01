@@ -31,42 +31,43 @@
 {% block tab_content %}
     <div class="tab-pane fade show active">
         <div class="container-fluid background">
-            <div class="form-row justify-content-center" id="header">
+            <div class="form-row justify-content-center">
                 <div class="col">
-                    <h4 class="mt-4 text-light">Add Delays to the Combination</h4>
+                    <h4 class="mt-4 tab-headline">Add Delays to the Combination</h4>
                 </div>
                 <div class="col mt-3">
-                    <button type="button" class="btn btn-info float-right">Info</button>
+                    <button type="button" class="btn btn-info float-right" data-toggle="modal"
+                            data-target="#exampleModalLong">Info
+                    </button>
                 </div>
             </div>
-            <br>
             <!--<h6 class="form-inline"> Original Delays:</h6>-->
-            <div class="scrollable-outer shadow">
+            <div class="scrollable-outer custom-shadow">
                 <!-- todo: new visualization where it shows the time stamp-->
                 <div class="scrollable-inner" id="rect1"></div>
             </div>
 
             <br>
 
-            <div id="container" class="container-delay shadow">
+            <div id="container" class="container-delay custom-shadow">
                 <div class="form-row">
                     <div class="col-xs-1 activity-margin">
                         <label> <b> </b> </label>
                     </div>
                     <div class="col-xs-1 mt-sm-5">
-                        <label class="text-light"> <b> Activity: </b> </label>
+                        <label class="text-dark"> <b> Activity: </b> </label>
                     </div>
                     <div class=" col-xs-1 mt-sm-5 name-margin">
                         <!--todo: get color from the activity list-->
                         <label class="text-success"> Name </label>
                     </div>
                     <div class="col-xs-1 mt-2 days-width">
-                        <label class="text-light" for="exampleFormControlTextarea1"> <b> Days </b> </label>
-                        <input type="number" class="form-control" placeholder="0">
+                        <label class="text-dark" for="exampleFormControlTextarea1"> <b> Days </b> </label>
+                        <input type="number" min="0" class="form-control picker" placeholder="0">
                     </div>
                     <div class="col-xs-1 mt-2">
-                        <label class="text-light" for="exampleFormControlSelect1"> <b> Hours </b> </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Hours </b> </label>
+                        <select class="form-control picker" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -97,8 +98,8 @@
                         </select>
                     </div>
                     <div class="col-xs-1 mt-2">
-                        <label class="text-light" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
+                        <select class="form-control picker" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -165,8 +166,8 @@
                         </select>
                     </div>
                     <div class="col-xs-1 mt-2">
-                        <label class="text-light" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
+                        <select class="form-control picker" id="exampleFormControlSelect1">
 
                             <option>0</option>
                             <option>1</option>
@@ -234,14 +235,14 @@
                     </div>
                 </div>
                 <div class="col-xs-1 mt-4 centered">
-                    <button type="button" class="btn purple-dark" id="add_delay">Add Delay</button>
+                    <button type="button" class="btn btn-dark" id="add_delay">Add Delay</button>
                 </div>
             </div>
 
-            <div class="container-confirm-combination shadow centered">
+            <div class="container-confirm-combination custom-shadow centered">
 
-                <h6 class="mt-4 text-light"><i>'Save'</i> will add the combination to the original log.</h6>
-                <h6 class="text-light"><i>'Discard'</i> will delete the combination. You can redo the
+                <h6 class="mt-2 text-dark"><i>'Save'</i> will add the combination to the original log.</h6>
+                <h6 class="text-dark"><i>'Discard'</i> will delete the combination. You can redo the
                     process by either selecting a new group or a new combination.</h6>
                 <br>
                 <input type="submit" class="btn btn-success centered mr-5" name="groupButton" value="Save"
@@ -250,6 +251,24 @@
                        onclick="discarded()"/>
             </div>
 
+        </div>
+
+        <!-- Info Popup Section -->
+        <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Delays</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
