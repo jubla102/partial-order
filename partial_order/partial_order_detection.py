@@ -159,7 +159,7 @@ def get_partial_orders_from_selected_file():
     TODO Replace hard coded file by user selection
     """
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    absolute_file_path = os.path.join(event_logs_path, 'Sepsi_Cases-Event_Log.xes')
+    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
     event_log = importer.apply(absolute_file_path)
 
     return get_partial_orders_from_event_log(event_log)
