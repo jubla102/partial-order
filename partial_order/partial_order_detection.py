@@ -12,7 +12,7 @@ from bootstrapdjango import settings
 
 def get_partial_orders_from_selected_file(request):
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    absolute_file_path = os.path.join(event_logs_path, settings.EVENT_LOG_NAME)
+    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
     event_log = importer.apply(absolute_file_path)
     partial_order_groups = get_partial_order_groups(event_log)
 
