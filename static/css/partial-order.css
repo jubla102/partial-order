@@ -25,12 +25,9 @@
 }
 
 .scrollable-inner-delay {
-
-    background-color: rgba(256%, 256%, 256%, 0);
-    /*background-color: rgba(0%, 0%, 0%, 0);*/
-    height: 170px;
     overflow: scroll;
     overflow-y: hidden;
+    padding: 20px;
     border-radius: 10px 10px 10px 10px;
 }
 
