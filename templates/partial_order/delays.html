@@ -7,7 +7,7 @@
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript">
 
-        let ids = ["groups_tab", "combinations_tab", "delays_tab"];
+        let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
             let element = document.getElementById(id);
             element.classList.remove("active");
@@ -31,9 +31,9 @@
 {% block tab_content %}
     <div class="tab-pane fade show active">
         <div class="container-fluid background">
-            <div class="form-row justify-content-center">
+            <div class="form-row justify-content-center mb-2">
                 <div class="col">
-                    <h4 class="mt-4 tab-headline">Add Delays to the Combination</h4>
+                    <h4 class="mt-3 tab-headline">Add Delays to the Combination</h4>
                 </div>
                 <div class="col mt-3">
                     <button type="button" class="btn btn-info float-right" data-toggle="modal"
@@ -41,15 +41,13 @@
                     </button>
                 </div>
             </div>
-            <!--<h6 class="form-inline"> Original Delays:</h6>-->
-            <div class="scrollable-outer custom-shadow">
-                <!-- todo: new visualization where it shows the time stamp-->
-                <div class="scrollable-inner" id="rect1"></div>
-            </div>
-
             <br>
 
-            <div id="container" class="container-delay custom-shadow">
+            <!-- todo: new visualization where it shows the time stamp-->
+            <div class="scrollable-inner-delay custom-shadow" id="rect1"></div>
+
+            <br>
+            <div class="custom-container custom-shadow">
                 <div class="form-row">
                     <div class="col-xs-1 activity-margin">
                         <label> <b> </b> </label>
@@ -237,18 +235,6 @@
                 <div class="col-xs-1 mt-4 centered">
                     <button type="button" class="btn btn-dark" id="add_delay">Add Delay</button>
                 </div>
-            </div>
-
-            <div class="container-confirm-combination custom-shadow centered">
-
-                <h6 class="mt-2 text-dark"><i>'Save'</i> will add the combination to the original log.</h6>
-                <h6 class="text-dark"><i>'Discard'</i> will delete the combination. You can redo the
-                    process by either selecting a new group or a new combination.</h6>
-                <br>
-                <input type="submit" class="btn btn-success centered mr-5" name="groupButton" value="Save"
-                       id='save' onclick="saved()"/>
-                <input type="submit" class="btn btn-danger centered" name="groupButton" value="Discard" id='discard'
-                       onclick="discarded()"/>
             </div>
 
         </div>
