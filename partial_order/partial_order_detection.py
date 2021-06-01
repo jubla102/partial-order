@@ -13,17 +13,17 @@ from bootstrapdjango import settings
 def test_data_structure(request):
     ds = {
         "colorMap": {
-            "a": "#EE6352",
-            "b": "#59CD90",
-            "c": "#3FA7D6",
-            "d": "#FAC05E",
-            "e": "#F79D84",
-            "f": "#53A548",
-            "g": "#804E49",
-            "h": "#A69CAC",
-            "i": "#BAF2D8",
-            "j": "#9F2042",
-            "k": "#788585",
+            "ER Registr.": "#EE6352",
+            "ER Triage": "#59CD90",
+            "Leucocytes": "#3FA7D6",
+            "CRP": "#FAC05E",
+            "IV Antibiotics": "#F79D84",
+            "Release A": "#53A548",
+            "Lactic Acid": "#804E49",
+            "IV Liquid": "#A69CAC",
+            "Admission NC": "#BAF2D8",
+            "Return ER": "#9F2042",
+            "ER Sepsis": "#788585",
             "l": "#478978",
             "m": "#FA7921",
             "n": "#5BC0EB"
@@ -38,33 +38,16 @@ def test_data_structure(request):
                         "caseId": 1,
                         "events": [
                             {
-                                "activity": "c",
+                                "activity": "ER Registr.",
                                 "timestamp": "2021-05-11 12:00"
                             },
                             {
-                                "activity": "a",
+                                "activity": "ER Triage",
                                 "timestamp": "2021-05-11 12:00"
                             },
                             {
-                                "activity": "d",
+                                "activity": "Leucocytes",
                                 "timestamp": "2021-05-11 12:00"
-                            }
-                        ]
-                    },
-                    {
-                        "caseId": 2,
-                        "events": [
-                            {
-                                "activity": "c",
-                                "timestamp": "2021-05-11 13:00"
-                            },
-                            {
-                                "activity": "a",
-                                "timestamp": "2021-05-11 13:00"
-                            },
-                            {
-                                "activity": "d",
-                                "timestamp": "2021-05-11 13:00"
                             }
                         ]
                     }
@@ -79,31 +62,83 @@ def test_data_structure(request):
                         "caseId": 1,
                         "events": [
                             {
-                                "activity": "a",
-                                "timestamp": "2021-05-11 12:00"
-                            },
-                            {
-                                "activity": "b",
+                                "activity": "ER Registr.",
                                 "timestamp": "2021-05-11 12:01"
                             },
                             {
-                                "activity": "c",
-                                "timestamp": "2021-05-11 12:01"
-                            },
-                            {
-                                "activity": "d",
+                                "activity": "CRP",
                                 "timestamp": "2021-05-11 12:02"
                             },
                             {
-                                "activity": "e",
-                                "timestamp": "2021-05-11 12:02"
-                            },
-                            {
-                                "activity": "f",
+                                "activity": "ER Triage",
                                 "timestamp": "2021-05-11 12:03"
                             },
                             {
-                                "activity": "g",
+                                "activity": "Leucocytes",
+                                "timestamp": "2021-05-11 12:04"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:05"
+                            },
+                            {
+                                "activity": "Lactic Acid",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "ER Sepsis",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "Release A",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "CRP",
+                                "timestamp": "2021-05-11 12:07"
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "groupId": 2,
+                "numerOfCases": 1,
+                "percentage": 0.1,
+                "cases": [
+                    {
+                        "caseId": 1,
+                        "events": [
+                            {
+                                "activity": "ER Registr.",
+                                "timestamp": "2021-05-11 12:01"
+                            },
+                            {
+                                "activity": "Admission NC",
+                                "timestamp": "2021-05-11 12:02"
+                            },
+                            {
+                                "activity": "Return ER",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Lactic Acid",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Release A",
+                                "timestamp": "2021-05-11 12:04"
+                            },
+                            {
+                                "activity": "Leucocytes",
                                 "timestamp": "2021-05-11 12:04"
                             }
                         ]
@@ -124,7 +159,7 @@ def get_partial_orders_from_selected_file():
     TODO Replace hard coded file by user selection
     """
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    absolute_file_path = os.path.join(event_logs_path, 'simple-test.xes')
+    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
     event_log = importer.apply(absolute_file_path)
 
     return get_partial_orders_from_event_log(event_log)
