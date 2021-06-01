@@ -1,12 +1,13 @@
 import json
 
 import pandas as pd
+from django.http import JsonResponse
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
-from partial_order_detection import get_partial_orders_from_selected_file as get_partial_orders
+from partial_order.partial_order_detection import get_partial_orders_from_selected_file as get_partial_orders
 
 CONCEPT_INDEX = 'concept:index'
 INDEX = 'index'
@@ -111,9 +112,7 @@ def get_partial_order_group_sequences():
     return partial_order_groups
 
 
-def get_partial_order_groups():
-    group_attributes = [DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]
-
+def get_partial_order_groups(request):
     partial_order_groups = list()
     groups = get_partial_order_group_sequences()
     orders = get_partial_order_sequences()
@@ -136,7 +135,7 @@ def get_partial_order_groups():
             {"group_id": int(group + 1), "num_cases": len(groups[group][1]), "percentage": 0,
              "cases": case_list})
 
-    return partial_order_groups
+    return JsonResponse(partial_order_groups, safe=False)
 
 
 def write_to_text_file():
@@ -186,9 +185,8 @@ def write_to_json_file():
 
 
 if __name__ == '__main__':
-    write_to_text_file()
-    partial_order_groups_main = get_partial_order_groups()
-
+    # write_to_text_file()
+    print(get_partial_order_groups(None))
     """
         partial_order_groups[i]
         i = Group index

@@ -1,10 +1,10 @@
 import os
 
-import pandas as pd
 from django.http import JsonResponse
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.importer.xes import importer
 from pm4py.util.constants import CASE_CONCEPT_NAME
+from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
 from bootstrapdjango import settings
@@ -13,17 +13,17 @@ from bootstrapdjango import settings
 def test_data_structure(request):
     ds = {
         "colorMap": {
-            "a": "#EE6352",
-            "b": "#59CD90",
-            "c": "#3FA7D6",
-            "d": "#FAC05E",
-            "e": "#F79D84",
-            "f": "#53A548",
-            "g": "#804E49",
-            "h": "#A69CAC",
-            "i": "#BAF2D8",
-            "j": "#9F2042",
-            "k": "#788585",
+            "ER Registr.": "#EE6352",
+            "ER Triage": "#59CD90",
+            "Leucocytes": "#3FA7D6",
+            "CRP": "#FAC05E",
+            "IV Antibiotics": "#F79D84",
+            "Release A": "#53A548",
+            "Lactic Acid": "#804E49",
+            "IV Liquid": "#A69CAC",
+            "Admission NC": "#BAF2D8",
+            "Return ER": "#9F2042",
+            "ER Sepsis": "#788585",
             "l": "#478978",
             "m": "#FA7921",
             "n": "#5BC0EB"
@@ -38,33 +38,16 @@ def test_data_structure(request):
                         "caseId": 1,
                         "events": [
                             {
-                                "activity": "c",
+                                "activity": "ER Registr.",
                                 "timestamp": "2021-05-11 12:00"
                             },
                             {
-                                "activity": "a",
+                                "activity": "ER Triage",
                                 "timestamp": "2021-05-11 12:00"
                             },
                             {
-                                "activity": "d",
+                                "activity": "Leucocytes",
                                 "timestamp": "2021-05-11 12:00"
-                            }
-                        ]
-                    },
-                    {
-                        "caseId": 2,
-                        "events": [
-                            {
-                                "activity": "c",
-                                "timestamp": "2021-05-11 13:00"
-                            },
-                            {
-                                "activity": "a",
-                                "timestamp": "2021-05-11 13:00"
-                            },
-                            {
-                                "activity": "d",
-                                "timestamp": "2021-05-11 13:00"
                             }
                         ]
                     }
@@ -79,31 +62,83 @@ def test_data_structure(request):
                         "caseId": 1,
                         "events": [
                             {
-                                "activity": "a",
-                                "timestamp": "2021-05-11 12:00"
-                            },
-                            {
-                                "activity": "b",
+                                "activity": "ER Registr.",
                                 "timestamp": "2021-05-11 12:01"
                             },
                             {
-                                "activity": "c",
-                                "timestamp": "2021-05-11 12:01"
-                            },
-                            {
-                                "activity": "d",
+                                "activity": "CRP",
                                 "timestamp": "2021-05-11 12:02"
                             },
                             {
-                                "activity": "e",
-                                "timestamp": "2021-05-11 12:02"
-                            },
-                            {
-                                "activity": "f",
+                                "activity": "ER Triage",
                                 "timestamp": "2021-05-11 12:03"
                             },
                             {
-                                "activity": "g",
+                                "activity": "Leucocytes",
+                                "timestamp": "2021-05-11 12:04"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:05"
+                            },
+                            {
+                                "activity": "Lactic Acid",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "ER Sepsis",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "Release A",
+                                "timestamp": "2021-05-11 12:06"
+                            },
+                            {
+                                "activity": "CRP",
+                                "timestamp": "2021-05-11 12:07"
+                            },
+                        ]
+                    }
+                ]
+            },
+            {
+                "groupId": 2,
+                "numerOfCases": 1,
+                "percentage": 0.1,
+                "cases": [
+                    {
+                        "caseId": 1,
+                        "events": [
+                            {
+                                "activity": "ER Registr.",
+                                "timestamp": "2021-05-11 12:01"
+                            },
+                            {
+                                "activity": "Admission NC",
+                                "timestamp": "2021-05-11 12:02"
+                            },
+                            {
+                                "activity": "Return ER",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Lactic Acid",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "IV Liquid",
+                                "timestamp": "2021-05-11 12:03"
+                            },
+                            {
+                                "activity": "Release A",
+                                "timestamp": "2021-05-11 12:04"
+                            },
+                            {
+                                "activity": "Leucocytes",
                                 "timestamp": "2021-05-11 12:04"
                             }
                         ]
@@ -123,28 +158,43 @@ def get_partial_orders_from_selected_file():
 
     TODO Replace hard coded file by user selection
     """
+def get_partial_orders_from_selected_file(request):
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    absolute_file_path = os.path.join(event_logs_path, 'simple-test.xes')
+    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
     event_log = importer.apply(absolute_file_path)
+    partial_order_groups = get_partial_order_groups(event_log)
 
-    return get_partial_orders_from_event_log(event_log)
+    return JsonResponse(partial_order_groups, safe=False)
 
 
-def get_partial_orders_from_event_log(event_log):
+def get_partial_order_groups(event_log):
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
-    case_identifiers = df[CASE_CONCEPT_NAME].unique()
-    partial_orders = pd.DataFrame()
-    for case_id in case_identifiers:
-        case = df.loc[df[CASE_CONCEPT_NAME] == case_id]
-        if is_partial_order(case):
-            partial_orders = partial_orders.append(case)
+    df = df[[CASE_CONCEPT_NAME, DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]]
+    df = df.sort_values(by=[CASE_CONCEPT_NAME, DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY])
+    partial_order_groups = {'totalNumberOfTraces': len(event_log), 'groups': {}}
+    df.groupby(CASE_CONCEPT_NAME).apply(lambda x: check_for_partial_order(x, partial_order_groups))
+    df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
 
-    return log_converter.apply(partial_orders, variant=log_converter.Variants.TO_EVENT_LOG)
+    return partial_order_groups
 
 
-def is_partial_order(case):
-    return not case[DEFAULT_TIMESTAMP_KEY].is_unique
+def check_for_partial_order(case, partial_order_groups):
+    events = []
+    if not case[DEFAULT_TIMESTAMP_KEY].is_unique:
+        case.groupby(DEFAULT_TIMESTAMP_KEY).apply(lambda x: create_group_hash_list(x, events))
+        key = ''.join(events)
+
+        if key in partial_order_groups['groups']:
+            partial_order_groups['groups'][key]['numberOfCases'] = partial_order_groups['groups'][key][
+                                                                       'numberOfCases'] + 1
+        else:
+            partial_order_groups['groups'][key] = {'numberOfCases': 1}
+            partial_order_groups['groups'][key]['events'] = [*case.to_dict('index').values()]
+
+
+def create_group_hash_list(x, events):
+    events.extend(['|'] + x[DEFAULT_NAME_KEY].values.tolist() + ['|'])
 
 
 if __name__ == '__main__':
-    print(get_partial_orders_from_selected_file())
+    print(get_partial_orders_from_selected_file(None))
