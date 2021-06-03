@@ -47,9 +47,9 @@
             </div>
             <br>
             <div class="scrollable-outer custom-shadow">
-                <div class="scrollable-inner" id="rect0"></div>
-                <div class="scrollable-inner" id="rect1"></div>
-                <div class="scrollable-inner" id="rect2"></div>
+                {% for i in numberOfGroups %}
+                    <div class="scrollable-inner" id="rect{{ i }}"></div>
+                {% endfor %}
             </div>
 
         </div>

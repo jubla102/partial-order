@@ -2,26 +2,31 @@ const EVENT_WIDTH = 125
 const EVENT_HEIGHT = 50
 const GAP = 10
 const EVENT_DIAMETER = 25
+const EVENTS_KEY = 'events'
+const ACTIVITY_KEY = 'concept:name'
+const TIMESTAMP_KEY = 'time:timestamp'
 
-axios.get('/partial-order/test')
+axios.get('/partial-order/po-groups')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data['colorMap']))
+            let colorMap = new Map(Object.entries(response.data['colors']))
             let partialOrderGroups = response.data['groups']
 
-            for (let i = 0; i < partialOrderGroups.length; i++) {
-                drawPartialOrders(i, partialOrderGroups[i]['cases'][0]['events'], colorMap)
+            let groupKeys = Object.keys(partialOrderGroups)
+            for (let i = 0; i < groupKeys.length; i++) {
+                drawPartialOrders(i, partialOrderGroups[groupKeys[i]][EVENTS_KEY], colorMap)
             }
         }
     );
 
 function drawPartialOrders(groupNumber, events, colorMap) {
+    console.log('ich bin in draw partial')
     let partialOrders = []
     let maxParallelEvents = 1
     for (let i = 0; i < events.length;) {
         let parallelEvents = [events[i]]
         let j = 1
         for (; i + j < events.length; j++) {
-            if (events[i]['timestamp'] === events[i + j]['timestamp']) {
+            if (events[i][TIMESTAMP_KEY] === events[i + j][TIMESTAMP_KEY]) {
                 parallelEvents.push(events[i + j])
             } else {
                 break
@@ -33,6 +38,7 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         partialOrders.push(parallelEvents)
         i = i + j
     }
+    console.log(partialOrders)
     //todo: get the length of the longest trace for width
     let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
     let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", 8000).attr("height", height)
@@ -72,13 +78,13 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             }
             svg.append('polygon')
                 .attr('points', polygon)
-                .attr('fill', colorMap.get(eventList[i][j]['activity']))
+                .attr('fill', colorMap.get(eventList[i][j][ACTIVITY_KEY]))
 
             svg.append('text')
                 .attr('x', 30 + xOffset + i * (EVENT_WIDTH + GAP))
                 .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
                 .attr('stroke', 'black')
-                .text(eventList[i][j]['activity'])
+                .text(eventList[i][j][ACTIVITY_KEY])
         }
     }
 }

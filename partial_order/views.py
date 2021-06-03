@@ -2,10 +2,17 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.template import loader
 
+from partial_order import partial_order_detection
+
 
 def groups(request):
     template = loader.get_template('partial_order/groups.html')
-    return HttpResponse(template.render({'log_name': settings.EVENT_LOG_NAME}, request))
+
+    partial_order_groups = partial_order_detection.get_groups_file()
+    number_of_groups = len(partial_order_groups['groups'])
+
+    return HttpResponse(
+        template.render({'log_name': settings.EVENT_LOG_NAME, 'numberOfGroups': range(number_of_groups)}, request))
 
 
 def combinations(request):
