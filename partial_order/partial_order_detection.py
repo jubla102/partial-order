@@ -1,3 +1,4 @@
+import json
 import os
 
 from django.http import JsonResponse
@@ -150,19 +151,20 @@ def test_data_structure(request):
     return JsonResponse(ds, safe=False)
 
 
-def get_partial_orders_from_selected_file():
-    """
-    simple-test.xes event log contains 9 cases.
-    The following case ids are partial orders: 1, 4, 6, 7, 8, 9
-    The groups are: (1, 7, 8), (4, 6), (9)
-
-    TODO Replace hard coded file by user selection
-    """
 def get_partial_orders_from_selected_file(request):
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
     absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
-    event_log = importer.apply(absolute_file_path)
-    partial_order_groups = get_partial_order_groups(event_log)
+
+    temp_path = os.path.join(settings.MEDIA_ROOT, "temp")
+    temp_file = os.path.join(temp_path, 'partial_orders_Sepsis_Cases-Event_Log.json')
+    if os.path.exists(temp_file):
+        with open(temp_file) as json_file:
+            partial_order_groups = json.load(json_file)
+    else:
+        event_log = importer.apply(absolute_file_path)
+        partial_order_groups = get_partial_order_groups(event_log)
+        with open(temp_file, 'w') as outfile:
+            json.dump(partial_order_groups, outfile, indent=4)
 
     return JsonResponse(partial_order_groups, safe=False)
 
@@ -170,10 +172,10 @@ def get_partial_orders_from_selected_file(request):
 def get_partial_order_groups(event_log):
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
     df = df[[CASE_CONCEPT_NAME, DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]]
+    df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
     df = df.sort_values(by=[CASE_CONCEPT_NAME, DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY])
     partial_order_groups = {'totalNumberOfTraces': len(event_log), 'groups': {}}
     df.groupby(CASE_CONCEPT_NAME).apply(lambda x: check_for_partial_order(x, partial_order_groups))
-    df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
 
     return partial_order_groups
 
