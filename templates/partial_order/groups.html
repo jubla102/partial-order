@@ -46,12 +46,18 @@
 
             </div>
             <br>
-            <div class="scrollable-outer custom-shadow">
-                {% for i in numberOfGroups %}
-                    <div class="scrollable-inner" id="rect{{ i }}"></div>
-                {% endfor %}
-            </div>
-
+            {% for group in groups %}
+                <div class="container-fluid">
+                    <div class="row partial-order-row">
+                        <div class="col-1 align-self-center">
+                            {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+                        </div>
+                        <div class="col-11 scrollable-outer">
+                            <div class="scrollable-inner" id="rect{{ forloop.counter0 }}"></div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
 
         <!-- Info Popup Section -->

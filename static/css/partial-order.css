@@ -11,17 +11,17 @@
     background-size: cover;
 }
 
+.partial-order-row {
+    padding: 30px;
+}
+
 .scrollable-outer {
-    width: 1250px;
     overflow: scroll;
-    border-radius: 5px 5px 5px 5px;
 }
 
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
-    padding: 20px;
-    border-radius: 10px 10px 10px 10px;
 }
 
 .scrollable-inner-delay {
@@ -59,19 +59,6 @@
 
 .custom-text-shadow {
     text-shadow: 2px 2px 30px #000000;
-}
-
-/* delays css*/
-
-.container {
-    margin: 0 auto;
-    margin-top: 50px;;
-    height: 80vh;
-    background-color: rgba(13, 20, 41, 0.7);
-    border: 1px solid #000000;
-    box-shadow: 1px 1px 2px #000000 inset,
-    -1px -1px 2px #000 inset;
-    border-radius: 3px/6px;
 }
 
 .custom-container {
