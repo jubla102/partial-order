@@ -34,16 +34,17 @@
                 </div>
             </div>
             <br>
-            <div class="row justify-content-center">
-                {% if log_name != ':notset:' %}
-                    <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
-                {% else %}
-                    <p class="text-danger"><b>You have not set any event log as input. Use the "Event Data" tab
-                        to set an event log as input!</b></p>
-                {% endif %}
+            <div class="row">
+                <div class="col-sm-6 col-md-7 col-lg-8">
+                    {% if log_name != ':notset:' %}
+                        <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
+                    {% else %}
+                        <p class="text-danger"><b>You have not set any event log as input. Use the "Event Data" tab
+                            to set an event log as input!</b></p>
+                    {% endif %}
 
-                {% csrf_token %}
-
+                    {% csrf_token %}
+                </div>
             </div>
             <br>
             {% for group in groups %}
