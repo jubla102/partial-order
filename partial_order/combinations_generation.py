@@ -1,7 +1,18 @@
 import itertools
+import json
 
 import pandas as pd
+from django.http import JsonResponse, HttpResponseNotFound
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
+
+
+def get_all_combinations(request):
+    if request.method == 'POST':
+        trace = json.loads(request.body)
+
+        return JsonResponse(get_order_combinations(trace), safe=False)
+    else:
+        return HttpResponseNotFound()
 
 
 def get_order_combinations(partial_order_trace):
@@ -34,3 +45,18 @@ def get_order_combinations(partial_order_trace):
         combinations.append(sorted(unsorted_trace, key=lambda x: x[DEFAULT_TIMESTAMP_KEY]))
 
     return combinations
+
+
+if __name__ == '__main__':
+    case = [{'case:concept:name': 'B', 'concept:name': 'f', 'time:timestamp': '2021-05-02 12:06'},
+            {'case:concept:name': 'B', 'concept:name': 'b', 'time:timestamp': '2021-05-02 12:01'},
+            {'case:concept:name': 'B', 'concept:name': 'a', 'time:timestamp': '2021-05-02 12:00'},
+            {'case:concept:name': 'B', 'concept:name': 'e', 'time:timestamp': '2021-05-02 12:05'},
+            {'case:concept:name': 'B', 'concept:name': 'c', 'time:timestamp': '2021-05-02 12:01'},
+            {'case:concept:name': 'B', 'concept:name': 'g', 'time:timestamp': '2021-05-02 12:06'},
+            {'case:concept:name': 'B', 'concept:name': 'd', 'time:timestamp': '2021-05-02 12:01'}]
+    combinations = get_order_combinations(case)
+    for combination in combinations:
+        for event in combination:
+            print(event['concept:name'], end=' ')
+        print('')
