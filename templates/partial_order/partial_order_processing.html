@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if message %}
+        <script>
+            alert({{message}})
+        </script>
+    {% endif %}
+    <body>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="groups_tab" href="groups">Partial Order Groups</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="combinations_tab" href="combinations">Combinations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="delays_tab" href="delays">Add Delays</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="final_tab" href="final_order">Final Order</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content" id="myTabContent">
+        {% block tab_content %}
+        {% endblock %}
+    </div>
+{% endblock %}

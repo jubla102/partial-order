@@ -100,14 +100,14 @@ def filter(request):
             temp_path = os.path.join(settings.MEDIA_ROOT, "temp")
 
             if settings.EVENT_LOG_NAME == ':notset:':
-                return HttpResponseRedirect(request.path_info)
+                print('hello')  # return HttpResponseRedirect(request.path_info)
 
             event_log = os.path.join(event_logs_path, settings.EVENT_LOG_NAME)
 
             event_log = os.path.join(event_logs_path, settings.EVENT_LOG_NAME)
             exportPrivacyAwareLog = True
             log = importer.apply(event_log)
-            dfg = dfg_factory.apply(log)
+            dfg = dfg_factory.apply(log)  # directly follows graph
             print(dfg)
             this_data, temp_file = dfg_to_g6(dfg)
 
@@ -117,6 +117,12 @@ def filter(request):
             return render(request, 'filter.html',
                           {'log_name': settings.EVENT_LOG_NAME, 'json_file': temp_file, 'data': json.dumps(this_data)})
 
+
+# line 107, 109 (get the event log)
+# 110 (get dfg)
+# 112 (dfg_to_g6)
+# 118 (this_data, json object data being sent to filter.html for plotting, from line 112)
+# this_data is nothing but a structure containing nodes and edges as you can see in line 140)
 
 def dfg_to_g6(dfg):
     unique_nodes = []
