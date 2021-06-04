@@ -8,11 +8,15 @@ from partial_order import partial_order_detection
 def groups(request):
     template = loader.get_template('partial_order/groups.html')
 
-    partial_order_groups = partial_order_detection.get_groups_file()
-    number_of_groups = len(partial_order_groups['groups'])
+    partial_order_ds = partial_order_detection.get_groups_file()
+    number_of_groups = len(partial_order_ds['groups'])
 
     return HttpResponse(
-        template.render({'log_name': settings.EVENT_LOG_NAME, 'numberOfGroups': range(number_of_groups)}, request))
+        template.render(
+            {'log_name': settings.EVENT_LOG_NAME,
+             'groups': partial_order_ds['groups'].values(),
+             'numberOfGroups': range(number_of_groups),
+             'totalNumberOfTraces': partial_order_ds['totalNumberOfTraces']}, request))
 
 
 def combinations(request):

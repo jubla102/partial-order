@@ -11,17 +11,20 @@
     background-size: cover;
 }
 
-.scrollable-outer {
-    width: 1250px;
-    overflow: scroll;
-    border-radius: 5px 5px 5px 5px;
+.partial-order-row {
+    padding: 30px 30px 30px 0;
+}
+
+.case-info {
+    padding-bottom: 37px;
+    min-width: 100px;
+    max-width: 100px;
 }
 
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
-    padding: 20px;
-    border-radius: 10px 10px 10px 10px;
+    padding: 15px 0 15px 0;
 }
 
 .scrollable-inner-delay {
@@ -49,6 +52,20 @@
     text-align: center;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(90, 90, 90, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
 /* .shadow {
     -webkit-border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
     -webkit-box-shadow: rgba(256, 256, 256, 0.3) 1px 2px 3px;
@@ -59,19 +76,6 @@
 
 .custom-text-shadow {
     text-shadow: 2px 2px 30px #000000;
-}
-
-/* delays css*/
-
-.container {
-    margin: 0 auto;
-    margin-top: 50px;;
-    height: 80vh;
-    background-color: rgba(13, 20, 41, 0.7);
-    border: 1px solid #000000;
-    box-shadow: 1px 1px 2px #000000 inset,
-    -1px -1px 2px #000 inset;
-    border-radius: 3px/6px;
 }
 
 .custom-container {
