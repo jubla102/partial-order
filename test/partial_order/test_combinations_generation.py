@@ -10,12 +10,12 @@ class TestCombinationsGeneration(unittest.TestCase):
         The events a - d are partial orders and therefore there are 4! = 24 possible orders.
         """
         trace = [
-            {'activity': 'a', 'time:timestamp': '2021-05-02 12:00'},
-            {'activity': 'b', 'time:timestamp': '2021-05-02 12:00'},
-            {'activity': 'c', 'time:timestamp': '2021-05-02 12:00'},
-            {'activity': 'd', 'time:timestamp': '2021-05-02 12:00'},
-            {'activity': 'e', 'time:timestamp': '2021-05-02 13:00'},
-            {'activity': 'f', 'time:timestamp': '2021-05-02 14:00'},
+            {'case:concept:name': 'A', 'concept:name': 'a', 'time:timestamp': '2021-05-02 12:00'},
+            {'case:concept:name': 'A', 'concept:name': 'b', 'time:timestamp': '2021-05-02 12:00'},
+            {'case:concept:name': 'A', 'concept:name': 'c', 'time:timestamp': '2021-05-02 12:00'},
+            {'case:concept:name': 'A', 'concept:name': 'd', 'time:timestamp': '2021-05-02 12:00'},
+            {'case:concept:name': 'A', 'concept:name': 'e', 'time:timestamp': '2021-05-02 13:00'},
+            {'case:concept:name': 'A', 'concept:name': 'f', 'time:timestamp': '2021-05-02 14:00'},
         ]
 
         combinations = combinations_generation.get_order_combinations(trace)
@@ -30,13 +30,13 @@ class TestCombinationsGeneration(unittest.TestCase):
         in total there are 12 possible orders.
         """
         trace = [
-            {'activity': 'f', 'time:timestamp': '2021-05-02 12:06'},
-            {'activity': 'b', 'time:timestamp': '2021-05-02 12:01'},
-            {'activity': 'a', 'time:timestamp': '2021-05-02 12:00'},
-            {'activity': 'e', 'time:timestamp': '2021-05-02 12:05'},
-            {'activity': 'c', 'time:timestamp': '2021-05-02 12:01'},
-            {'activity': 'g', 'time:timestamp': '2021-05-02 12:06'},
-            {'activity': 'd', 'time:timestamp': '2021-05-02 12:01'}
+            {'case:concept:name': 'B', 'concept:name': 'f', 'time:timestamp': '2021-05-02 12:06'},
+            {'case:concept:name': 'B', 'concept:name': 'b', 'time:timestamp': '2021-05-02 12:01'},
+            {'case:concept:name': 'B', 'concept:name': 'a', 'time:timestamp': '2021-05-02 12:00'},
+            {'case:concept:name': 'B', 'concept:name': 'e', 'time:timestamp': '2021-05-02 12:05'},
+            {'case:concept:name': 'B', 'concept:name': 'c', 'time:timestamp': '2021-05-02 12:01'},
+            {'case:concept:name': 'B', 'concept:name': 'g', 'time:timestamp': '2021-05-02 12:06'},
+            {'case:concept:name': 'B', 'concept:name': 'd', 'time:timestamp': '2021-05-02 12:01'}
         ]
 
         combinations = combinations_generation.get_order_combinations(trace)
