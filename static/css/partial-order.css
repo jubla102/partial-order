@@ -16,14 +16,15 @@
 }
 
 .case-info {
-    padding: 0;
-    min-width: 80px;
-    max-width: 80px;
+    padding-bottom: 37px;
+    min-width: 100px;
+    max-width: 100px;
 }
 
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
+    padding: 15px 0 15px 0;
 }
 
 .scrollable-inner-delay {
@@ -49,6 +50,19 @@
 
 .centered {
     text-align: center;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(90, 90, 90, 0.4);
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
 }
 
 /* .shadow {

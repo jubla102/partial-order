@@ -37,8 +37,8 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         partialOrders.push(parallelEvents)
         i = i + j
     }
-    //todo: get the length of the longest trace for width
-    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
+    
+    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP + 2 * 15 // padding top bottom = 15
     let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP
     let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", width).attr("height", height)
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
