@@ -13,7 +13,7 @@ from bootstrapdjango import settings
 
 
 def get_colors(activities):
-    color_palette = sns.color_palette('hls', len(activities)).as_hex()
+    color_palette = sns.color_palette(None, len(activities)).as_hex()
     colors = {}
     for i, activity in enumerate(activities):
         colors[activity] = color_palette[i]
