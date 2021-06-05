@@ -1,7 +1,6 @@
 import json
 import os
 
-import seaborn as sns
 from django.http import JsonResponse
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.importer.xes import importer
@@ -10,15 +9,7 @@ from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
 from bootstrapdjango import settings
-
-
-def get_colors(activities):
-    color_palette = sns.color_palette(None, len(activities)).as_hex()
-    colors = {}
-    for i, activity in enumerate(activities):
-        colors[activity] = color_palette[i]
-
-    return colors
+from partial_order.colors import get_colors, get_colors_from_file
 
 
 def get_partial_orders_from_selected_file(request):
@@ -32,19 +23,23 @@ def get_groups_file():
     # absolute_file_path = os.path.join(event_logs_path, 'simple-test.xes')
     absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
     temp_path = os.path.join(settings.MEDIA_ROOT, "temp")
-    temp_file = os.path.join(temp_path, 'partial_orders_Sepsis_Cases-Event_Log.json')
-    if os.path.exists(temp_file):
-        with open(temp_file) as json_file:
-            partial_order_groups = json.load(json_file)
+    temp_groups_file = os.path.join(temp_path, 'partial_orders_Sepsis_Cases-Event_Log.json')
+    temp_color_file = os.path.join(temp_path, 'colors_Sepsis_Cases-Event_Log.json')
+    if os.path.exists(temp_groups_file):
+        with open(temp_groups_file) as groups_file:
+            partial_order_groups = json.load(groups_file)
+
+        partial_order_groups['colors'] = get_colors_from_file()
     else:
         event_log = importer.apply(absolute_file_path)
         df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
         df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
         activities = df[DEFAULT_NAME_KEY].unique().tolist()
         partial_order_groups = get_partial_order_groups(df)
-        partial_order_groups['colors'] = get_colors(activities)
-        with open(temp_file, 'w') as outfile:
-            json.dump(partial_order_groups, outfile, indent=4)
+        colors = get_colors(activities)
+        with open(temp_groups_file, 'w') as outfile_groups, open(temp_color_file, 'w') as outfile_colors:
+            json.dump(partial_order_groups, outfile_groups, indent=4)
+            json.dump(colors, outfile_colors, indent=4)
 
     return partial_order_groups
 
