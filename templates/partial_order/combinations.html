@@ -38,15 +38,18 @@
         </div>
         <br>
 
-
-        <div class="container-fluid">
-            <div class="row partial-order-row">
-                <div class="col-11">
-                    <div class="scrollable-inner" id="polygon0"></div>
+        {% for combination in combinations %}
+            <div class="container-fluid">
+                <div class="row partial-order-row">
+                    <div class="col-1 align-self-center case-info">
+                        1 case
+                    </div>
+                    <div class="col-11">
+                        <div class="scrollable-inner" id="polygon{{ forloop.counter0 }}"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        {% endfor %}
 
         <!-- Info Popup Section -->
         <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
