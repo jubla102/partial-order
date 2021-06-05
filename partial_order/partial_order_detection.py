@@ -64,11 +64,15 @@ def check_for_partial_order(case, partial_order_groups):
         case.groupby(DEFAULT_TIMESTAMP_KEY).apply(lambda x: create_group_hash_list(x, events))
         key = ''.join(events)
 
+        case_id = case[CASE_CONCEPT_NAME][0]
         if key in partial_order_groups['groups']:
+            partial_order_groups['groups'][key]['caseIds'].append(case_id)
+
             partial_order_groups['groups'][key]['numberOfCases'] = partial_order_groups['groups'][key][
                                                                        'numberOfCases'] + 1
         else:
             partial_order_groups['groups'][key] = {'numberOfCases': 1}
+            partial_order_groups['groups'][key]['caseIds'] = [case_id]
             partial_order_groups['groups'][key]['events'] = [*case.to_dict('index').values()]
 
 
