@@ -40,7 +40,7 @@ function drawPartialOrders(groupNumber, events, colorMap) {
 
     let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP + 2 * 15 // padding top bottom = 15
     let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP
-    let svg = d3.selectAll(`#rect${groupNumber}`).append("svg").attr("width", width).attr("height", height)
+    let svg = d3.selectAll(`#polygon${groupNumber}`).append("svg").attr("width", width).attr("height", height)
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
 }
 
@@ -87,3 +87,119 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         }
     }
 }
+
+$("#polygon0").click(function () {
+    redirectPost("/partial-order/combinations", {
+        "partialOrder": JSON.stringify([
+            {
+                "case:concept:name": "A",
+                "concept:name": "ER Registration",
+                "time:timestamp": "2014-10-22 11:15:41+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-10-22 11:27:00+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "LacticAcid",
+                "time:timestamp": "2014-10-22 11:27:00+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-10-22 11:27:00+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "ER Triage",
+                "time:timestamp": "2014-10-22 11:33:37+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "ER Sepsis Triage",
+                "time:timestamp": "2014-10-22 11:34:00+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "IV Antibiotics",
+                "time:timestamp": "2014-10-22 14:03:47+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "IV Liquid",
+                "time:timestamp": "2014-10-22 14:03:47+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Admission NC",
+                "time:timestamp": "2014-10-22 14:13:19+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-10-24 09:00:00+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-10-24 09:00:00+02:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-10-26 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-10-26 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-10-28 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-10-28 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-10-30 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-10-30 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-10-31 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-10-31 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "CRP",
+                "time:timestamp": "2014-11-02 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Leucocytes",
+                "time:timestamp": "2014-11-02 08:00:00+01:00"
+            },
+            {
+                "case:concept:name": "A",
+                "concept:name": "Release A",
+                "time:timestamp": "2014-11-02 15:15:00+01:00"
+            }])
+    });
+});

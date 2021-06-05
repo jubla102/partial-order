@@ -5,6 +5,7 @@
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript" src="../../static/js/postRedirect.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -54,7 +55,7 @@
                             {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
                         </div>
                         <div class="col-11">
-                            <div class="scrollable-inner" id="rect{{ forloop.counter0 }}"></div>
+                            <div class="scrollable-inner" id="polygon{{ forloop.counter0 }}"></div>
                         </div>
                     </div>
                 </div>

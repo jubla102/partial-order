@@ -1,18 +1,7 @@
 import itertools
-import json
 
 import pandas as pd
-from django.http import JsonResponse, HttpResponseNotFound
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
-
-
-def get_all_combinations(request):
-    if request.method == 'POST':
-        trace = json.loads(request.body)
-
-        return JsonResponse(get_order_combinations(trace), safe=False)
-    else:
-        return HttpResponseNotFound()
 
 
 def get_order_combinations(partial_order_trace):
