@@ -5,6 +5,7 @@
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript" src="../../static/js/postRedirect.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -34,16 +35,17 @@
                 </div>
             </div>
             <br>
-            <div class="row justify-content-center">
-                {% if log_name != ':notset:' %}
-                    <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
-                {% else %}
-                    <p class="text-danger"><b>You have not set any event log as input. Use the "Event Data" tab
-                        to set an event log as input!</b></p>
-                {% endif %}
+            <div class="row">
+                <div class="col-sm-6 col-md-7 col-lg-8">
+                    {% if log_name != ':notset:' %}
+                        <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
+                    {% else %}
+                        <p class="text-danger"><b>You have not set any event log as input. Use the "Event Data" tab
+                            to set an event log as input!</b></p>
+                    {% endif %}
 
-                {% csrf_token %}
-
+                    {% csrf_token %}
+                </div>
             </div>
             <br>
             {% for group in groups %}
@@ -53,7 +55,7 @@
                             {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
                         </div>
                         <div class="col-11">
-                            <div class="scrollable-inner" id="rect{{ forloop.counter0 }}"></div>
+                            <div class="scrollable-inner" id="partial-order-{{ forloop.counter0 }}"></div>
                         </div>
                     </div>
                 </div>
