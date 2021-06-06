@@ -4,26 +4,19 @@ const GAP = 10
 const EVENT_DIAMETER = 25
 const ACTIVITY_KEY = 'concept:name'
 
-const combinations = JSON.parse(document.getElementById('combinations').textContent);
+const combination = JSON.parse(document.getElementById('combination').textContent);
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data))
-            for (let i = 0; i < combinations.length; i++) {
-                drawTotalOrders(i, combinations[i], colorMap)
-            }
+            drawTotalOrder(combination, colorMap)
         }
     );
 
-function drawTotalOrders(combinationsNumber, events, colorMap) {
+function drawTotalOrder(events, colorMap) {
     let height = EVENT_HEIGHT + 2 * 15 // padding top bottom = 15
     let width = events.length * (EVENT_WIDTH + EVENT_DIAMETER) + (events.length - 1) * GAP
-    let svg = d3.selectAll(`#polygon${combinationsNumber}`).append("svg").attr("width", width).attr("height", height)
+    let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
 
-    $(`#polygon${combinationsNumber}`).click(function () {
-        redirectPost("/partial-order/delays", {
-            "combination": JSON.stringify(events)
-        });
-    });
     for (let i = 0; i < events.length; i++) {
         let polygon
         if (i === 0) {

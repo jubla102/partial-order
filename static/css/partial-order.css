@@ -79,22 +79,19 @@
 }
 
 .custom-container {
-    margin: 0 auto;
-    margin-top: 10px;;
+    margin: 10px auto 0;;
     height: 22vh;
     border-radius: 10px 10px 10px 10px;
 }
 
 #confirm-final.custom-container {
-    margin: 0 auto;
-    margin-top: 10px;;
+    margin: 10px auto 0;;
     height: 27vh;
     border-radius: 10px 10px 10px 10px;
 }
 
 #export-final.custom-container {
-    margin: 0 auto;
-    margin-top: 10px;
+    margin: 10px auto 0;
     height: 20vh;
     border-radius: 10px 10px 10px 10px;
 }

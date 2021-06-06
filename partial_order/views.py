@@ -34,7 +34,12 @@ def combinations(request):
 
 def delays(request):
     template = loader.get_template('partial_order/delays.html')
-    return HttpResponse(template.render({'log_name': settings.EVENT_LOG_NAME}, request))
+    if request.method == 'POST':
+        combination = get_form_data(request, 'combination')
+    else:
+        return HttpResponseNotFound()
+
+    return HttpResponse(template.render({'combination': combination}, request))
 
 
 def final_order(request):

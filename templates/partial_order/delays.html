@@ -4,7 +4,7 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript" src="../../static/js/delays.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -15,20 +15,11 @@
         let element = document.getElementById("delays_tab");
         element.classList.add("active");
 
-        function saved() {
-            if (confirm("The order will be saved and added to the original log"))
-                alert("The order was saved");
-        }
-
-        function discarded() {
-            if (confirm("Doing this will discard all the changes and delete modifications so far, do you wish to proceed?"))
-                alert("The order was discarded");
-        }
-
     </script>
 {% endblock %}
 
 {% block tab_content %}
+    {{ combination|json_script:"combination" }}
     <div class="tab-pane fade show active">
         <div class="container-fluid background">
             <div class="form-row justify-content-center mb-2">
@@ -44,7 +35,7 @@
             <br>
 
             <!-- todo: new visualization where it shows the time stamp-->
-            <div class="scrollable-inner-delay custom-shadow" id="rect1"></div>
+            <div class="scrollable-inner" id="combination"></div>
 
             <br>
             <div class="custom-container custom-shadow">
