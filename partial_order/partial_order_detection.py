@@ -35,7 +35,7 @@ def get_groups_file():
         df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
         df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
         activities = df[DEFAULT_NAME_KEY].unique().tolist()
-        partial_order_groups = get_partial_order_groups(df)
+        partial_order_groups = {'totalNumberOfTraces': len(event_log), 'groups': get_partial_order_groups(df)}
         colors = get_colors(activities)
         with open(temp_groups_file, 'w') as outfile_groups, open(temp_color_file, 'w') as outfile_colors:
             json.dump(partial_order_groups, outfile_groups, indent=4)
@@ -47,10 +47,10 @@ def get_groups_file():
 def get_partial_order_groups(df):
     df = df[[CASE_CONCEPT_NAME, DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]]
     df = df.sort_values(by=[CASE_CONCEPT_NAME, DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY])
-    partial_order_groups = {'totalNumberOfTraces': len(df), 'groups': {}}
-    df.groupby(CASE_CONCEPT_NAME).apply(lambda x: check_for_partial_order(x, partial_order_groups))
+    groups = {}
+    df.groupby(CASE_CONCEPT_NAME).apply(lambda x: check_for_partial_order(x, groups))
 
-    return partial_order_groups
+    return groups
 
 
 def check_for_partial_order(case, partial_order_groups):
@@ -60,15 +60,15 @@ def check_for_partial_order(case, partial_order_groups):
         key = ''.join(events)
 
         case_id = case[CASE_CONCEPT_NAME][0]
-        if key in partial_order_groups['groups']:
-            partial_order_groups['groups'][key]['caseIds'].append(case_id)
+        if key in partial_order_groups:
+            partial_order_groups[key]['caseIds'].append(case_id)
 
-            partial_order_groups['groups'][key]['numberOfCases'] = partial_order_groups['groups'][key][
-                                                                       'numberOfCases'] + 1
+            partial_order_groups[key]['numberOfCases'] = partial_order_groups[key][
+                                                             'numberOfCases'] + 1
         else:
-            partial_order_groups['groups'][key] = {'numberOfCases': 1}
-            partial_order_groups['groups'][key]['caseIds'] = [case_id]
-            partial_order_groups['groups'][key]['events'] = [*case.to_dict('index').values()]
+            partial_order_groups[key] = {'numberOfCases': 1}
+            partial_order_groups[key]['caseIds'] = [case_id]
+            partial_order_groups[key]['events'] = [*case.to_dict('index').values()]
 
 
 def create_group_hash_list(x, events):
