@@ -9,7 +9,7 @@ axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data))
             for (let i = 0; i < combinations.length; i++) {
-                drawTotalOrders(i, combinations[i], colorMap)
+                drawTotalOrders(i, combinations[i]['events'], colorMap)
             }
         }
     );
