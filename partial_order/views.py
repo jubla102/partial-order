@@ -32,8 +32,8 @@ def groups(request):
 def combinations(request):
     template = loader.get_template('partial_order/combinations.html')
     if request.method == 'POST':
-        trace = get_form_data(request, 'partialOrder')
-        combinations = combinations_generation.get_order_combinations(trace)
+        variant = get_form_data(request, 'partialOrder')
+        combinations = combinations_generation.get_order_combinations(variant)
     else:
         return HttpResponseNotFound()
 
