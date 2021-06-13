@@ -35,7 +35,7 @@ def get_groups_file():
         df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
         df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
         activities = df[DEFAULT_NAME_KEY].unique().tolist()
-        partial_order_groups = {'totalNumberOfTraces': len(event_log), 'groups': get_partial_order_groups(df)}
+        partial_order_groups = {'groups': get_partial_order_groups(df)}
         colors = get_colors(activities)
         with open(temp_groups_file, 'w') as outfile_groups, open(temp_color_file, 'w') as outfile_colors:
             json.dump(partial_order_groups, outfile_groups, indent=4)

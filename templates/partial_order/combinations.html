@@ -1,4 +1,5 @@
 {% extends 'partial_order/partial_order_processing.html' %}
+{% load mathfilters %}
 
 {% block script %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
@@ -43,11 +44,12 @@
                     <div class="row partial-order-row">
                         <div class="col-1 align-self-center case-info">
                             <div class="row">
-                                1 case
+                                {{ combination.frequency }} {{ combination.frequency|pluralize:"case,cases" }}
                             </div>
                             <div class="row">
                                 <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                0.01 % of the log
+                                <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                                {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the log
                             </div>
                         </div>
                         <div class="col-11">

@@ -1,10 +1,18 @@
+import os
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
+from pm4py.objects.log.importer.xes import importer
 
 from partial_order import partial_order_detection, combinations_generation
 from partial_order.colors import get_colors_from_file
 from partial_order.utils import get_form_data
+
+event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
+absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
+event_log = importer.apply(absolute_file_path)
+number_of_traces = len(event_log)
 
 
 def groups(request):
@@ -18,7 +26,7 @@ def groups(request):
             {'log_name': settings.EVENT_LOG_NAME,
              'groups': partial_order_ds['groups'].values(),
              'numberOfGroups': range(number_of_groups),
-             'totalNumberOfTraces': partial_order_ds['totalNumberOfTraces']}, request))
+             'totalNumberOfTraces': number_of_traces}, request))
 
 
 def combinations(request):
@@ -29,7 +37,8 @@ def combinations(request):
     else:
         return HttpResponseNotFound()
 
-    return HttpResponse(template.render({'combinations': combinations}, request))
+    return HttpResponse(
+        template.render({'combinations': combinations, 'totalNumberOfTraces': number_of_traces}, request))
 
 
 def delays(request):

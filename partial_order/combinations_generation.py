@@ -1,7 +1,14 @@
 import itertools
+import os
 
 import pandas as pd
-from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
+from pm4py.objects.conversion.log import converter as log_converter
+from pm4py.objects.log.importer.xes import importer
+from pm4py.statistics.traces.pandas import case_statistics
+from pm4py.util.constants import CASE_CONCEPT_NAME
+from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
+
+from bootstrapdjango import settings
 
 
 def get_order_combinations(partial_order_trace):
@@ -28,24 +35,43 @@ def get_order_combinations(partial_order_trace):
     # cartesian product of the permutations
     cartesian_product = list(itertools.product(*permutations))
 
+    case_information = get_case_information()
     combinations = []
     for p in cartesian_product:
         unsorted_trace = [element for tupl in p for element in tupl] + unique_timestamps_events
-        combinations.append(sorted(unsorted_trace, key=lambda x: x[DEFAULT_TIMESTAMP_KEY]))
+        combination = sorted(unsorted_trace, key=lambda x: x[DEFAULT_TIMESTAMP_KEY])
+        activities = []
+        key = ''
+        for event in combination:
+            activities.append(event[DEFAULT_NAME_KEY])
+            key = ','.join(activities)
+
+        combinations.append({'events': combination, 'frequency': get_frequency(key, case_information)})
 
     return combinations
 
 
+def get_case_information():
+    event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
+    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
+    event_log = importer.apply(absolute_file_path)
+    df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
+    df_without_partial_orders = df.groupby(CASE_CONCEPT_NAME).filter(lambda x: x[DEFAULT_TIMESTAMP_KEY].is_unique)
+    df_without_partial_orders.reset_index(drop=True, inplace=True)  # reset index
+
+    variants_count = case_statistics.get_variant_statistics(df_without_partial_orders)
+    return sorted(variants_count, key=lambda x: x[CASE_CONCEPT_NAME], reverse=True)
+
+
+def get_frequency(key, case_information):
+    for information in case_information:
+        if key == information['variant']:
+            return information[CASE_CONCEPT_NAME]
+
+    return 0
+
+
 if __name__ == '__main__':
-    case = [{'case:concept:name': 'B', 'concept:name': 'f', 'time:timestamp': '2021-05-02 12:06'},
-            {'case:concept:name': 'B', 'concept:name': 'b', 'time:timestamp': '2021-05-02 12:01'},
-            {'case:concept:name': 'B', 'concept:name': 'a', 'time:timestamp': '2021-05-02 12:00'},
-            {'case:concept:name': 'B', 'concept:name': 'e', 'time:timestamp': '2021-05-02 12:05'},
-            {'case:concept:name': 'B', 'concept:name': 'c', 'time:timestamp': '2021-05-02 12:01'},
-            {'case:concept:name': 'B', 'concept:name': 'g', 'time:timestamp': '2021-05-02 12:06'},
-            {'case:concept:name': 'B', 'concept:name': 'd', 'time:timestamp': '2021-05-02 12:01'}]
-    combinations = get_order_combinations(case)
-    for combination in combinations:
-        for event in combination:
-            print(event['concept:name'], end=' ')
-        print('')
+    info = get_case_information()
+    key = 'ER Registration,ER Triage,ER Sepsis Triage'
+    print(get_frequency(key, info))
