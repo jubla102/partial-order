@@ -15,8 +15,8 @@ axios.get('/partial-order/colors')
     );
 
 function drawTotalOrders(combinationsNumber, events, colorMap) {
-    let height = EVENT_HEIGHT + 2 * 15 // padding top bottom = 15
-    let width = events.length * (EVENT_WIDTH + EVENT_DIAMETER) + (events.length - 1) * GAP
+    let height = EVENT_HEIGHT
+    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP + EVENT_DIAMETER
     let svg = d3.selectAll(`#combination-${combinationsNumber}`).append("svg").attr("width", width).attr("height", height)
 
     $(`#combination-${combinationsNumber}`).click(function () {

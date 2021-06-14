@@ -23,56 +23,57 @@
 
 {% block tab_content %}
     {{ combinations|json_script:"combinations" }}
-    <div class="tab-pane fade show active background">
-        <div class="container-fluid background">
-            <div class="form-row justify-content-center">
-                <div class="col">
-                    <h4 class="mt-4 tab-headline">Please select a combination</h4>
-                </div>
-                <div class="col mt-3">
-                    <button type="button" class="btn btn-info float-right" data-toggle="modal"
-                            data-target="#exampleModalLong">Info
-                    </button>
-                </div>
+    <div class="tab-pane fade show active">
+        <div class="form-row justify-content-center">
+            <div class="col">
+                <h4 class="mt-4 tab-headline">Please select a combination</h4>
             </div>
-            <h6 class="mt-4 white">You can modify the combination by adding delays in the
-                <i>'Add Delays'</i> tab. </h6>
-            <br>
+            <div class="col mt-3">
+                <button type="button" class="btn btn-info float-right" data-toggle="modal"
+                        data-target="#exampleModalLong">Info
+                </button>
+            </div>
+        </div>
+        <h6 class="mt-4 white">You can modify the combination by adding delays in the
+            <i>'Add Delays'</i> tab. </h6>
+        <br>
 
-            {% for combination in combinations %}
-                <div class="container-fluid">
-                    <div class="row partial-order-row">
-                        <div class="col-1 align-self-center case-info">
-                            <div class="row">
+        {% for combination in combinations %}
+            <div class="container-fluid">
+                <div class="row  flex-nowrap partial-order-row">
+                    <div class="col-1 align-self-center case-info">
+                        <div class="row">
+                            <div class="col-12 inner-case-info">
                                 {{ combination.frequency }} {{ combination.frequency|pluralize:"case,cases" }}
                             </div>
-                            <div class="row">
-                                <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                        </div>
+                        <div class="row">
+                            <div class="col-12 inner-case-info">
                                 <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
                                 {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the log
                             </div>
                         </div>
-                        <div class="col-11">
-                            <div class="scrollable-inner" id="combination-{{ forloop.counter0 }}"></div>
-                        </div>
+                    </div>
+                    <div class="scrollable-inner">
+                        <div class="polygon" id="combination-{{ forloop.counter0 }}"></div>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
+        {% endfor %}
 
-            <!-- Info Popup Section -->
-            <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Combinations</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
+        <!-- Info Popup Section -->
+        <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Combinations</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
                     </div>
                 </div>
             </div>
