@@ -50,7 +50,7 @@
             {% for group in groups %}
                 <div class="container-fluid">
                     <div class="row partial-order-row">
-                        <div class="col-2 align-self-center case-info">
+                        <div class="col-1 align-self-center case-info">
                             <div class="row">
                                 <div class="col-12 inner-case-info">
                                     {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-10 align-self-center">
+                        <div class="col-11 align-self-center">
                             <div class="scrollable-inner">
                                 <div class="polygon" id="partial-order-{{ forloop.counter0 }}"></div>
                             </div>
