@@ -25,10 +25,14 @@
 
 .case-info {
     padding: 0 0 10px 0;
+    min-width: 150px;
+    max-width: 150px;
 }
 
 .inner-case-info {
     padding-right: 0;
+    min-width: 150px;
+    max-width: 150px;
 }
 
 .scrollable-inner {
