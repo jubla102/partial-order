@@ -1,4 +1,4 @@
-const EVENT_WIDTH = 125
+const EVENT_WIDTH = 150
 const EVENT_HEIGHT = 50
 const GAP = 10
 const EVENT_DIAMETER = 25
@@ -6,6 +6,7 @@ const EVENTS_KEY = 'events'
 const ACTIVITY_KEY = 'concept:name'
 const TIMESTAMP_KEY = 'time:timestamp'
 
+let textWidthMap = new Map()
 axios.get('/partial-order/po-groups')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
@@ -57,7 +58,6 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         baseY = Math.floor(maxParallelEvents / 2) * (EVENT_HEIGHT + GAP)
     }
 
-    let width = 0
     let xOffset = 0
     let i = 0
     for (i; i < eventList.length; i++) {
@@ -67,6 +67,7 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             xOffset = xOffset + GAP * 2
         }
         for (let j = 0; j < eventList[i].length; j++) {
+            let activityName = eventList[i][j][ACTIVITY_KEY];
             let yOffset
             if (eventList[i].length % 2 === 0) {
                 yOffset = (eventList[i].length / 2 - 0.5) - j
@@ -77,22 +78,34 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             let polygon
             if (i === 0) {
                 // starting events do not have a corner on the left
-                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT}`
+                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT / 2} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT}`
             } else {
                 // standard event, not starting and finishing
-                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER}`
+                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT / 2} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT / 2}`
             }
+
             svg.append('polygon')
                 .attr('points', polygon)
-                .attr('fill', colorMap.get(eventList[i][j][ACTIVITY_KEY]))
+                .attr('fill', colorMap.get(activityName))
+
+            if (!textWidthMap.has(activityName)) {
+                let text = svg.append('text')
+                    .attr('x', 30 + xOffset + i * (EVENT_WIDTH + GAP))
+                    .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
+                    .attr('stroke', 'black')
+                    .text(activityName)
+
+                textWidthMap.set(activityName, text.node().getComputedTextLength())
+                text.remove()
+            }
 
             svg.append('text')
-                .attr('x', 30 + xOffset + i * (EVENT_WIDTH + GAP))
+                .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidthMap.get(activityName) / 2)
                 .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
                 .attr('stroke', 'black')
-                .text(eventList[i][j][ACTIVITY_KEY])
+                .text(activityName)
         }
     }
-    width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP
+    let width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP
     svg.attr("width", width)
 }
