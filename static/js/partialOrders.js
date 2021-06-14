@@ -47,7 +47,6 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         })
     })
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
-    console.log("---------------------------------------")
 }
 
 function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
@@ -58,20 +57,15 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         baseY = Math.floor(maxParallelEvents / 2) * (EVENT_HEIGHT + GAP)
     }
 
-    let width = EVENT_DIAMETER
+    let width = 0
     let xOffset = 0
-    for (let i = 0; i < eventList.length; i++) {
+    let i = 0
+    for (i; i < eventList.length; i++) {
         if ((i !== 0 && eventList[i].length % 2 === 0 && (eventList[i - 1].length % 2 !== 0)) ||
             (i !== 0 && eventList[i].length % 2 !== 0 && (eventList[i - 1].length % 2 === 0))
         ) {
             xOffset = xOffset + GAP * 2
-            width += EVENT_WIDTH + GAP * 2
-            console.log(`width inc: ${EVENT_WIDTH + GAP * 2}`)
-        } else {
-            console.log(`width inc: ${EVENT_WIDTH + GAP}`)
-            width += EVENT_WIDTH + GAP
         }
-        console.log(`width: ${width}`)
         for (let j = 0; j < eventList[i].length; j++) {
             let yOffset
             if (eventList[i].length % 2 === 0) {
@@ -99,5 +93,6 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
                 .text(eventList[i][j][ACTIVITY_KEY])
         }
     }
+    width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP
     svg.attr("width", width)
 }
