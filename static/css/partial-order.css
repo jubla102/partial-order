@@ -17,6 +17,7 @@
 
 .partial-order-inner-row:hover {
     background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .case-info {
@@ -42,6 +43,10 @@
     background-color: rgb(139, 2, 194);
     color: white;
     border-color: black;
+}
+
+.tab-pane {
+    padding: 15px
 }
 
 .text-purple {
