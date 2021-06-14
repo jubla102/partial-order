@@ -12,24 +12,32 @@
 }
 
 .partial-order-row {
-    padding: 30px 30px 30px 0;
+    padding: 30px 0 30px 0;
+}
+
+.polygon {
+    padding: 15px 0 15px 0;
 }
 
 .partial-order-inner-row:hover {
     background-color: rgba(0, 0, 0, 0.1);
-    width: 100%;
 }
 
 .case-info {
-    padding-bottom: 37px;
-    min-width: 125px;
-    max-width: 125px;
+    padding: 0 0 10px 0;
+    min-width: 160px;
+    max-width: 160px;
+}
+
+.inner-case-info {
+    padding-right: 0;
+    min-width: 160px;
+    max-width: 160px;
 }
 
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
-    padding: 15px 0 15px 0;
 }
 
 .scrollable-inner-delay {
