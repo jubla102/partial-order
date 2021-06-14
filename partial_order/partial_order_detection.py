@@ -8,8 +8,8 @@ from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
-from partial_order.colors import get_colors, get_colors_from_file
-from partial_order.general_functions import get_groups_file_path, get_colors_file_path, get_selected_file_path
+from partial_order.general_functions import get_groups_file_path, get_colors_file_path, get_selected_file_path, \
+    get_longest_activity_name, get_metadata_from_file, get_colors
 
 
 def get_partial_orders_from_selected_file(request):
@@ -25,17 +25,19 @@ def get_groups_file():
         with open(temp_groups_file) as groups_file:
             partial_order_groups = json.load(groups_file)
 
-        partial_order_groups['colors'] = get_colors_from_file()
+        partial_order_groups['metadata'] = get_metadata_from_file()
     else:
         event_log = importer.apply(get_selected_file_path())
         df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
         df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
         activities = df[DEFAULT_NAME_KEY].unique().tolist()
-        partial_order_groups = {'groups': get_partial_order_groups(df)}
-        colors = get_colors(activities)
+        partial_order_groups = {'groups': get_partial_order_groups(df),
+                                'longestActivityName': get_longest_activity_name(activities)}
+        metadata = {'colors': get_colors(activities),
+                    'longestActivityName': get_longest_activity_name(activities)}
         with open(temp_groups_file, 'w') as outfile_groups, open(temp_color_file, 'w') as outfile_colors:
             json.dump(partial_order_groups, outfile_groups, indent=4)
-            json.dump(colors, outfile_colors, indent=4)
+            json.dump(metadata, outfile_colors, indent=4)
 
     return partial_order_groups
 

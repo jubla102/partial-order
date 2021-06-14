@@ -1,13 +1,15 @@
-const EVENT_WIDTH = 125
-const EVENT_HEIGHT = 50
-const GAP = 10
-const EVENT_DIAMETER = 25
-const ACTIVITY_KEY = 'concept:name'
-
+let EVENT_WIDTH = 125
+let textWidthMap = new Map()
 const combinations = JSON.parse(document.getElementById('combinations').textContent);
 axios.get('/partial-order/colors')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data))
+            let colorMap = new Map(Object.entries(response.data['colors']))
+
+            let longestActivityWidth = getLongestActivityWidth(response.data['longestActivityName'], '#combination-0')
+            if (longestActivityWidth > EVENT_WIDTH) {
+                EVENT_WIDTH = longestActivityWidth
+            }
+
             for (let i = 0; i < combinations.length; i++) {
                 drawTotalOrders(i, combinations[i]['events'], colorMap)
             }
@@ -26,6 +28,7 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
     })
 
     for (let i = 0; i < events.length; i++) {
+        let activityName = events[i][ACTIVITY_KEY]
         let polygon
         if (i === 0) {
             // starting events do not have a corner on the left
@@ -34,14 +37,28 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
             // standard event, not starting and finishing
             polygon = `${i * (EVENT_WIDTH + GAP)},0 ${(EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},0 ${EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT / 2} ${EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT / 2}`
         }
+
         svg.append('polygon')
             .attr('points', polygon)
-            .attr('fill', colorMap.get(events[i][ACTIVITY_KEY]))
+            .attr('fill', colorMap.get(activityName))
 
-        svg.append('text')
-            .attr('x', 30 + i * (EVENT_WIDTH + GAP))
-            .attr('y', 30)
-            .attr('stroke', 'black')
-            .text(events[i][ACTIVITY_KEY])
+        if (!textWidthMap.has(activityName)) {
+            let text = svg.append('text')
+                .text(activityName)
+            textWidthMap.set(activityName, text.node().getComputedTextLength())
+            text.remove()
+        }
+
+        if (i === 0) {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidthMap.get(activityName) / 2)
+                .attr('y', 31)
+                .text(activityName)
+        } else {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidthMap.get(activityName) / 2)
+                .attr('y', 31)
+                .text(activityName)
+        }
     }
 }

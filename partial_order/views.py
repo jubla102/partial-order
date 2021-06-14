@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation, general_functions
-from partial_order.colors import get_colors_from_file
+from partial_order.general_functions import get_metadata_from_file
 from partial_order.utils import get_form_data
 
 
@@ -57,4 +57,4 @@ def final_order(request):
 
 
 def colors(request):
-    return JsonResponse(get_colors_from_file(), safe=False)
+    return JsonResponse(get_metadata_from_file(), safe=False)
