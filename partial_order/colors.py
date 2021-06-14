@@ -1,9 +1,8 @@
 import json
-import os
 
 import seaborn as sns
 
-from bootstrapdjango import settings
+from partial_order.general_functions import get_colors_file_path
 
 
 def get_colors(activities):
@@ -16,7 +15,6 @@ def get_colors(activities):
 
 
 def get_colors_from_file():
-    temp_path = os.path.join(settings.MEDIA_ROOT, "temp")
-    temp_color_file = os.path.join(temp_path, 'colors_Sepsis_Cases-Event_Log.json')
-    with open(temp_color_file) as color_file:
+    color_file = get_colors_file_path()
+    with open(color_file) as color_file:
         return json.load(color_file)
