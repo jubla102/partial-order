@@ -27,8 +27,8 @@ def combinations(request):
 
     number_of_traces = general_functions.get_number_of_traces()
     if request.method == 'POST':
-        trace = get_form_data(request, 'partialOrder')
-        combinations = combinations_generation.get_order_combinations(trace)
+        variant = get_form_data(request, 'partialOrder')
+        combinations = combinations_generation.get_order_combinations(variant)
     else:
         return HttpResponseNotFound()
 
