@@ -8,8 +8,8 @@ from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
-from bootstrapdjango import settings
 from partial_order.colors import get_colors, get_colors_from_file
+from partial_order.general_functions import get_groups_file_path, get_colors_file_path, get_selected_file_path
 
 
 def get_partial_orders_from_selected_file(request):
@@ -19,19 +19,15 @@ def get_partial_orders_from_selected_file(request):
 
 
 def get_groups_file():
-    event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    # absolute_file_path = os.path.join(event_logs_path, 'simple-test.xes')
-    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
-    temp_path = os.path.join(settings.MEDIA_ROOT, "temp")
-    temp_groups_file = os.path.join(temp_path, 'partial_orders_Sepsis_Cases-Event_Log.json')
-    temp_color_file = os.path.join(temp_path, 'colors_Sepsis_Cases-Event_Log.json')
+    temp_groups_file = get_groups_file_path()
+    temp_color_file = get_colors_file_path()
     if os.path.exists(temp_groups_file):
         with open(temp_groups_file) as groups_file:
             partial_order_groups = json.load(groups_file)
 
         partial_order_groups['colors'] = get_colors_from_file()
     else:
-        event_log = importer.apply(absolute_file_path)
+        event_log = importer.apply(get_selected_file_path())
         df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
         df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
         activities = df[DEFAULT_NAME_KEY].unique().tolist()
