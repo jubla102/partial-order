@@ -49,27 +49,30 @@
                 </div>
             </div>
             <br>
-            {% for group in groups %}
-                <div class="container-fluid">
-                    <div class="row partial-order-row">
-                        <div class="partial-order-inner-row">
-                            <div class="col-1 align-self-center case-info">
-                                <div class="row">
-                                    {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+            {% if log_name != ':notset:' %}
+                {% for group in groups %}
+                    <div class="container-fluid">
+                        <div class="row partial-order-row">
+                            <div class="partial-order-inner-row">
+                                <div class="col-1 align-self-center case-info">
+                                    <div class="row">
+                                        {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+                                    </div>
+                                    <div class="row">
+                                        <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                                        {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
+                                        the
+                                        log
+                                    </div>
                                 </div>
-                                <div class="row">
-                                    <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                    {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the
-                                    log
+                                <div class="col-11">
+                                    <div class="scrollable-inner" id="partial-order-{{ forloop.counter0 }}"></div>
                                 </div>
-                            </div>
-                            <div class="col-11">
-                                <div class="scrollable-inner" id="partial-order-{{ forloop.counter0 }}"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
 
         <!-- Info Popup Section -->

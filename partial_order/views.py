@@ -10,14 +10,19 @@ from partial_order.utils import get_form_data
 def groups(request):
     template = loader.get_template('partial_order/groups.html')
 
-    number_of_traces = general_functions.get_number_of_traces()
-    partial_order_ds = partial_order_detection.get_groups_file()
-    number_of_groups = len(partial_order_ds['groups'])
+    number_of_groups = 0
+    number_of_traces = 0
+    groups = None
+    if settings.EVENT_LOG_NAME != ':notset:':
+        number_of_traces = general_functions.get_number_of_traces()
+        partial_order_ds = partial_order_detection.get_groups_file()
+        number_of_groups = len(partial_order_ds['groups'])
+        groups = partial_order_ds['groups'].values()
 
     return HttpResponse(
         template.render(
             {'log_name': settings.EVENT_LOG_NAME,
-             'groups': partial_order_ds['groups'].values(),
+             'groups': groups,
              'numberOfGroups': range(number_of_groups),
              'totalNumberOfTraces': number_of_traces}, request))
 
