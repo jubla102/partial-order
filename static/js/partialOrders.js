@@ -38,8 +38,9 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         i = i + j
     }
 
-    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP + 2 * 15 // padding top bottom = 15
-    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP
+    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
+    let width = partialOrders.length * EVENT_WIDTH + (partialOrders.length - 1) * GAP * 2 + EVENT_DIAMETER
+    console.log(partialOrders.length)
     let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("width", width).attr("height", height)
     $(`#partial-order-${groupNumber}`).click(function () {
         redirectPost("/partial-order/combinations", {
