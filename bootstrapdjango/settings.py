@@ -116,3 +116,7 @@ TLKC_FILE = ''
 # FILE_UPLOAD_HANDLERS = [
 #     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
 # ]
+
+NUMBER_OF_TRACES = 0
+COLORS = {}
+LONGEST_ACTIVITY_NAME = ''

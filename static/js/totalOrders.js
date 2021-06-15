@@ -1,11 +1,11 @@
 let EVENT_WIDTH = 125
 let textWidthMap = new Map()
 const combinations = JSON.parse(document.getElementById('combinations').textContent);
+const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent);
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
 
-            let longestActivityWidth = getLongestActivityWidth(response.data['longestActivityName'], '#combination-0')
             if (longestActivityWidth > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth
             }
@@ -23,7 +23,8 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
 
     $(`#combination-${combinationsNumber}`).click(function () {
         redirectPost("/partial-order/delays", {
-            "combination": JSON.stringify(events)
+            "combination": JSON.stringify(events),
+            "longestActivityWidth": JSON.stringify(EVENT_WIDTH)
         })
     })
 

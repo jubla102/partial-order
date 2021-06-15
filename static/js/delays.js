@@ -1,10 +1,10 @@
 let EVENT_WIDTH = 125
 let textWidthMap = new Map()
 const combination = JSON.parse(document.getElementById('combination').textContent);
+const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent);
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
-            let longestActivityWidth = getLongestActivityWidth(response.data['longestActivityName'], '#combination')
             if (longestActivityWidth > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth
             }

@@ -42,7 +42,8 @@ function drawPartialOrders(groupNumber, events, colorMap) {
     let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("height", height)
     $(`#partial-order-${groupNumber}`).click(function () {
         redirectPost("/partial-order/combinations", {
-            "partialOrder": JSON.stringify(events)
+            "partialOrder": JSON.stringify(events),
+            "longestActivityWidth": JSON.stringify(EVENT_WIDTH)
         })
     })
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)

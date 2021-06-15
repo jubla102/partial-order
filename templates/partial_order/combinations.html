@@ -23,6 +23,7 @@
 
 {% block tab_content %}
     {{ combinations|json_script:"combinations" }}
+    {{ longestActivityWidth|json_script:"longestActivityWidth" }}
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center">
             <div class="col">
