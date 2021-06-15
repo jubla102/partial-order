@@ -14,7 +14,7 @@ axios.get('/partial-order/colors')
 
 function drawTotalOrder(events, colorMap) {
     let height = EVENT_HEIGHT
-    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP + EVENT_DIAMETER
+    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
     let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
 
     for (let i = 0; i < events.length; i++) {
@@ -32,11 +32,11 @@ function drawTotalOrder(events, colorMap) {
             .attr('fill', colorMap.get(activityName))
 
         if (!textWidthMap.has(activityName)) {
-            let fasdfasd = svg.append('text')
+            let text = svg.append('text')
                 .text(activityName)
-            textWidthMap.set(activityName, fasdfasd.node().getComputedTextLength())
-            fasdfasd.remove()
-            console.log(fasdfasd.node().getComputedTextLength())
+            textWidthMap.set(activityName, text.node().getComputedTextLength())
+            text.remove()
+            console.log(text.node().getBBox().width)
         }
 
 

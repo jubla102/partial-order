@@ -62,7 +62,7 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         if ((i !== 0 && eventList[i].length % 2 === 0 && (eventList[i - 1].length % 2 !== 0)) ||
             (i !== 0 && eventList[i].length % 2 !== 0 && (eventList[i - 1].length % 2 === 0))
         ) {
-            xOffset = xOffset + GAP * 2
+            xOffset = xOffset + GAP * 3
         }
         for (let j = 0; j < eventList[i].length; j++) {
             let activityName = eventList[i][j][ACTIVITY_KEY];
@@ -84,6 +84,7 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
 
             svg.append('polygon')
                 .attr('points', polygon)
+                .attr('class', 'event')
                 .attr('fill', colorMap.get(activityName))
 
             if (!textWidthMap.has(activityName)) {
@@ -107,6 +108,6 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             }
         }
     }
-    let width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP
+    let width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP + STROKE_SPACE
     svg.attr("width", width)
 }

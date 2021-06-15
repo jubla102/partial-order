@@ -19,8 +19,15 @@
     padding: 15px 0 15px 0;
 }
 
+/*
 .partial-order-group:hover {
     background-color: rgba(0, 0, 0, 0.1);
+}
+*/
+
+.partial-order-group:hover .event {
+    stroke: #0275d8;
+    stroke-width: 2px;
 }
 
 .case-info {

@@ -1,9 +1,10 @@
 const EVENT_HEIGHT = 50
-const GAP = 10
-const EVENT_DIAMETER = 25
+const GAP = 4
+const EVENT_DIAMETER = 10
 const EVENTS_KEY = 'events'
 const ACTIVITY_KEY = 'concept:name'
 const TIMESTAMP_KEY = 'time:timestamp'
+const STROKE_SPACE = 4
 
 function redirectPost(url, data) {
     let form = document.createElement('form');
