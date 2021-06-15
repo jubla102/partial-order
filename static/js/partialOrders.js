@@ -24,6 +24,8 @@ axios.get('/partial-order/po-groups')
                     })
                 })
             }
+            $('#spinner').hide()
+            $('.partial-order-groups').removeAttr('hidden')
         }
     );
 

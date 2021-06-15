@@ -13,6 +13,9 @@ axios.get('/partial-order/colors')
             for (let i = 0; i < combinations.length; i++) {
                 drawTotalOrders(i, combinations[i]['events'], colorMap)
             }
+
+            $('#spinner').hide()
+            $('.partial-order-groups').removeAttr('hidden')
         }
     );
 

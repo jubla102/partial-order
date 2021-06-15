@@ -40,28 +40,32 @@
             <i>'Add Delays'</i> tab. </h6>
         <br>
 
-        {% for combination in combinations %}
-            <div class="container-fluid">
-                <div class="row  flex-nowrap partial-order-row partial-order-group">
-                    <div class="col-1 align-self-center case-info">
-                        <div class="row">
-                            <div class="col-12 inner-case-info">
-                                {{ combination.frequency }} {{ combination.frequency|pluralize:"case,cases" }}
+        <div class="spinner-border text-primary" id="spinner"></div>
+        <div class="partial-order-groups" hidden>
+            {% for combination in combinations %}
+                <div class="container-fluid">
+                    <div class="row  flex-nowrap partial-order-row partial-order-group">
+                        <div class="col-1 align-self-center case-info">
+                            <div class="row">
+                                <div class="col-12 inner-case-info">
+                                    {{ combination.frequency }} {{ combination.frequency|pluralize:"case,cases" }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 inner-case-info">
+                                    <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                                    {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the
+                                    log
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12 inner-case-info">
-                                <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the log
-                            </div>
+                        <div class="scrollable-inner">
+                            <div class="polygon" id="combination-{{ forloop.counter0 }}"></div>
                         </div>
-                    </div>
-                    <div class="scrollable-inner">
-                        <div class="polygon" id="combination-{{ forloop.counter0 }}"></div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
 
         <!-- Info Popup Section -->
         <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"

@@ -47,32 +47,35 @@
 
         <br>
         {% if log_name != ':notset:' %}
-            {% for group in groups %}
-                <div class="container-fluid">
-                    <div class="row flex-nowrap partial-order-row partial-order-group">
-                        <div class="col-1 align-self-center case-info">
-                            <div class="row">
-                                <div class="col-12 inner-case-info">
-                                    {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+            <div class="spinner-border text-primary" id="spinner"></div>
+            <div class="partial-order-groups" hidden>
+                {% for group in groups %}
+                    <div class="container-fluid">
+                        <div class="row flex-nowrap partial-order-row partial-order-group">
+                            <div class="col-1 align-self-center case-info">
+                                <div class="row">
+                                    <div class="col-12 inner-case-info">
+                                        {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 inner-case-info">
+                                        <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                                        {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
+                                        the
+                                        log
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12 inner-case-info">
-                                    <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                    {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
-                                    the
-                                    log
+                            <div class="col-11 align-self-center">
+                                <div class="scrollable-inner">
+                                    <div class="polygon" id="partial-order-{{ forloop.counter0 }}"></div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-11 align-self-center">
-                            <div class="scrollable-inner">
-                                <div class="polygon" id="partial-order-{{ forloop.counter0 }}"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
 
