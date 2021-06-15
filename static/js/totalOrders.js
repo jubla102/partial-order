@@ -1,7 +1,7 @@
 let EVENT_WIDTH = 125
-let textWidthMap = new Map()
-const combinations = JSON.parse(document.getElementById('combinations').textContent);
-const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent);
+const combinations = JSON.parse(document.getElementById('combinations').textContent)
+const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent)
+const textWidthMap = new Map(JSON.parse(document.getElementById('textWidths').textContent))
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
@@ -24,7 +24,8 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
     $(`#combination-${combinationsNumber}`).click(function () {
         redirectPost("/partial-order/delays", {
             "combination": JSON.stringify(events),
-            "longestActivityWidth": JSON.stringify(EVENT_WIDTH)
+            "longestActivityWidth": JSON.stringify(EVENT_WIDTH),
+            "textWidths": JSON.stringify([...textWidthMap])
         })
     })
 
@@ -43,13 +44,6 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
             .attr('points', polygon)
             .attr('class', 'event')
             .attr('fill', colorMap.get(activityName))
-
-        if (!textWidthMap.has(activityName)) {
-            let text = svg.append('text')
-                .text(activityName)
-            textWidthMap.set(activityName, text.node().getComputedTextLength())
-            text.remove()
-        }
 
         if (i === 0) {
             svg.append('text')

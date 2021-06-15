@@ -1,3 +1,4 @@
+import json
 import os
 
 import seaborn as sns
@@ -35,3 +36,7 @@ def get_colors(activities):
         colors[activity] = color_palette[i]
 
     return colors
+
+
+def get_form_data(request, key):
+    return json.loads(request.POST.dict()[key])

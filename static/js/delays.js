@@ -1,7 +1,7 @@
 let EVENT_WIDTH = 125
-let textWidthMap = new Map()
 const combination = JSON.parse(document.getElementById('combination').textContent);
 const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent);
+const textWidthMap = new Map(JSON.parse(document.getElementById('textWidths').textContent))
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
@@ -30,15 +30,6 @@ function drawTotalOrder(events, colorMap) {
         svg.append('polygon')
             .attr('points', polygon)
             .attr('fill', colorMap.get(activityName))
-
-        if (!textWidthMap.has(activityName)) {
-            let text = svg.append('text')
-                .text(activityName)
-            textWidthMap.set(activityName, text.node().getComputedTextLength())
-            text.remove()
-            console.log(text.node().getBBox().width)
-        }
-
 
         if (i === 0) {
             svg.append('text')

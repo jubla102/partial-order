@@ -3,8 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.general_functions import get_meta_data
-from partial_order.utils import get_form_data
+from partial_order.general_functions import get_meta_data, get_form_data
 
 
 def groups(request):
@@ -31,13 +30,15 @@ def combinations(request):
     if request.method == 'POST':
         variant = get_form_data(request, 'partialOrder')
         longest_activity_width = get_form_data(request, 'longestActivityWidth')
+        print(request.POST.dict())
+        text_widths = get_form_data(request, 'textWidths')
         combinations = combinations_generation.get_order_combinations(variant)
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
         template.render({'combinations': combinations, 'longestActivityWidth': longest_activity_width,
-                         'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
+                         'textWidths': text_widths, 'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
 
 
 def delays(request):
@@ -45,11 +46,13 @@ def delays(request):
     if request.method == 'POST':
         combination = get_form_data(request, 'combination')
         longest_activity_width = get_form_data(request, 'longestActivityWidth')
+        text_widths = get_form_data(request, 'textWidths')
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
-        template.render({'combination': combination, 'longestActivityWidth': longest_activity_width}, request))
+        template.render({'combination': combination, 'longestActivityWidth': longest_activity_width,
+                         'textWidths': text_widths}, request))
 
 
 def final_order(request):
