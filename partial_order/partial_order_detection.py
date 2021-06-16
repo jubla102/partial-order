@@ -26,6 +26,7 @@ def get_groups_file():
 
         partial_order_groups['metadata']['colors'] = settings.COLORS
         partial_order_groups['metadata']['longestActivityName'] = settings.LONGEST_ACTIVITY_NAME
+        partial_order_groups['metadata']['textWidths'] = settings.TEXT_WIDTHS
     else:
         event_log = importer.apply(get_selected_file_path())
         df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)

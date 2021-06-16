@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
@@ -65,8 +67,8 @@ def meta_data(request):
 
 def text_width(request):
     if request.method == 'POST':
-        print(request.POST.dict())
-        # text_widths = get_form_data(request, 'textWidths')
+        text_widths = json.loads(request.body.decode('utf-8'))['textWidths']
+        settings.TEXT_WIDTHS = text_widths
 
         return HttpResponse()
     else:

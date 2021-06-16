@@ -20,16 +20,3 @@ function redirectPost(url, data) {
     }
     form.submit();
 }
-
-function getLongestActivityWidth(activityName, id) {
-    let svg = d3.selectAll(id).append("svg")
-    let text = svg.append('text')
-        .text(activityName)
-
-    let width = text.node().getComputedTextLength()
-
-    svg.remove()
-    text.remove()
-
-    return width + 20
-}

@@ -1,12 +1,13 @@
 let EVENT_WIDTH = 125
-let textWidthMap = new Map()
+let textWidths = {}
 axios.get('/partial-order/po-groups')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['metadata']['colors']))
+            textWidths = JSON.parse(response.data['metadata']['textWidths'])
+            let longestActivityWidth = textWidths[response.data['metadata']['longestActivityName']]
 
-            let longestActivityWidth = getLongestActivityWidth(response.data['metadata']['longestActivityName'], '#partial-order-0')
-            if (longestActivityWidth > EVENT_WIDTH) {
-                EVENT_WIDTH = longestActivityWidth
+            if (longestActivityWidth + 20 > EVENT_WIDTH) {
+                EVENT_WIDTH = longestActivityWidth + 20
             }
 
             let partialOrderGroups = response.data['groups']
@@ -20,7 +21,7 @@ axios.get('/partial-order/po-groups')
                     redirectPost("/partial-order/combinations", {
                         "partialOrder": JSON.stringify(partialOrderGroups[groupKeys[i]][EVENTS_KEY]),
                         "longestActivityWidth": JSON.stringify(EVENT_WIDTH),
-                        "textWidths": JSON.stringify([...textWidthMap])
+                        "textWidths": JSON.stringify(textWidths)
                     })
                 })
             }
@@ -94,23 +95,14 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
                 .attr('class', 'event')
                 .attr('fill', colorMap.get(activityName))
 
-            if (!textWidthMap.has(activityName)) {
-                let text = svg.append('text')
-                    .text(activityName)
-
-                textWidthMap.set(activityName, text.node().getComputedTextLength())
-                console.log(`${text.node().getComputedTextLength()} / ${activityName.length} = ${text.node().getComputedTextLength() / activityName.length}`)
-                text.remove()
-            }
-
             if (i === 0) {
                 svg.append('text')
-                    .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidthMap.get(activityName) / 2)
+                    .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidths[activityName] / 2)
                     .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 31)
                     .text(activityName)
             } else {
                 svg.append('text')
-                    .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidthMap.get(activityName) / 2)
+                    .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidths[activityName] / 2)
                     .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 31)
                     .text(activityName)
             }

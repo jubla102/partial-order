@@ -158,19 +158,17 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
 
-        let textWidthMap = new Map()
+        let textWidthMap = {}
         let svg = d3.select('#text-width-calculation').append("svg")
         activities.forEach(activity => {
             let text = svg.append('text')
+                .attr('opacity', 0)
                 .text(activity)
-            textWidthMap.set(activity, text.node().getComputedTextLength())
+            textWidthMap[activity] = text.node().getComputedTextLength()
             text.remove()
         })
 
-        const json = {textWidths: JSON.stringify(textWidthMap)}
-        axios.post('/partial-order/text-widths', json);
-
-        //axios.post('/partial-order/text-widths', {textWidths: JSON.stringify([...textWidthMap])})
+        axios.post('/partial-order/text-widths', {'textWidths': JSON.stringify(textWidthMap)})
 
     </script>
 
