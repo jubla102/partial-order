@@ -1,13 +1,14 @@
 let EVENT_WIDTH = 125
 const combinations = JSON.parse(document.getElementById('combinations').textContent)
-const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent)
-const textWidthMap = new Map(JSON.parse(document.getElementById('textWidths').textContent))
+let textWidths = {}
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
-
-            if (longestActivityWidth > EVENT_WIDTH) {
-                EVENT_WIDTH = longestActivityWidth
+            textWidths = JSON.parse(response.data['textWidths'])
+            let longestActivityWidth = textWidths[response.data['longestActivityName']]
+        
+            if (longestActivityWidth + 20 > EVENT_WIDTH) {
+                EVENT_WIDTH = longestActivityWidth + 20
             }
 
             for (let i = 0; i < combinations.length; i++) {
@@ -26,9 +27,7 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
 
     $(`#combination-${combinationsNumber}`).click(function () {
         redirectPost("/partial-order/delays", {
-            "combination": JSON.stringify(events),
-            "longestActivityWidth": JSON.stringify(EVENT_WIDTH),
-            "textWidths": JSON.stringify([...textWidthMap])
+            "combination": JSON.stringify(events)
         })
     })
 
@@ -50,12 +49,12 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
 
         if (i === 0) {
             svg.append('text')
-                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidthMap.get(activityName) / 2)
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidths[activityName] / 2)
                 .attr('y', 31)
                 .text(activityName)
         } else {
             svg.append('text')
-                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidthMap.get(activityName) / 2)
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidths[activityName] / 2)
                 .attr('y', 31)
                 .text(activityName)
         }

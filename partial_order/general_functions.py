@@ -26,7 +26,9 @@ def get_longest_activity_name(activities):
 
 
 def get_meta_data():
-    return {'colors': settings.COLORS, 'longestActivityName': settings.LONGEST_ACTIVITY_NAME}
+    return {'colors': settings.COLORS,
+            'longestActivityName': settings.LONGEST_ACTIVITY_NAME,
+            'textWidths': settings.TEXT_WIDTHS}
 
 
 def get_colors(activities):

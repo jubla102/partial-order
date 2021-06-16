@@ -19,9 +19,7 @@ axios.get('/partial-order/po-groups')
             for (let i = 0; i < groupKeys.length; i++) {
                 $(`#partial-order-${i}`).click(function () {
                     redirectPost("/partial-order/combinations", {
-                        "partialOrder": JSON.stringify(partialOrderGroups[groupKeys[i]][EVENTS_KEY]),
-                        "longestActivityWidth": JSON.stringify(EVENT_WIDTH),
-                        "textWidths": JSON.stringify(textWidths)
+                        "partialOrder": JSON.stringify(partialOrderGroups[groupKeys[i]][EVENTS_KEY])
                     })
                 })
             }

@@ -31,15 +31,12 @@ def combinations(request):
 
     if request.method == 'POST':
         variant = get_form_data(request, 'partialOrder')
-        longest_activity_width = get_form_data(request, 'longestActivityWidth')
-        text_widths = get_form_data(request, 'textWidths')
         combinations = combinations_generation.get_order_combinations(variant)
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
-        template.render({'combinations': combinations, 'longestActivityWidth': longest_activity_width,
-                         'textWidths': text_widths, 'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
+        template.render({'combinations': combinations, 'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
 
 
 def delays(request):
