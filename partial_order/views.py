@@ -30,7 +30,6 @@ def combinations(request):
     if request.method == 'POST':
         variant = get_form_data(request, 'partialOrder')
         longest_activity_width = get_form_data(request, 'longestActivityWidth')
-        print(request.POST.dict())
         text_widths = get_form_data(request, 'textWidths')
         combinations = combinations_generation.get_order_combinations(variant)
     else:
@@ -62,3 +61,13 @@ def final_order(request):
 
 def meta_data(request):
     return JsonResponse(get_meta_data(), safe=False)
+
+
+def text_width(request):
+    if request.method == 'POST':
+        print(request.POST.dict())
+        # text_widths = get_form_data(request, 'textWidths')
+
+        return HttpResponse()
+    else:
+        return HttpResponseNotFound()

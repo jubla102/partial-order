@@ -9,5 +9,6 @@ urlpatterns = [
     path('combinations', views.combinations, name='combinations'),
     path('delays', views.delays, name='delays'),
     path('final_order', views.final_order, name='final_order'),
-    path('colors', views.meta_data, name='colors')
+    path('colors', views.meta_data, name='colors'),
+    path('text-widths', views.text_width, name='text-widths'),
 ]

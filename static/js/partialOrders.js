@@ -99,6 +99,7 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
                     .text(activityName)
 
                 textWidthMap.set(activityName, text.node().getComputedTextLength())
+                console.log(`${text.node().getComputedTextLength()} / ${activityName.length} = ${text.node().getComputedTextLength() / activityName.length}`)
                 text.remove()
             }
 

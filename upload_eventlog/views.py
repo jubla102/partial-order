@@ -115,7 +115,8 @@ def upload_page(request):
                 eventlogs = [f for f in listdir(event_logs_path) if isfile(join(event_logs_path, f))]
 
                 return render(request, 'upload.html',
-                              {'eventlog_list': eventlogs, 'log_name': filename, 'log_attributes': log_attributes})
+                              {'eventlog_list': eventlogs, 'log_name': filename, 'log_attributes': log_attributes,
+                               'activities': activities})
 
             elif "downloadButton" in request.POST:  # for event logs
                 if "log_list" not in request.POST:
