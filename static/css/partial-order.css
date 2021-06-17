@@ -11,24 +11,47 @@
     background-size: cover;
 }
 
-.partial-order-row {
-    padding: 30px 30px 30px 0;
+.delay-row {
+    padding: 0 15px 0 15px;
 }
 
-.partial-order-inner-row:hover {
+.polygon {
+    padding: 15px 0 15px 0;
+}
+
+.info-subtitle {
+    padding-left: 15px;
+}
+
+.partial-order-row {
+    padding: 30px 0 30px 15px;
+}
+
+.partial-order-group:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+
+.partial-order-group:hover .event {
+    stroke: black;
+    stroke-width: 2px;
+}
+
 .case-info {
-    padding-bottom: 37px;
-    min-width: 125px;
-    max-width: 125px;
+    padding: 0 0 10px 0;
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.inner-case-info {
+    padding-right: 0;
+    min-width: 150px;
+    max-width: 150px;
 }
 
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
-    padding: 15px 0 15px 0;
 }
 
 .scrollable-inner-delay {
@@ -37,6 +60,10 @@
     padding: 20px;
     height: 150px;
     border-radius: 10px 10px 10px 10px;
+}
+
+.info-row {
+    padding-right: 15px;
 }
 
 .purple-dark {
@@ -50,7 +77,14 @@
 }
 
 .tab-headline {
+    padding-left: 15px;
     color: #00529F;
+}
+
+#spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
 }
 
 .centered {

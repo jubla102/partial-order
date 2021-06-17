@@ -6,7 +6,7 @@
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="../../static/js/totalOrders.js" defer></script>
-    <script type="text/javascript" src="../../static/js/postRedirect.js" defer></script>
+    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -23,71 +23,76 @@
 
 {% block tab_content %}
     {{ combinations|json_script:"combinations" }}
-    <div class="tab-pane fade show active background">
-        <div class="container-fluid background">
-            <div class="form-row justify-content-center">
-                <div class="col">
-                    <h4 class="mt-4 tab-headline">Please select a combination</h4>
-                </div>
-                <div class="col mt-3">
-                    <button type="button" class="btn btn-info float-right" data-toggle="modal"
-                            data-target="#exampleModalLong">Info
-                    </button>
-                </div>
+    <div class="tab-pane fade show active">
+        <div class="form-row justify-content-center info-row">
+            <div class="col">
+                <h4 class="mt-4 tab-headline">Please select a combination</h4>
             </div>
-            <h6 class="mt-4 white">You can modify the combination by adding delays in the
-                <i>'Add Delays'</i> tab. </h6>
-            <br>
+            <div class="col mt-3">
+                <button type="button" class="btn btn-info float-right" data-toggle="modal"
+                        data-target="#exampleModalLong">Info
+                </button>
+            </div>
+        </div>
+        <h6 class="mt-4 info-subtitle">You can modify the combination by adding delays in the
+            <i>'Add Delays'</i> tab. </h6>
+        <br>
 
+        <div class="spinner-border text-primary" id="spinner"></div>
+        <div class="partial-order-groups" hidden>
             {% for combination in combinations %}
                 <div class="container-fluid">
-                    <div class="row partial-order-row">
+                    <div class="row  flex-nowrap partial-order-row partial-order-group">
                         <div class="col-1 align-self-center case-info">
                             <div class="row">
-                                {{ combination.frequency }} {{ combination.frequency|pluralize:"case,cases" }}
+                                <div class="col-12 inner-case-info">
+                                    {{ combination.frequency }} {{ combination.frequency|pluralize:"case,cases" }}
+                                </div>
                             </div>
                             <div class="row">
-                                <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the log
+                                <div class="col-12 inner-case-info">
+                                    <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                                    {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the
+                                    log
+                                </div>
                             </div>
                         </div>
-                        <div class="col-11">
-                            <div class="scrollable-inner"
-                                 id="combination-{{ forloop.counter0 }}">{{ forloop.counter0 }} </div>
+                        <div class="scrollable-inner">
+                            <div class="polygon" id="combination-{{ forloop.counter0 }}"></div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+        </div>
 
-            <!-- Info Popup Section -->
-            <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Combinations</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h6>What are Combinations?</h6>
-                            <p class="info"> The combinations displayed in this page are all possible ordered
-                                combinations of activities present in the selected partial order group. We do this to
-                                eliminate the <i>stacked activities</i>, and hence partial orders. For a given set of
-                                total
-                                stacked activities <b>'n'</b> in a partial order group, there are <b>n!</b> number of
-                                possible combinations.
-                                <br>
-                                <b>Example:</b>
-                                <br>
-                                <!--todo: add table and images -->
-                            </p>
-                        </div>
+        <!-- Info Popup Section -->
+        <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Combinations</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>What are Combinations?</h6>
+                        <p class="info"> The combinations displayed in this page are all possible ordered
+                            combinations of activities present in the selected partial order group. We do this to
+                            eliminate the <i>stacked activities</i>, and hence partial orders. For a given set of
+                            total
+                            stacked activities <b>'n'</b> in a partial order group, there are <b>n!</b> number of
+                            possible combinations.
+                            <br>
+                            <b>Example:</b>
+                            <br>
+                            <!--todo: add table and images -->
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock %}

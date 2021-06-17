@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    
+
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="eventlogs-tab" data-toggle="tab" href="#eventlogs" role="tab"
@@ -109,6 +109,8 @@
 
         </div>
     </div>
+    {{ activities|json_script:"activities" }}
+    <div id="text-width-calculation"></div>
 
 
 
@@ -117,43 +119,56 @@
 {% block script %}
 
 
-    <script>
-        <!--
-        var token = '{{csrf_token}}';-->
-        <!--
-        $(document).ready(function () {-->
+    <script type="text/javascript">
+        const activities = JSON.parse(document.getElementById('activities').textContent)
 
-            <!--
-            $("select.custom-select").change(function () {-->
-                <!--
-                var selectedlog = $(this).children("option:selected").val();-->
-                <!--
-                $.ajax({-->
-                    <!--headers: {"X-CSRFToken": token},-->
-                    <!--type: "POST",-->
-                    <!--url: "upload_eventlog",-->
-                    <!--data: {log_name: selectedlog},-->
-                    <!--dataType: 'json',-->
-                    <!--
-                }).done(function (result) {-->
-                    <!--
-                    no_trace = result.log_attributes.no_traces-->
-                    <!--
-                    $('#no_trace').text("No of traces: " + no_trace)-->
+        var token = '{{csrf_token}}';
 
-                    <!--
-                    no_event = result.log_attributes.no_events-->
-                    <!--
-                    $('#no_event').text("No of events: " + no_event)-->
-                    <!--
-                });-->
-                <!--
-            });-->
-            <!--});-->
+        $(document).ready(function () {
 
-            $(document).ready(function () {
-                $('[data-toggle="tooltip"]').tooltip();
+
+            $("select.custom-select").change(function () {
+
+                var selectedlog = $(this).children("option:selected").val();
+
+                $.ajax({
+                    headers: {"X-CSRFToken": token},
+                    type: "POST",
+                    url: "upload_eventlog",
+                    data: {log_name: selectedlog},
+                    dataType: 'json',
+
+                }).done(function (result) {
+
+                    no_trace = result.log_attributes.no_traces
+
+                    $('#no_trace').text("No of traces: " + no_trace)
+
+
+                    no_event = result.log_attributes.no_events
+
+                    $('#no_event').text("No of events: " + no_event)
+
+                });
+
             });
+        });
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        let textWidthMap = {}
+        let svg = d3.select('#text-width-calculation').append("svg")
+        activities.forEach(activity => {
+            let text = svg.append('text')
+                .attr('opacity', 0)
+                .text(activity)
+            textWidthMap[activity] = text.node().getComputedTextLength()
+            text.remove()
+        })
+
+        axios.post('/partial-order/text-widths', {'textWidths': JSON.stringify(textWidthMap)})
 
     </script>
 
