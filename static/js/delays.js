@@ -44,53 +44,32 @@ function drawTotalOrder(events, colorMap) {
 function visualize_delay() {
     console.log(combination)
     let i = 0, count = 1;
-    while (combination[i][TIME_KEY] != combination[i + 1][TIME_KEY])
+    while (combination[i][TIME_KEY] !== combination[i + 1][TIME_KEY])
         i++
     i += 1
     while (i < combination.length - 1) {
         console.log(i, count)
-        if (combination[i][TIME_KEY] != combination[i + 1][TIME_KEY]) {
+        if (combination[i][TIME_KEY] !== combination[i + 1][TIME_KEY]) {
             svg.append('text')
                 .attr('x', 30 + i * (EVENT_WIDTH + GAP))
-                .attr('y', 70)
-                .attr('stroke', 'rgba(92, 184, 92, 1)')
+                .attr('y', 75)
+                .attr('fill', 'rgba(92, 184, 92, 1)')
                 .text('+' + count + ' delta')
-
-            svg.append('text')
-                .attr('x', 32 + i * (EVENT_WIDTH + GAP))
-                .attr('y', 90)
-                .attr('stroke', 'rgba(92, 184, 92, 1)')
-                .text('was added')
-                .style("font-size", 14);
             i++
         } else {
             svg.append('text')
                 .attr('x', 30 + i * (EVENT_WIDTH + GAP))
-                .attr('y', 70)
-                .attr('stroke', 'rgba(92, 184, 92, 1)')
+                .attr('y', 75)
+                .attr('fill', 'rgba(92, 184, 92, 1)')
                 .text('+' + count + ' delta')
 
-            svg.append('text')
-                .attr('x', 32 + i * (EVENT_WIDTH + GAP))
-                .attr('y', 90)
-                .attr('stroke', 'rgba(92, 184, 92, 1)')
-                .text('was added')
-                .style("font-size", 14);
             count++
             i++
         }
     }
     svg.append('text')
         .attr('x', 30 + i * (EVENT_WIDTH + GAP))
-        .attr('y', 70)
-        .attr('stroke', 'rgba(92, 184, 92, 1)')
+        .attr('y', 75)
+        .attr('fill', 'rgba(92, 184, 92, 1)')
         .text('+' + count + ' delta')
-
-    svg.append('text')
-        .attr('x', 32 + i * (EVENT_WIDTH + GAP))
-        .attr('y', 90)
-        .attr('stroke', 'rgba(92, 184, 92, 1)')
-        .text('was added')
-        .style("font-size", 14);
-
 }
