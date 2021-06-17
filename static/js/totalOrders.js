@@ -6,7 +6,7 @@ axios.get('/partial-order/colors')
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])
             let longestActivityWidth = textWidths[response.data['longestActivityName']]
-
+        
             if (longestActivityWidth + 20 > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth + 20
             }
