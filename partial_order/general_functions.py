@@ -1,22 +1,8 @@
+import json
 import os
 
+import seaborn as sns
 from django.conf import settings
-from pm4py.objects.conversion.log import converter as log_converter
-from pm4py.objects.log.importer.xes import importer
-
-
-def max_trace_length():
-    """
-        Returns
-        -------
-        result: maximum length of a trace in an event log
-    """
-    event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    absolute_file_path = os.path.join(event_logs_path, 'simple-test.xes')
-    event_log = importer.apply(absolute_file_path)
-    df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
-    val = df.groupby(["case:concept:name"]).count().max()
-    return val["concept:name"]
 
 
 def get_selected_file_path():
@@ -30,17 +16,29 @@ def get_groups_file_path():
     return os.path.join(event_logs_path, file_name)
 
 
-def get_colors_file_path():
-    event_logs_path = os.path.join(settings.MEDIA_ROOT, "temp")
-    file_name = 'colors_' + os.path.splitext(settings.EVENT_LOG_NAME)[0] + '.json'
-    return os.path.join(event_logs_path, file_name)
+def get_longest_activity_name(activities):
+    longest_activity_name = ''
+    for activity in activities:
+        if len(longest_activity_name) < len(activity):
+            longest_activity_name = activity
+
+    return longest_activity_name
 
 
-def get_number_of_traces():
-    file = get_selected_file_path()
-    event_log = importer.apply(file)
-    return len(event_log)
+def get_meta_data():
+    return {'colors': settings.COLORS,
+            'longestActivityName': settings.LONGEST_ACTIVITY_NAME,
+            'textWidths': settings.TEXT_WIDTHS}
 
 
-if __name__ == '__main__':
-    print(max_trace_length())
+def get_colors(activities):
+    color_palette = sns.color_palette(None, len(activities)).as_hex()
+    colors = {}
+    for i, activity in enumerate(activities):
+        colors[activity] = color_palette[i]
+
+    return colors
+
+
+def get_form_data(request, key):
+    return json.loads(request.POST.dict()[key])
