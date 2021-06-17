@@ -25,6 +25,7 @@ def time_to_datetime(time_string):
     time_datetime = datetime.strptime(time_string, '%Y-%m-%d %H:%M:%S%z')
     return time_datetime
 
+
 """
 Add delta to a timestamp and return the new timestamp as a datetime object
 """
@@ -38,13 +39,14 @@ def add_time(time_datetime, delta_seconds):
 
 
 """
-Returns the event log as a dataframe object
+Returns the event log as a dataframe object, sorted by timestamps
 """
 
 
 def get_log():
+    parameters = {"timestamp_sort": True}
     event_log = importer.apply('test_log.xes')
-    df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
+    df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
     return df
 
 
@@ -76,15 +78,42 @@ Deletes the group information from the groups file and then writes the new times
 
 
 def save_delay_in_log():
-    time = '2014-10-22 21:15:41+02:00'
     event_log_df = get_log()
     groups_dict = get_groups()
     group_dict = get_selected_group()
-    print(time)
-    print(event_log_df)
-    print(groups_dict['groups']['|ER Registration||ER Triage||ER Sepsis Triage||CRPLacticAcidLeucocytes||IV '
-                                'Liquid||IV Antibiotics|']['caseIds'])
-    print(group_dict['delay'])
+
+    time_delay = group_dict['delay']
+    for caseId in group_dict['caseIds']:
+        counter = 0
+
+        timestamps = event_log_df[event_log_df['case:concept:name'] == caseId]['time:timestamp'].tolist()
+
+        temp = set()
+        for idx, val in enumerate(timestamps):
+            check = val in temp
+            print(check)
+            if check:
+                partial_ind = idx
+                break
+            else:
+                temp.add(val)
+
+        print(partial_ind)
+
+        for ind, timestamp in \
+                enumerate(timestamps[partial_ind:]):
+            if timestamp == timestamps[ind - 1]:
+                counter += 1
+            delta = int(counter * time_delay)
+            event_log_df[event_log_df['case:concept:name'] == caseId].at[ind, 'time:timestamp']= \
+                timestamp + timedelta(seconds=delta)
+
+    if group_dict['group'] in groups_dict['groups']:
+        del groups_dict['groups'][group_dict['group']]
+
+    dump_to_json(groups_dict, 'modified_test_groups')
+
+    print(event_log_df[event_log_df['case:concept:name'] == 'A']['time:timestamp'].iloc[2])
 
 
 if __name__ == '__main__':
