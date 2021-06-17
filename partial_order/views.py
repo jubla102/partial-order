@@ -43,14 +43,11 @@ def delays(request):
     template = loader.get_template('partial_order/delays.html')
     if request.method == 'POST':
         combination = get_form_data(request, 'combination')
-        longest_activity_width = get_form_data(request, 'longestActivityWidth')
-        text_widths = get_form_data(request, 'textWidths')
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
-        template.render({'combination': combination, 'longestActivityWidth': longest_activity_width,
-                         'textWidths': text_widths}, request))
+        template.render({'combination': combination}, request))
 
 
 def final_order(request):

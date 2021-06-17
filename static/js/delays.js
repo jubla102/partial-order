@@ -1,12 +1,14 @@
 let EVENT_WIDTH = 125
 const combination = JSON.parse(document.getElementById('combination').textContent);
-const longestActivityWidth = JSON.parse(document.getElementById('longestActivityWidth').textContent);
-const textWidthMap = new Map(JSON.parse(document.getElementById('textWidths').textContent))
-axios.get('/partial-order/colors')
+let textWidths = {}
+axios.get('/partial-order/po-groups')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data['colors']))
-            if (longestActivityWidth > EVENT_WIDTH) {
-                EVENT_WIDTH = longestActivityWidth
+            let colorMap = new Map(Object.entries(response.data['metadata']['colors']))
+            textWidths = JSON.parse(response.data['metadata']['textWidths'])
+            let longestActivityWidth = textWidths[response.data['metadata']['longestActivityName']]
+
+            if (longestActivityWidth + 20 > EVENT_WIDTH) {
+                EVENT_WIDTH = longestActivityWidth + 20
             }
             drawTotalOrder(combination, colorMap)
         }
@@ -33,12 +35,12 @@ function drawTotalOrder(events, colorMap) {
 
         if (i === 0) {
             svg.append('text')
-                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidthMap.get(activityName) / 2)
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidths[activityName] / 2)
                 .attr('y', 31)
                 .text(activityName)
         } else {
             svg.append('text')
-                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidthMap.get(activityName) / 2)
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidths[activityName] / 2)
                 .attr('y', 31)
                 .text(activityName)
         }
