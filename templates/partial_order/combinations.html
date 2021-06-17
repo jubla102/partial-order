@@ -53,7 +53,8 @@
                             </div>
                         </div>
                         <div class="col-11">
-                            <div class="scrollable-inner" id="combination-{{ forloop.counter0 }}"></div>
+                            <div class="scrollable-inner"
+                                 id="combination-{{ forloop.counter0 }}">{{ forloop.counter0 }} </div>
                         </div>
                     </div>
                 </div>
@@ -62,7 +63,7 @@
             <!-- Info Popup Section -->
             <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLongTitle">Combinations</h5>
@@ -71,7 +72,18 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <h6>What are Combinations?</h6>
+                            <p class="info"> The combinations displayed in this page are all possible ordered
+                                combinations of activities present in the selected partial order group. We do this to
+                                eliminate the <i>stacked activities</i>, and hence partial orders. For a given set of
+                                total
+                                stacked activities <b>'n'</b> in a partial order group, there are <b>n!</b> number of
+                                possible combinations.
+                                <br>
+                                <b>Example:</b>
+                                <br>
+                                <!--todo: add table and images -->
+                            </p>
                         </div>
                     </div>
                 </div>

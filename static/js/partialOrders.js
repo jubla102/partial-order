@@ -38,9 +38,9 @@ function drawPartialOrders(groupNumber, events, colorMap) {
         i = i + j
     }
 
-    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP + 2 * 15 // padding top bottom = 15
-    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP
-    let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("width", width).attr("height", height)
+    let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
+
+    let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("height", height)
     $(`#partial-order-${groupNumber}`).click(function () {
         redirectPost("/partial-order/combinations", {
             "partialOrder": JSON.stringify(events)
@@ -57,8 +57,10 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         baseY = Math.floor(maxParallelEvents / 2) * (EVENT_HEIGHT + GAP)
     }
 
+    let width = 0
     let xOffset = 0
-    for (let i = 0; i < eventList.length; i++) {
+    let i = 0
+    for (i; i < eventList.length; i++) {
         if ((i !== 0 && eventList[i].length % 2 === 0 && (eventList[i - 1].length % 2 !== 0)) ||
             (i !== 0 && eventList[i].length % 2 !== 0 && (eventList[i - 1].length % 2 === 0))
         ) {
@@ -91,4 +93,6 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
                 .text(eventList[i][j][ACTIVITY_KEY])
         }
     }
+    width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP
+    svg.attr("width", width)
 }
