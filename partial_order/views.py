@@ -1,36 +1,34 @@
-import os
+import json
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
-from pm4py.objects.log.importer.xes import importer
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.colors import get_colors_from_file
-from partial_order.utils import get_form_data
-
-event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
-event_log = importer.apply(absolute_file_path)
-number_of_traces = len(event_log)
+from partial_order.general_functions import get_meta_data, get_form_data
 
 
 def groups(request):
     template = loader.get_template('partial_order/groups.html')
 
-    partial_order_ds = partial_order_detection.get_groups_file()
-    number_of_groups = len(partial_order_ds['groups'])
+    number_of_groups = 0
+    groups = None
+    if settings.EVENT_LOG_NAME != ':notset:':
+        partial_order_ds = partial_order_detection.get_groups_file()
+        number_of_groups = len(partial_order_ds['groups'])
+        groups = partial_order_ds['groups'].values()
 
     return HttpResponse(
         template.render(
             {'log_name': settings.EVENT_LOG_NAME,
-             'groups': partial_order_ds['groups'].values(),
+             'groups': groups,
              'numberOfGroups': range(number_of_groups),
-             'totalNumberOfTraces': number_of_traces}, request))
+             'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
 
 
 def combinations(request):
     template = loader.get_template('partial_order/combinations.html')
+
     if request.method == 'POST':
         variant = get_form_data(request, 'partialOrder')
         combinations = combinations_generation.get_order_combinations(variant)
@@ -38,7 +36,7 @@ def combinations(request):
         return HttpResponseNotFound()
 
     return HttpResponse(
-        template.render({'combinations': combinations, 'totalNumberOfTraces': number_of_traces}, request))
+        template.render({'combinations': combinations, 'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
 
 
 def delays(request):
@@ -48,7 +46,8 @@ def delays(request):
     else:
         return HttpResponseNotFound()
 
-    return HttpResponse(template.render({'combination': combination}, request))
+    return HttpResponse(
+        template.render({'combination': combination}, request))
 
 
 def final_order(request):
@@ -56,5 +55,15 @@ def final_order(request):
     return HttpResponse(template.render({'log_name': settings.EVENT_LOG_NAME}, request))
 
 
-def colors(request):
-    return JsonResponse(get_colors_from_file(), safe=False)
+def meta_data(request):
+    return JsonResponse(get_meta_data(), safe=False)
+
+
+def text_width(request):
+    if request.method == 'POST':
+        text_widths = json.loads(request.body.decode('utf-8'))['textWidths']
+        settings.TEXT_WIDTHS = text_widths
+
+        return HttpResponse()
+    else:
+        return HttpResponseNotFound()

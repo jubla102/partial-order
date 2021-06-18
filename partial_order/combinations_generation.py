@@ -1,5 +1,4 @@
 import itertools
-import os
 
 import pandas as pd
 from pm4py.objects.conversion.log import converter as log_converter
@@ -8,7 +7,7 @@ from pm4py.statistics.traces.pandas import case_statistics
 from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
 
-from bootstrapdjango import settings
+from partial_order.general_functions import get_selected_file_path
 
 
 def get_order_combinations(partial_order_trace):
@@ -52,9 +51,8 @@ def get_order_combinations(partial_order_trace):
 
 
 def get_case_information():
-    event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    absolute_file_path = os.path.join(event_logs_path, 'Sepsis_Cases-Event_Log.xes')
-    event_log = importer.apply(absolute_file_path)
+    file = get_selected_file_path()
+    event_log = importer.apply(file)
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
     df_without_partial_orders = df.groupby(CASE_CONCEPT_NAME).filter(lambda x: x[DEFAULT_TIMESTAMP_KEY].is_unique)
     df_without_partial_orders.reset_index(drop=True, inplace=True)  # reset index
