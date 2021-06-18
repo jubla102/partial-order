@@ -170,6 +170,8 @@ def save_delay_to_log(variant_path, groups_path, event_log_path):
     # write the new groups information into the same file, while the original groups file remains intact
     dump_to_json(groups_dict, groups_path)
 
+    return event_log_df
+
 
 if __name__ == '__main__':
 
@@ -184,5 +186,15 @@ if __name__ == '__main__':
     # complete path to the xes log file
     event_log_file_path = 'event_log_file.xes'
 
-    # function that does everything (magic)
-    save_delay_to_log(variant_file_path, groups_file_path, event_log_file_path)
+    # this function returns the dataframe containing the new timestamps,
+    # for the selected group in the order that the user chose
+    event_log_final = save_delay_to_log(variant_file_path, groups_file_path, event_log_file_path)
+
+    # print all traces grouped by cases
+    variant = get_variant(variant_file_path)
+    for caseId in variant[CASEIDS]:
+        print('_______')
+        print('-------')
+        print(caseId)
+        print('=======')
+        print(event_log_final[event_log_final[CASE_CONCEPT_NAME] == caseId][[DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]])
