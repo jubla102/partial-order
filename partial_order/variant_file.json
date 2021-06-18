@@ -1,0 +1,31 @@
+{
+  "group": "|ER Registration||CRPLacticAcidLeucocytes||ER Triage||ER Sepsis Triage||IV AntibioticsIV Liquid||Admission NC||CRPLeucocytes||CRPLeucocytes||CRPLeucocytes||CRPLeucocytes||CRPLeucocytes||CRPLeucocytes||Release A|",
+  "delay": 10,
+  "caseIds": [
+      "A"
+    ],
+    "events": [
+      "ER Registration",
+      "CRP",
+      "LacticAcid",
+      "Leucocytes",
+      "ER Triage",
+      "ER Sepsis Triage",
+      "IV Antibiotics",
+      "IV Liquid",
+      "Admission NC",
+      "CRP",
+      "Leucocytes",
+      "CRP",
+      "Leucocytes",
+      "CRP",
+      "Leucocytes",
+      "CRP",
+      "Leucocytes",
+      "CRP",
+      "Leucocytes",
+      "CRP",
+      "Leucocytes",
+      "Release A"
+            ]
+}

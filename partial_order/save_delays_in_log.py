@@ -1,41 +1,33 @@
 from datetime import datetime, timedelta
 import json
+import os.path
+from shutil import copyfile
 
+import pandas as pd
 from pm4py.objects.log.importer.xes import importer
 
 from pm4py.objects.conversion.log import converter as log_converter
 
+from pm4py.util.constants import CASE_CONCEPT_NAME
+from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
+
+# CONSTANTS
+GROUP = 'group'
+GROUPS = 'groups'
+EVENTS = 'events'
+CASEIDS = 'caseIds'
+DELAY = 'delay'
 
 """
 Write the dictionary object to a json file
 """
 
 
-def dump_to_json(data, file_name):
-    with open(file_name + '.json', 'w') as outfile:
+def dump_to_json(data, groups_path):
+    if not os.path.isfile(groups_path + '.org.json'):
+        copyfile(groups_path, groups_path + '.org.json')
+    with open(groups_path, 'w') as outfile:
         json.dump(data, outfile, indent=4)
-
-
-"""
-Convert the time from a string object to a datetime object
-"""
-
-
-def time_to_datetime(time_string):
-    time_datetime = datetime.strptime(time_string, '%Y-%m-%d %H:%M:%S%z')
-    return time_datetime
-
-
-"""
-Add delta to a timestamp and return the new timestamp as a datetime object
-"""
-
-
-def add_time(time_datetime, delta_seconds):
-    if not isinstance(time_datetime, datetime):
-        time_datetime = time_to_datetime(time_datetime)
-
-    return time_datetime + timedelta(seconds=delta_seconds)
 
 
 """
@@ -43,9 +35,10 @@ Returns the event log as a dataframe object, sorted by timestamps
 """
 
 
-def get_log():
+def get_log(event_log_path):
     parameters = {"timestamp_sort": True}
-    event_log = importer.apply('test_log.xes')
+    event_log = importer.apply(event_log_path)
+    copyfile(event_log_path, event_log_path + '.org.xes')
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
     return df
 
@@ -55,8 +48,10 @@ Returns the groups.json file content as a dictionary object
 """
 
 
-def get_groups():
-    with open('test_groups.json') as test_groups_file:
+def get_groups(groups_path):
+    if not os.path.isfile(groups_path + '.org.json'):
+        copyfile(groups_path, groups_path + '.org.json')
+    with open(groups_path + '.org.json') as test_groups_file:
         data = json.load(test_groups_file)
     return data
 
@@ -66,8 +61,8 @@ Returns the group information and delay from the frontend as a dictionary object
 """
 
 
-def get_selected_group():
-    with open('test_group_info.json') as test_group_info:
+def get_variant(variant_path):
+    with open(variant_path) as test_group_info:
         data = json.load(test_group_info)
     return data
 
@@ -77,44 +72,71 @@ Deletes the group information from the groups file and then writes the new times
 """
 
 
-def save_delay_in_log():
-    event_log_df = get_log()
-    groups_dict = get_groups()
-    group_dict = get_selected_group()
+def save_delay_in_log(variant_path, groups_path, event_log_path):
+    event_log_df = get_log(event_log_path)
+    groups_dict = get_groups(groups_path)
+    variant_dict = get_variant(variant_path)
 
-    time_delay = group_dict['delay']
-    for caseId in group_dict['caseIds']:
+    time_delay = variant_dict[DELAY]
+    sequence = variant_dict[EVENTS]
+
+    event_log_df = event_log_df.groupby([CASE_CONCEPT_NAME]).apply(
+        lambda x: x.sort_values([DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY], ascending=True)).reset_index(drop=True)
+
+    variant_dict[CASEIDS] = sorted(variant_dict[CASEIDS])
+
+    log_copy = event_log_df
+
+    for caseId in variant_dict[CASEIDS]:
         counter = 0
 
-        timestamps = event_log_df[event_log_df['case:concept:name'] == caseId]['time:timestamp'].tolist()
+        new_time_list = list()
 
-        temp = set()
-        for idx, val in enumerate(timestamps):
-            check = val in temp
-            print(check)
-            if check:
-                partial_ind = idx
+        length = len(log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId)])
+
+        for idx, event in enumerate(log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId)]):
+            event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId].iloc[idx] = \
+                log_copy.loc[
+                    (log_copy[CASE_CONCEPT_NAME] == caseId) & (log_copy[DEFAULT_NAME_KEY] == sequence[idx])].iloc[0]
+            log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId) & (log_copy[DEFAULT_NAME_KEY] == event)] = \
+                log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId) & (log_copy[DEFAULT_NAME_KEY] == event)].iloc[1:]
+            if idx == length - 1:
                 break
-            else:
-                temp.add(val)
 
-        print(partial_ind)
+        timestamps = event_log_df[log_copy[CASE_CONCEPT_NAME] == caseId][DEFAULT_TIMESTAMP_KEY].tolist()
 
-        for ind, timestamp in \
-                enumerate(timestamps[partial_ind:]):
-            if timestamp == timestamps[ind - 1]:
+        new_time_list.append(timestamps[0])
+
+        partial_ind = 1
+        while not timestamps[partial_ind] == timestamps[partial_ind - 1]:
+            new_time_list.append(timestamps[partial_ind])
+            partial_ind += 1
+
+        for ind, timestamp in enumerate(timestamps[partial_ind:]):
+            if timestamp == timestamps[partial_ind + ind - 1]:
                 counter += 1
+
             delta = int(counter * time_delay)
-            event_log_df[event_log_df['case:concept:name'] == caseId].at[ind, 'time:timestamp']= \
-                timestamp + timedelta(seconds=delta)
+            new_time = timestamp + timedelta(seconds=delta)
+            new_time_list.append(new_time)
 
-    if group_dict['group'] in groups_dict['groups']:
-        del groups_dict['groups'][group_dict['group']]
+        new_time_list_index = list(event_log_df[event_log_df[CASE_CONCEPT_NAME] == caseId]
+                                   [DEFAULT_TIMESTAMP_KEY].index.values)
 
-    dump_to_json(groups_dict, 'modified_test_groups')
+        new_time_series = pd.Series(data=new_time_list, index=new_time_list_index)
 
-    print(event_log_df[event_log_df['case:concept:name'] == 'A']['time:timestamp'].iloc[2])
+        event_log_df.replace(to_replace=
+                             event_log_df[event_log_df[CASE_CONCEPT_NAME] == caseId][DEFAULT_TIMESTAMP_KEY].values,
+                             value=new_time_series, inplace=True)
+
+    if variant_dict[GROUP] in groups_dict[GROUPS]:
+        del groups_dict[GROUPS][variant_dict[GROUP]]
+
+    dump_to_json(groups_dict, groups_path)
 
 
 if __name__ == '__main__':
-    save_delay_in_log()
+    variant_file_path = 'variant_file.json'
+    groups_file_path = 'groups_file.json'
+    event_log_file_path = 'event_log_file.xes'
+    save_delay_in_log(variant_file_path, groups_file_path, event_log_file_path)
