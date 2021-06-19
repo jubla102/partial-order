@@ -31,8 +31,33 @@ def get_meta_data():
             'textWidths': settings.TEXT_WIDTHS}
 
 
+def dupcheck(x):
+    for elem in x:
+        if x.count(elem) > 1:
+            return True
+    return False
+
+
+def generate_colors(activities_length):
+    if (activities_length > 10):
+        color_palette = sns.color_palette(None, 10).as_hex()
+        activities_length -= 10
+    else:
+        color_palette = sns.color_palette(None, activities_length).as_hex()
+        return color_palette
+    if (activities_length > 10):
+        color_palette = color_palette + sns.color_palette("pastel", 10).as_hex()
+        activities_length -= 10
+    else:
+        color_palette = color_palette + sns.color_palette("pastel", activities_length).as_hex()
+        return color_palette
+    if (activities_length >= 1):
+        color_palette = color_palette + sns.color_palette("bright", activities_length).as_hex()
+        return color_palette
+
+
 def get_colors(activities):
-    color_palette = sns.color_palette(None, len(activities)).as_hex()
+    color_palette = generate_colors(len(activities))
     colors = {}
     for i, activity in enumerate(activities):
         colors[activity] = color_palette[i]
@@ -42,3 +67,8 @@ def get_colors(activities):
 
 def get_form_data(request, key):
     return json.loads(request.POST.dict()[key])
+
+
+if __name__ == '__main__':
+    colors = get_colors((31))
+    print("final: ", len(colors), colors)
