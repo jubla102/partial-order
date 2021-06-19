@@ -5,8 +5,8 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
+    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -60,8 +60,7 @@
                                 <div class="row">
                                     <div class="col-12 inner-case-info">
                                         <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                        {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} %
-                                        of
+                                        {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
                                         the
                                         log
                                     </div>

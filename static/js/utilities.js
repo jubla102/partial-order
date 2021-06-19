@@ -20,3 +20,14 @@ function redirectPost(url, data) {
     }
     form.submit();
 }
+
+function getTextWidth(text) {
+    let svg = d3.select('#text-width-calculation').append("svg")
+    let textObj = svg.append('text')
+        .attr('opacity', 0)
+        .text(text)
+    let textWidth = textObj.node().getComputedTextLength()
+    textObj.remove()
+
+    return textWidth;
+}
