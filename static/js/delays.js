@@ -1,17 +1,13 @@
 let EVENT_WIDTH = 125
 const combination = JSON.parse(document.getElementById('combination').textContent);
 let textWidths = {}
-axios.get('/partial-order/po-groups')
-
-let height = EVENT_HEIGHT * 3
-let width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER
-let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
 
 axios.get('/partial-order/colors')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data['metadata']['colors']))
-            textWidths = JSON.parse(response.data['metadata']['textWidths'])
-            let longestActivityWidth = textWidths[response.data['metadata']['longestActivityName']]
+            console.log(response.data)
+            let colorMap = new Map(Object.entries(response.data['colors']))
+            textWidths = JSON.parse(response.data['textWidths'])
+            let longestActivityWidth = textWidths[response.data['longestActivityName']]
 
             if (longestActivityWidth + 20 > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth + 20
@@ -21,6 +17,9 @@ axios.get('/partial-order/colors')
     );
 
 function drawTotalOrder(events, colorMap) {
+    let height = EVENT_HEIGHT * 3
+    let width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER
+    let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
     for (let i = 0; i < events.length; i++) {
         let activityName = events[i][ACTIVITY_KEY];
         let polygon
@@ -51,7 +50,7 @@ function drawTotalOrder(events, colorMap) {
 }
 
 function visualize_delay() {
-    console.log(combination)
+    console.log('i was called')
     let i = 0, count = 1;
     while (combination[i][TIME_KEY] !== combination[i + 1][TIME_KEY])
         i++
