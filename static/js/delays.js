@@ -1,11 +1,16 @@
 let EVENT_WIDTH = 125
 const combination = JSON.parse(document.getElementById('combination').textContent);
 let textWidths = {}
-axios.get('/partial-order/po-groups')
+
+let height = EVENT_HEIGHT * 2
+let width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
+let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
+
+axios.get('/partial-order/colors')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data['metadata']['colors']))
-            textWidths = JSON.parse(response.data['metadata']['textWidths'])
-            let longestActivityWidth = textWidths[response.data['metadata']['longestActivityName']]
+            let colorMap = new Map(Object.entries(response.data['colors']))
+            textWidths = JSON.parse(response.data['textWidths'])
+            let longestActivityWidth = textWidths[response.data['longestActivityName']]
 
             if (longestActivityWidth + 20 > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth + 20
@@ -15,10 +20,6 @@ axios.get('/partial-order/po-groups')
     );
 
 function drawTotalOrder(events, colorMap) {
-    let height = EVENT_HEIGHT
-    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
-    let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
-
     for (let i = 0; i < events.length; i++) {
         let activityName = events[i][ACTIVITY_KEY];
         let polygon
@@ -46,4 +47,36 @@ function drawTotalOrder(events, colorMap) {
         }
 
     }
+}
+
+function visualizeDelay() {
+    let i = 0, count = 1;
+    while (combination[i][TIMESTAMP_KEY] !== combination[i + 1][TIMESTAMP_KEY])
+        i++
+    i += 1
+    while (i < combination.length - 1) {
+        let text = '+' + count + ' delta'
+        if (combination[i][TIMESTAMP_KEY] !== combination[i + 1][TIMESTAMP_KEY]) {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth(text) / 2)
+                .attr('y', 75)
+                .attr('fill', 'rgba(92, 184, 92, 1)')
+                .text(text)
+            i++
+        } else {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth(text) / 2)
+                .attr('y', 75)
+                .attr('fill', 'rgba(92, 184, 92, 1)')
+                .text(text)
+
+            count++
+            i++
+        }
+    }
+    svg.append('text')
+        .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth('+' + count + ' delta') / 2)
+        .attr('y', 75)
+        .attr('fill', 'rgba(92, 184, 92, 1)')
+        .text('+' + count + ' delta')
 }

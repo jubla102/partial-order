@@ -5,8 +5,8 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/totalOrders.js" defer></script>
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
+    <script type="text/javascript" src="../../static/js/totalOrders.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -68,7 +68,7 @@
         <!-- Info Popup Section -->
         <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Combinations</h5>
@@ -77,7 +77,18 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <h6>What are Combinations?</h6>
+                        <p class="info"> The combinations displayed in this page are all possible ordered
+                            combinations of activities present in the selected partial order group. We do this to
+                            eliminate the <i>stacked activities</i>, and hence partial orders. For a given set of
+                            total
+                            stacked activities <b>'n'</b> in a partial order group, there are <b>n!</b> number of
+                            possible combinations.
+                            <br>
+                            <b>Example:</b>
+                            <br>
+                            <!--todo: add table and images -->
+                        </p>
                     </div>
                 </div>
             </div>

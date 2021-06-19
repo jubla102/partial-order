@@ -58,6 +58,7 @@
     overflow: scroll;
     overflow-y: hidden;
     padding: 20px;
+    height: 150px;
     border-radius: 10px 10px 10px 10px;
 }
 
@@ -156,4 +157,9 @@
 
 .picker {
     color: black;
+}
+
+.p.info {
+    text-align: justify;
+    text-justify: inter-word;
 }

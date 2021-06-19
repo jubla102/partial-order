@@ -5,8 +5,8 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
+    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -82,7 +82,7 @@
     <!-- Info Popup Section -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Partial Order Combinations</h5>
@@ -91,11 +91,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <h6>What is a Partial Order Group?</h6>
+                    <p class="info"> A partial order group is a group that consists of all the traces of the event
+                        log which have the same set of activities and are partial orders. We use the chevron style
+                        for visualizing these activities (shape of the activities).
+                        <br>
+                        If an activity 'A' is followed by 'B' in the
+                        visualization, it means 'B' occurred after 'A'. The ordering of activities that do not cause
+                        the trace to become a partial order is retained as it is. The activities that have the same
+                        time stamps and hence cause the trace to become a partial order are stacked on top of each
+                        other, since an ordering cannot be decided. A 'Partial Order Group' contains all such traces
+                        that have the same activities.
+                        <b>Example:</b>
+                        <br>
+                        <!--todo: add table and images -->
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-
 
 {% endblock %}
