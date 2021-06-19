@@ -4,8 +4,8 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/delays.js" defer></script>
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
+    <script type="text/javascript" src="../../static/js/delays.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -225,7 +225,7 @@
             </div>
         </div>
         <div class="col-xs-2 mt-4 centered">
-            <button type="button" class="btn btn-dark" id="add_delay" onclick="displayDelay(); visualize_delay();">
+            <button type="button" class="btn btn-dark" id="add_delay" onclick="displayDelay(); visualizeDelay();">
                 Add Delay
             </button>
         </div>
@@ -238,6 +238,7 @@
         </div>
     </div>
     </div>
+    <div id="text-width-calculation"></div>
 
     <!-- Info Popup Section -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
