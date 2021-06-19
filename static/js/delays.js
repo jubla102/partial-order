@@ -3,23 +3,24 @@ const combination = JSON.parse(document.getElementById('combination').textConten
 let textWidths = {}
 
 let height = EVENT_HEIGHT * 2
-let width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
-let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
-
+let width = 0
+let svg
 axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])
             let longestActivityWidth = textWidths[response.data['longestActivityName']]
-
             if (longestActivityWidth + 20 > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth + 20
             }
+            width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
+            svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
             drawTotalOrder(combination, colorMap)
         }
     );
 
 function drawTotalOrder(events, colorMap) {
+
     for (let i = 0; i < events.length; i++) {
         let activityName = events[i][ACTIVITY_KEY];
         let polygon
