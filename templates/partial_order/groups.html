@@ -46,7 +46,15 @@
 
         <br>
         {% if log_name != ':notset:' %}
-            <div class="spinner-border text-primary" id="spinner"></div>
+
+            <!--<div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status" id="spin">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>-->
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" id="spinner"></div>
+            </div>
             <div class="partial-order-groups" hidden>
                 {% for group in groups %}
                     <div class="container-fluid">
@@ -144,7 +152,7 @@
                     These activities are therefore stacked on top of each other.<br><br>
                     <h6>Further Steps:</h6>
                     Each partial order group is selectable (grey color appears when hovered on the group; can be seen in
-                    the figure). Selecting a group will automatically redirects the application to the
+                    the figure). Selecting a group will automatically redirect the application to the
                     <b>Combinations</b> tab, which displays all possible combinations in which the activities can be
                     ordered to convert the partial orders to complete orders.
                 </div>
