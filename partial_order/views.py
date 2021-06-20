@@ -58,7 +58,17 @@ def delays(request):
 
 def final_order(request):
     template = loader.get_template('partial_order/final_order.html')
-    return HttpResponse(template.render({'log_name': settings.EVENT_LOG_NAME}, request))
+    if request.method == 'POST':
+        groupId = get_form_data(request, 'groupId')
+        combination = get_form_data(request, 'combination')
+        caseIds = get_form_data(request, 'caseIds')
+    else:
+        return HttpResponseNotFound()
+
+    return HttpResponse(
+        template.render({'groupId': groupId,
+                         'combination': combination,
+                         'caseIds': caseIds}, request))
 
 
 def meta_data(request):

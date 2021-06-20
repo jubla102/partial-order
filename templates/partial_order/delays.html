@@ -34,7 +34,11 @@
         }
 
         function redirectToFinalOrder() {
-            let days = parseInt(document.getElementById("days").value)
+            let days = document.getElementById("days").value
+            if (days === "")
+                days = 0
+            else
+                days = parseInt(days)
             let hours = parseInt(document.getElementById("hours").value)
             let minutes = parseInt(document.getElementById("minutes").value)
             let seconds = parseInt(document.getElementById("seconds").value)
@@ -196,4 +200,5 @@
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}

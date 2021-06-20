@@ -4,7 +4,8 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
+    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
+    <script type="text/javascript" src="../../static/js/finalOrder.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -29,66 +30,66 @@
 {% endblock %}
 
 {% block tab_content %}
-
+    {{ combination|json_script:"combination" }}
     <div class="tab-pane fade show active">
-        <div class="container-fluid background">
-            <div class="form-row justify-content-center">
-                <div class=" col">
-                    <h4 class="mt-4 tab-headline">Confirm the Order</h4>
-                </div>
-                <div class="col mt-3">
-                    <button type="button" class="btn btn-info float-right" data-toggle="modal"
-                            data-target="#exampleModalLong">Info
-                    </button>
-                </div>
+        <div class="form-row justify-content-center">
+            <div class=" col">
+                <h4 class="mt-4 tab-headline">Confirm the Order</h4>
             </div>
-            <br>
-            <div class="scrollable-outer">
-                <div class="scrollable-inner" id="rect1"></div>
+            <div class="col mt-3">
+                <button type="button" class="btn btn-info float-right" data-toggle="modal"
+                        data-target="#exampleModalLong">Info
+                </button>
             </div>
-            <br>
-            <div class="custom-container centered" id="confirm-final">
+        </div>
+        <br>
 
-                <!-- todo: display traces here-->
-                <div class="scrollable-inner-delay" id="combination"></div>
-                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
-                       id='save' onclick="saved()" title="Save will add the combination to the
-                    original log"/>
-                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
-                       id='discard' onclick="discarded()" title="Discard will delete the combination."/>
-                <br><br>
-                <h6 class="text-dark mt-2"> You can redo the process by either selecting a new group or a new
-                    combination.</h6>
+        <div class="delay-row">
+            <div class="scrollable-inner">
+                <div id="combination"></div>
             </div>
-            <br><br>
-            <div class="custom-container centered" id="export-final">
-                <h4 class="mt-4">Export</h4>
-                <h6 class="mt-4 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
-                    the XES file of the modified event log.</h6>
-                <br>
-                <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
-                       id='export' onclick=""/>
-            </div>
-
         </div>
 
-        <!-- Info Popup Section -->
-        <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Final Order</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
+        <br>
+        <div class="custom-container centered" id="confirm-final">
+            <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
+                   id='save' onclick="saved()" title="Save will add the combination to the
+                    original log"/>
+            <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
+                   id='discard' onclick="discarded()" title="Discard will delete the combination."/>
+            <br><br>
+            <h6 class="text-dark mt-2"> You can redo the process by either selecting a new group or a new
+                combination.</h6>
+        </div>
+        <br><br>
+        <div class="custom-container centered" id="export-final">
+            <h4 class="mt-4">Export</h4>
+            <h6 class="mt-4 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
+                the XES file of the modified event log.</h6>
+            <br>
+            <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
+                   id='export' onclick=""/>
+        </div>
+
+    </div>
+
+    <!-- Info Popup Section -->
+    <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Final Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
                 </div>
             </div>
         </div>
     </div>
+
 
 {% endblock %}
