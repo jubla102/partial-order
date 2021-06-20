@@ -4,6 +4,8 @@ import os.path
 from shutil import copyfile
 
 import pandas as pd
+import pm4py
+from pm4py.objects.log.exporter.xes import exporter
 from pm4py.objects.log.importer.xes import importer
 
 from pm4py.objects.conversion.log import converter as log_converter
@@ -24,10 +26,24 @@ Write the dictionary object to a json file
 
 
 def dump_to_json(data, groups_path):
-    if not os.path.isfile(groups_path + '.org.json'):
-        copyfile(groups_path, groups_path + '.org.json')
+    if not os.path.isfile(groups_path + '.original.json'):
+        copyfile(groups_path, groups_path + '.original.json')
     with open(groups_path, 'w') as outfile:
         json.dump(data, outfile, indent=4)
+
+
+"""
+Write the event log dataframe to a xes file
+"""
+
+
+def write_to_xes(event_log_df, event_log_path):
+    log = log_converter.apply(event_log_df, variant=log_converter.Variants.TO_EVENT_LOG, parameters=None)
+
+    if not os.path.isfile(event_log_path + '.modified.xes'):
+        copyfile(event_log_path, event_log_path + '.modified.xes')
+
+    exporter.apply(log, event_log_path + '.modified.xes')
 
 
 """
@@ -37,10 +53,11 @@ Returns the event log as a dataframe object, sorted by timestamps
 
 def get_log(event_log_path):
     parameters = {"timestamp_sort": True}
-    event_log = importer.apply(event_log_path)
 
-    # also creates a copy to save the original log
-    copyfile(event_log_path, event_log_path + '.org.xes')
+    # also creates a copy to save the original log if it doesn't already exist
+    if not os.path.isfile(event_log_path + '.modified.xes'):
+        copyfile(event_log_path, event_log_path + '.modified.xes')
+    event_log = importer.apply(event_log_path + '.modified.xes')
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
     return df
 
@@ -51,11 +68,10 @@ Returns the groups.json file content as a dictionary object
 
 
 def get_groups(groups_path):
-
     # create a copy of th original if it doesn't already exist
-    if not os.path.isfile(groups_path + '.org.json'):
-        copyfile(groups_path, groups_path + '.org.json')
-    with open(groups_path + '.org.json') as test_groups_file:
+    if not os.path.isfile(groups_path + '.original.json'):
+        copyfile(groups_path, groups_path + '.original.json')
+    with open(groups_path) as test_groups_file:
         data = json.load(test_groups_file)
     return data
 
@@ -77,7 +93,6 @@ Deletes the group information from the groups file and then writes the new times
 
 
 def save_delay_to_log(variant_path, groups_path, event_log_path):
-
     event_log_df = get_log(event_log_path)
     groups_dict = get_groups(groups_path)
     variant_dict = get_variant(variant_path)
@@ -95,11 +110,11 @@ def save_delay_to_log(variant_path, groups_path, event_log_path):
     # sort the variant's group's caseIds in ascending order
     variant_dict[CASEIDS] = sorted(variant_dict[CASEIDS])
 
-    # create a copy of the event_log_df
-    log_copy = event_log_df
-
     # iterate over each caseId present in the selected group
     for caseId in variant_dict[CASEIDS]:
+
+        # create a sub data frame for the current caseId
+        case_df = event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId]
 
         # counter for delta modifier
         counter = 0
@@ -107,21 +122,26 @@ def save_delay_to_log(variant_path, groups_path, event_log_path):
         # list to store all new timestamps
         new_time_list = list()
 
-        # number ot cases in the selected variant's group
-        length = len(log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId)])
+        # number of events in each trace
+        num_events = len(sequence)
 
-        # iterate over the copy of the log to reorder the rows in event_log_df in the order that the user selected
-        for idx, event in enumerate(log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId)]):
-            event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId].iloc[idx] = \
-                log_copy.loc[
-                    (log_copy[CASE_CONCEPT_NAME] == caseId) & (log_copy[DEFAULT_NAME_KEY] == sequence[idx])].iloc[0]
-            log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId) & (log_copy[DEFAULT_NAME_KEY] == event)] = \
-                log_copy[(log_copy[CASE_CONCEPT_NAME] == caseId) & (log_copy[DEFAULT_NAME_KEY] == event)].iloc[1:]
-            if idx == length - 1:
-                break
+        index = event_log_df[event_log_df[CASE_CONCEPT_NAME] == caseId].index
+
+        # iterate over the  the log to reorder the rows in event_log_df in the order that the user selected
+        idx = 0
+        while idx < num_events:
+            event_log_df.at[index[idx], event_log_df.columns] = case_df[case_df[DEFAULT_NAME_KEY] == sequence[idx]].iloc[0].values
+
+            if len(case_df[case_df[DEFAULT_NAME_KEY] == sequence[idx]]) > 1:
+                case_df.loc[case_df[DEFAULT_NAME_KEY] == sequence[idx]] = \
+                    case_df.loc[case_df[DEFAULT_NAME_KEY] == sequence[idx]].iloc[1:]
+            else:
+                case_df.drop(case_df[case_df[DEFAULT_NAME_KEY] == sequence[idx]].index, inplace=True)
+
+            idx += 1
 
         # store the timestamps in a list
-        timestamps = event_log_df[log_copy[CASE_CONCEPT_NAME] == caseId][DEFAULT_TIMESTAMP_KEY].tolist()
+        timestamps = event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId][DEFAULT_TIMESTAMP_KEY].tolist()
 
         # append the first timestamp to the list of new timestamps
         new_time_list.append(timestamps[0])
@@ -135,11 +155,10 @@ def save_delay_to_log(variant_path, groups_path, event_log_path):
             new_time_list.append(timestamps[partial_ind])
             partial_ind += 1
 
-        # iterate over each timestamp in the lsit of timestamps and then add the corresponding delay
+        # iterate over each timestamp in the list of timestamps and then add the corresponding delay
         # starting from the first duplicate timestamp
         for ind, timestamp in enumerate(timestamps[partial_ind:]):
             if timestamp == timestamps[partial_ind + ind - 1]:
-
                 # increment the delta modifier when the current timestamp is also a duplicate
                 counter += 1
 
@@ -178,23 +197,31 @@ if __name__ == '__main__':
     # add complete paths to the respective files here
 
     # complete path to the variant information from the user here
-    variant_file_path = 'variant_file.json'
+    variant_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_Sepsis_Cases-Event_Log.json.variant.json'
 
     # complete path to the json file containing all groups' information
-    groups_file_path = 'groups_file.json'
+    groups_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_Sepsis_Cases-Event_Log.json'
 
     # complete path to the xes log file
-    event_log_file_path = 'event_log_file.xes'
+    event_log_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\event_logs\\Sepsis_Cases-Event_Log.xes'
 
     # this function returns the dataframe containing the new timestamps,
     # for the selected group in the order that the user chose
     event_log_final = save_delay_to_log(variant_file_path, groups_file_path, event_log_file_path)
 
-    # print all traces grouped by cases
+    # write event log to the modified xes file
+    write_to_xes(event_log_final, event_log_file_path)
+
+    """
+    
+    Remove comment to print all cases with the new timestamps
+
     variant = get_variant(variant_file_path)
-    for caseId in variant[CASEIDS]:
-        print('_______')
-        print('-------')
-        print(caseId)
+
+    for case in variant[CASEIDS]:
         print('=======')
-        print(event_log_final[event_log_final[CASE_CONCEPT_NAME] == caseId][[DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]])
+        print('Case: ', case)
+        print('=======')
+        print(event_log_final[event_log_final[CASE_CONCEPT_NAME] == case][[DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]])
+    
+    """
