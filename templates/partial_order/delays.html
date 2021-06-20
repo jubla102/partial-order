@@ -7,6 +7,8 @@
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
     <script type="text/javascript" src="../../static/js/delays.js" defer></script>
     <script type="text/javascript">
+        let groupId = '{{ groupId }}'
+        document.getElementById('combinations_tab').href = `combinations/${groupId}`
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -22,9 +24,9 @@
             let hours = document.getElementById("hours").value
             let minutes = document.getElementById("minutes").value
             let seconds = document.getElementById("seconds").value
-            if (days == "")
+            if (days === "")
                 days = 0;
-            document.getElementById("added-delay").innerHTML = days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds.";
+            document.getElementById("added-delay").innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
         }
 
     </script>
