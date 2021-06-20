@@ -4,7 +4,6 @@ from datetime import timedelta
 from shutil import copyfile
 
 import pandas as pd
-from django.conf import settings
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.exporter.xes import exporter
 from pm4py.objects.log.importer.xes import importer
@@ -37,15 +36,13 @@ Write the event log dataframe to a xes file
 """
 
 
-def write_to_xes(event_log_df, export_path):
-    log = log_converter.apply(event_log_df, variant=log_converter.Variants.TO_EVENT_LOG, parameters=None)
-    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '-modified.xes'
-    export_file_path = export_path + file_name
+def write_to_xes(event_log_df):
+    export_file_path = get_export_file_path()
 
     if not os.path.isfile(export_file_path):
         copyfile(get_selected_file_path(), export_file_path)
 
-    exporter.apply(log, export_file_path)
+    exporter.apply(event_log_df, export_file_path)
 
 
 """
@@ -56,9 +53,7 @@ Returns the event log as a dataframe object, sorted by timestamps
 def get_log(event_log_path):
     parameters = {"timestamp_sort": True}
 
-    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '-modified.xes'
-    export_path = get_export_file_path()
-    export_file_path = export_path + file_name
+    export_file_path = get_export_file_path()
 
     if not os.path.isfile(export_file_path):
         copyfile(event_log_path, export_file_path)
@@ -92,7 +87,6 @@ def save_delay_to_log(variant_dict_obj):
     event_log_df = get_log(event_log_path)
     groups_dict = get_groups(groups_path)
     variant_dict = variant_dict_obj
-    export_path = get_export_file_path()
 
     # proceed only if the selected variant's group is present in the groups file
     if variant_dict[GROUP] in groups_dict[GROUPS]:
@@ -190,7 +184,7 @@ def save_delay_to_log(variant_dict_obj):
         dump_to_json(groups_dict, groups_path)
 
         # write event log to the modified xes file
-        write_to_xes(event_log_df, export_path)
+        write_to_xes(event_log_df)
 
 
 if __name__ == '__main__':

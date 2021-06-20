@@ -29,9 +29,11 @@ def get_groups_file_path():
     file_name = 'groups_' + os.path.splitext(settings.EVENT_LOG_NAME)[0] + '.json'
     return os.path.join(event_logs_path, file_name)
 
+
 def get_export_file_path():
     export_file_path = os.path.join(settings.MEDIA_ROOT, "exports")
-    return os.path.join(export_file_path)
+    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '-modified.xes'
+    return os.path.join(export_file_path, file_name)
 
 
 def get_colors_file_path():
