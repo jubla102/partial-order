@@ -180,7 +180,7 @@ def save_delay_to_log(variant_dict_obj, groups_path, event_log_path):
         dump_to_json(groups_dict, groups_path)
 
         # write event log to the modified xes file
-        write_to_xes(event_log_df, event_log_file_path)
+        write_to_xes(event_log_df, event_log_path)
 
 
 if __name__ == '__main__':
