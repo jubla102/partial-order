@@ -76,25 +76,14 @@ def get_groups(groups_path):
 
 
 """
-Returns the group information and delay from the frontend as a dictionary object
-"""
-
-
-def get_variant(variant_path):
-    with open(variant_path) as test_group_info:
-        data = json.load(test_group_info)
-    return data
-
-
-"""
 Deletes the group information from the groups file and then writes the new timestamps into the log file
 """
 
 
-def save_delay_to_log(variant_path, groups_path, event_log_path):
+def save_delay_to_log(variant_dict_obj, groups_path, event_log_path):
     event_log_df = get_log(event_log_path)
     groups_dict = get_groups(groups_path)
-    variant_dict = get_variant(variant_path)
+    variant_dict = variant_dict_obj
 
     # proceed only if the selected variant's group is present in the groups file
     if variant_dict[GROUP] in groups_dict[GROUPS]:
@@ -200,14 +189,17 @@ if __name__ == '__main__':
     # the paths must include the file formats
 
     # complete path to the variant information from the user here
-    variant_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_Sepsis_Cases-Event_Log.json.variant.json'
+    # variant_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json.variant.json'
+
+    # variant dictionary from the front end
+    variant_obj = {"group": "|a||bc|", "delay" : 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
 
     # complete path to the json file containing all groups' information
-    groups_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_Sepsis_Cases-Event_Log.json'
+    groups_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json'
 
     # complete path to the xes log file
-    event_log_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\event_logs\\Sepsis_Cases-Event_Log.xes'
+    event_log_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\event_logs\\simple-test-1.xes'
 
     # this function takes the paths and then modifies the event log with the new timestamps and events in the order
     # that the user has selected
-    save_delay_to_log(variant_file_path, groups_file_path, event_log_file_path)
+    save_delay_to_log(variant_obj, groups_file_path, event_log_file_path)
