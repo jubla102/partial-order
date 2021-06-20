@@ -67,7 +67,6 @@
                 </div>
             {% endfor %}
         </div>
-
         <!-- Info Popup Section -->
         <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -79,19 +78,37 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body  text-justify">
                         <h6>What are Combinations?</h6>
-                        <p class="info"> The combinations displayed in this page are all possible ordered
-                            combinations of activities present in the selected partial order group. We do this to
-                            eliminate the <i>stacked activities</i>, and hence partial orders. For a given set of
-                            total
-                            stacked activities <b>'n'</b> in a partial order group, there are <b>n!</b> number of
-                            possible combinations.
-                            <br>
-                            <b>Example:</b>
-                            <br>
-                            <!--todo: add table and images -->
-                        </p>
+                        The <i>combinations</i> displayed in this page are all the possible ordered
+                        combinations that can be generated using the activities present in the selected partial
+                        order group. We do this to eliminate the <i>stacked activities</i>, and hence partial
+                        orders.<br>
+                        For a given partial order group containing a total of <b>'n'</b> stacked activities,
+                        there are <b>n!</b> number of possible combinations.
+                        <br><br>
+                        <h6>Example:</h6>
+                        <img src="../../media/info/partial_order_groups/groups.PNG" alt="Partial Order Groups"
+                             width="750" height="400"><br>
+                        On selecting the first partial order group from the previous tab (as seen in the figure above),
+                        we get the following possible combinations:<br><br>
+                        <img src="../../media/info/combinations/combinations.PNG" alt="Combinations"
+                             width="700" height="250"><br>
+                        The total number of stacked activities in the selected partial order group is 2, and hence we
+                        get 2! = 2 combinations.<br><br>
+                        The <i>statistics</i> on the left gives information about the existence of that particular
+                        combination in the event log. Information like number and percentage of traces having the same
+                        combination are displayed. A combination is nothing but a variant. Since, all possible
+                        combinations are generated here, there can be combinations/variants (hence also traces) which
+                        may not be present in the event log. In such cases the the number and percentage of traces are
+                        simply 0, which is true in this case. There does not exist a complete ordered trace a,b,c,e,f in
+                        the event log.<br><br>
+                        <h6>Further Steps:</h6>
+                        Each combination is selectable (grey color appears when hovered on the combination; can be
+                        seen in the figure). Selecting a combination will automatically redirects the application to the
+                        <b>Add Delays</b> tab, where delays can be added to the activities, so that the activities can
+                        be ordered along with modified timestamps attached to them.
+
                     </div>
                 </div>
             </div>

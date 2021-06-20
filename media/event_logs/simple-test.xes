@@ -64,16 +64,11 @@
 		</event>
 	</trace>
 	<trace>
-		<string key="concept:name" value="3"/>
+	<string key="concept:name" value="3"/>
 		<event>
 			<string key="concept:name" value="a"/>
 			<string key="lifecycle:transition" value="complete"/>
 			<date key="time:timestamp" value="2021-05-04T12:00:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
 		</event>
 		<event>
 			<string key="concept:name" value="c"/>
@@ -81,14 +76,19 @@
 			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
 		</event>
 		<event>
-			<string key="concept:name" value="d"/>
+			<string key="concept:name" value="b"/>
 			<string key="lifecycle:transition" value="complete"/>
 			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
 		</event>
 		<event>
-			<string key="concept:name" value="g"/>
+			<string key="concept:name" value="e"/>
 			<string key="lifecycle:transition" value="complete"/>
 			<date key="time:timestamp" value="2021-05-04T12:04:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="concept:name" value="f"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<date key="time:timestamp" value="2021-05-04T12:05:00.000+02:00"/>
 		</event>
 	</trace>
 	<trace>
