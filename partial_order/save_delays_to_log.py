@@ -192,7 +192,7 @@ if __name__ == '__main__':
     # variant_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json.variant.json'
 
     # variant dictionary from the front end
-    variant_obj = {"group": "|a||bc|", "delay" : 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
+    variant_obj = {"group": "|a||bc|", "delay": 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
 
     # complete path to the json file containing all groups' information
     groups_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json'
