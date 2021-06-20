@@ -25,8 +25,6 @@ Write the dictionary object to a json file
 
 
 def dump_to_json(data, groups_path):
-    if not os.path.isfile(groups_path + '.original.json'):
-        copyfile(groups_path, groups_path + '.original.json')
     with open(groups_path, 'w') as outfile:
         json.dump(data, outfile, indent=4)
 
@@ -68,9 +66,6 @@ Returns the groups.json file content as a dictionary object
 
 
 def get_groups(groups_path):
-    # create a copy of th original if it doesn't already exist
-    if not os.path.isfile(groups_path + '.original.json'):
-        copyfile(groups_path, groups_path + '.original.json')
     with open(groups_path) as test_groups_file:
         data = json.load(test_groups_file)
     return data
