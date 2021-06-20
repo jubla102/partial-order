@@ -69,6 +69,8 @@ def get_form_data(request, key):
     return json.loads(request.POST.dict()[key])
 
 
-if __name__ == '__main__':
-    colors = get_colors((31))
-    print("final: ", len(colors), colors)
+def get_group_from_file(group_id):
+    groups_file = get_groups_file_path()
+    with open(groups_file) as groups_file:
+        partial_order_groups = json.load(groups_file)
+        return partial_order_groups['groups'][group_id]
