@@ -1,7 +1,9 @@
 let EVENT_WIDTH = 125
-const groupId = JSON.parse(document.getElementById('groupId').textContent);
-const combination = JSON.parse(document.getElementById('combination').textContent);
-const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
+const groupId = JSON.parse(document.getElementById('groupId').textContent)
+const combination = JSON.parse(document.getElementById('combination').textContent)
+const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
+const delay = JSON.parse(document.getElementById('delay').textContent)
+
 let textWidths = {}
 
 let height = EVENT_HEIGHT * 2
@@ -24,11 +26,16 @@ axios.get('/partial-order/colors')
 let saveButton = document.getElementById('save');
 
 saveButton.onclick = function () {
+    let events = []
+    combination.forEach(event => {
+        events.push(event[ACTIVITY_KEY])
+    })
     if (confirm("The order will be saved and added to the original log")) {
         axios.post('/partial-order/save-delay', {
             'groupId': JSON.stringify(groupId),
-            'combination': JSON.stringify(combination),
-            'caseIds': JSON.stringify(caseIds)
+            'events': JSON.stringify(events),
+            'caseIds': JSON.stringify(caseIds),
+            'delay': JSON.stringify(delay)
         })
         alert('The order was saved')
         location.href = 'groups'

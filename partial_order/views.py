@@ -6,6 +6,7 @@ from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
 from partial_order.general_functions import get_meta_data, get_form_data, get_group_from_file
+from partial_order.save_delays_to_log import save_delay_to_log
 
 
 def groups(request):
@@ -62,13 +63,15 @@ def final_order(request):
         groupId = get_form_data(request, 'groupId')
         combination = get_form_data(request, 'combination')
         caseIds = get_form_data(request, 'caseIds')
+        delay = get_form_data(request, 'delay')
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
         template.render({'groupId': groupId,
                          'combination': combination,
-                         'caseIds': caseIds}, request))
+                         'caseIds': caseIds,
+                         'delay': delay}, request))
 
 
 def meta_data(request):
@@ -87,7 +90,15 @@ def text_width(request):
 
 def save_delay(request):
     if request.method == 'POST':
-        print(request.POST.dict())
+        request_body = json.loads(request.body.decode('utf-8'))
+        groupId = request_body['groupId']
+        caseIds = request_body['caseIds']
+        events = request_body['events']
+        delay = request_body['delay']
+
+        variant_obj = {"group": groupId, "delay": delay, "caseIds": caseIds, "events": events}
+        save_delay_to_log(variant_obj)
+
         return HttpResponse()
     else:
         return HttpResponseNotFound()

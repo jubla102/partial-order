@@ -1,18 +1,18 @@
-from datetime import timedelta
 import json
 import os.path
+from datetime import timedelta
 from shutil import copyfile
 
 import pandas as pd
+from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.exporter.xes import exporter
 from pm4py.objects.log.importer.xes import importer
-
-from pm4py.objects.conversion.log import converter as log_converter
-
 from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
 
 # CONSTANTS
+from partial_order.general_functions import get_groups_file_path, get_selected_file_path
+
 GROUP = 'group'
 GROUPS = 'groups'
 EVENTS = 'events'
@@ -80,7 +80,9 @@ Deletes the group information from the groups file and then writes the new times
 """
 
 
-def save_delay_to_log(variant_dict_obj, groups_path, event_log_path):
+def save_delay_to_log(variant_dict_obj):
+    groups_path = get_groups_file_path()
+    event_log_path = get_selected_file_path()
     event_log_df = get_log(event_log_path)
     groups_dict = get_groups(groups_path)
     variant_dict = variant_dict_obj
@@ -121,7 +123,8 @@ def save_delay_to_log(variant_dict_obj, groups_path, event_log_path):
             # iterate over the  the log to reorder the rows in event_log_df in the order that the user has selected
             idx = 0
             while idx < num_events:
-                event_log_df.at[index[idx], event_log_df.columns] = case_df[case_df[DEFAULT_NAME_KEY] == sequence[idx]].iloc[0].values
+                event_log_df.at[index[idx], event_log_df.columns] = \
+                    case_df[case_df[DEFAULT_NAME_KEY] == sequence[idx]].iloc[0].values
 
                 if len(case_df[case_df[DEFAULT_NAME_KEY] == sequence[idx]]) > 1:
                     case_df.loc[case_df[DEFAULT_NAME_KEY] == sequence[idx]] = \
@@ -164,7 +167,7 @@ def save_delay_to_log(variant_dict_obj, groups_path, event_log_path):
 
             # get the index for the list of new timestamps from that of the dataframe for this caseId
             new_time_list_index = list(event_log_df[event_log_df[CASE_CONCEPT_NAME] == caseId]
-                                    [DEFAULT_TIMESTAMP_KEY].index.values)
+                                       [DEFAULT_TIMESTAMP_KEY].index.values)
 
             # create a pandas Series object with the new timestamp list and its index list
             new_time_series = pd.Series(data=new_time_list, index=new_time_list_index)
@@ -184,15 +187,8 @@ def save_delay_to_log(variant_dict_obj, groups_path, event_log_path):
 
 
 if __name__ == '__main__':
-
-    # add complete paths to the respective files here
-    # the paths must include the file formats
-
-    # complete path to the variant information from the user here
-    # variant_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json.variant.json'
-
     # variant dictionary from the front end
-    variant_obj = {"group": "|a||bc|", "delay" : 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
+    variant_obj = {"group": "|a||bc|", "delay": 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
 
     # complete path to the json file containing all groups' information
     groups_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json'
@@ -202,4 +198,4 @@ if __name__ == '__main__':
 
     # this function takes the paths and then modifies the event log with the new timestamps and events in the order
     # that the user has selected
-    save_delay_to_log(variant_obj, groups_file_path, event_log_file_path)
+    save_delay_to_log(variant_obj)
