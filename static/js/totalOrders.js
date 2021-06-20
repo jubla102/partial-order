@@ -1,5 +1,7 @@
 let EVENT_WIDTH = 125
+const groupId = JSON.parse(document.getElementById('groupId').textContent)
 const combinations = JSON.parse(document.getElementById('combinations').textContent)
+const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
 let textWidths = {}
 axios.get('/partial-order/colors')
     .then((response) => {
@@ -26,8 +28,10 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
     let svg = d3.selectAll(`#combination-${combinationsNumber}`).append("svg").attr("width", width).attr("height", height)
 
     $(`#combination-${combinationsNumber}`).click(function () {
-        redirectPost("/partial-order/delays", {
-            "combination": JSON.stringify(events)
+        redirectPost('/partial-order/delays', {
+            'groupId': JSON.stringify(groupId),
+            'combination': JSON.stringify(events),
+            'caseIds': JSON.stringify(caseIds)
         })
     })
 

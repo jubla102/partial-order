@@ -22,7 +22,9 @@
 {% endblock %}
 
 {% block tab_content %}
+    {{ groupId|json_script:"groupId" }}
     {{ combinations|json_script:"combinations" }}
+    {{ caseIds|json_script:"caseIds" }}
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center info-row">
             <div class="col">

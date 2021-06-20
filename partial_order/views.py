@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.general_functions import get_meta_data, get_form_data
+from partial_order.general_functions import get_meta_data, get_form_data, get_group_from_file
 
 
 def groups(request):
@@ -26,28 +26,34 @@ def groups(request):
              'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
 
 
-def combinations(request):
+def combinations(request, group_id):
     template = loader.get_template('partial_order/combinations.html')
-
-    if request.method == 'POST':
-        variant = get_form_data(request, 'partialOrder')
-        combinations = combinations_generation.get_order_combinations(variant)
-    else:
-        return HttpResponseNotFound()
+    group = get_group_from_file(group_id)
+    combinations = combinations_generation.get_order_combinations(group['events'])
+    case_ids = group['caseIds']
 
     return HttpResponse(
-        template.render({'combinations': combinations, 'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
+        template.render(
+            {'groupId': group_id,
+             'combinations': combinations,
+             'caseIds': case_ids,
+             'totalNumberOfTraces': settings.NUMBER_OF_TRACES},
+            request))
 
 
 def delays(request):
     template = loader.get_template('partial_order/delays.html')
     if request.method == 'POST':
+        groupId = get_form_data(request, 'groupId')
         combination = get_form_data(request, 'combination')
+        caseIds = get_form_data(request, 'caseIds')
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
-        template.render({'combination': combination}, request))
+        template.render({'groupId': groupId,
+                         'combination': combination,
+                         'caseIds': caseIds}, request))
 
 
 def final_order(request):

@@ -18,9 +18,7 @@ axios.get('/partial-order/po-groups')
 
             for (let i = 0; i < groupKeys.length; i++) {
                 $(`#partial-order-${i}`).click(function () {
-                    redirectPost("/partial-order/combinations", {
-                        "partialOrder": JSON.stringify(partialOrderGroups[groupKeys[i]][EVENTS_KEY])
-                    })
+                    location.href = `/partial-order/combinations/${groupKeys[i]}`
                 })
             }
             $('#spinner').hide()
