@@ -9,6 +9,7 @@ axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])
+            console.log(combination)
             let longestActivityWidth = textWidths[response.data['longestActivityName']]
             if (longestActivityWidth + 20 > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth + 20
@@ -48,6 +49,7 @@ function drawTotalOrder(events, colorMap) {
         }
 
     }
+    visualizeDelay()
 }
 
 function visualizeDelay() {

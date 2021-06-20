@@ -8,6 +8,7 @@
     <script type="text/javascript" src="../../static/js/delays.js" defer></script>
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
+        const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
         document.getElementById('combinations_tab').href = `combinations/${groupId}`
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -45,9 +46,9 @@
 
             let delay = days * 86400 + hours * 3600 + minutes * 60 + seconds
             let data = {
-                'groupId': JSON.stringify('{{ groupId }}'),
-                'combination': JSON.stringify('{{ combination }}'),
-                'caseIds': JSON.stringify('{{ caseIds }}'),
+                'groupId': JSON.stringify(groupId),
+                'combination': JSON.stringify(combination),
+                'caseIds': JSON.stringify(caseIds),
                 'delay': delay
             }
 
@@ -58,6 +59,7 @@
 
 {% block tab_content %}
     {{ combination|json_script:"combination" }}
+    {{ caseIds|json_script:"caseIds" }}
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center mb-2 info-row">
             <div class="col">
@@ -147,7 +149,6 @@
             </div>
         </div>
 
-    </div>
     </div>
     <div id="text-width-calculation"></div>
 

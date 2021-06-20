@@ -122,14 +122,12 @@
 }
 
 .custom-container {
-    margin: 10px auto 0;;
-    height: 22vh;
+    margin: 10px auto 0;
     border-radius: 10px 10px 10px 10px;
 }
 
 #confirm-final.custom-container {
-    margin: 10px auto 0;;
-    height: 27vh;
+    margin: 10px auto 0;
     border-radius: 10px 10px 10px 10px;
 }
 
