@@ -61,14 +61,16 @@ function visualizeDelay() {
             svg.append('text')
                 .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth(text) / 2)
                 .attr('y', 75)
-                .attr('fill', 'rgba(92, 184, 92, 1)')
+                .attr('fill', '#28a745')
+                .attr('font-weight', 'bolder')
                 .text(text)
             i++
         } else {
             svg.append('text')
                 .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth(text) / 2)
                 .attr('y', 75)
-                .attr('fill', 'rgba(92, 184, 92, 1)')
+                .attr('fill', '#28a745')
+                .attr('font-weight', 'bolder')
                 .text(text)
 
             count++
@@ -78,6 +80,7 @@ function visualizeDelay() {
     svg.append('text')
         .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth('+' + count + ' delta') / 2)
         .attr('y', 75)
-        .attr('fill', 'rgba(92, 184, 92, 1)')
+        .attr('fill', '#28a745')
+        .attr('font-weight', 'bolder')
         .text('+' + count + ' delta')
 }
