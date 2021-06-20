@@ -1,10 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import json
 import os.path
 from shutil import copyfile
 
 import pandas as pd
-import pm4py
 from pm4py.objects.log.exporter.xes import exporter
 from pm4py.objects.log.importer.xes import importer
 
