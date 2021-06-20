@@ -97,6 +97,7 @@ def save_delay_to_log(variant_path, groups_path, event_log_path):
     groups_dict = get_groups(groups_path)
     variant_dict = get_variant(variant_path)
 
+    # proceed only if the selected variant's group is present in the groups file
     if variant_dict[GROUP] in groups_dict[GROUPS]:
 
         # save the delay from the user
@@ -197,6 +198,7 @@ def save_delay_to_log(variant_path, groups_path, event_log_path):
 if __name__ == '__main__':
 
     # add complete paths to the respective files here
+    # the paths must include the file formats
 
     # complete path to the variant information from the user here
     variant_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_Sepsis_Cases-Event_Log.json.variant.json'
@@ -207,20 +209,6 @@ if __name__ == '__main__':
     # complete path to the xes log file
     event_log_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\event_logs\\Sepsis_Cases-Event_Log.xes'
 
-    # this function returns the dataframe containing the new timestamps,
-    # for the selected group in the order that the user chose
+    # this function takes the paths and then modifies the event log with the new timestamps and events in the order
+    # that the user has selected
     save_delay_to_log(variant_file_path, groups_file_path, event_log_file_path)
-
-    """
-    
-    Remove comment to print all cases with the new timestamps
-
-    variant = get_variant(variant_file_path)
-
-    for case in variant[CASEIDS]:
-        print('=======')
-        print('Case: ', case)
-        print('=======')
-        print(event_log_final[event_log_final[CASE_CONCEPT_NAME] == case][[DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]])
-    
-    """
