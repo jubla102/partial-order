@@ -58,7 +58,7 @@
     overflow: scroll;
     overflow-y: hidden;
     padding: 20px;
-    height: 150px;
+    height: 130px;
     border-radius: 10px 10px 10px 10px;
 }
 
@@ -151,10 +151,61 @@
     margin-bottom: 20px;
 }
 
-#save, #discard, #add_delay {
+#save, #discard, #add_delay, #proceed-btn {
     width: 150px;
 }
 
 .picker {
     color: black;
+}
+
+#proceed-div {
+    visibility: hidden;
+}
+
+#export {
+    width: 150px;
+    height: 40px;
+    border-color: rgba(103, 0, 181, 0.1);
+}
+
+#export:hover {
+    background-color: rgba(103, 0, 181, 1);
+    color: white;
+}
+
+#export:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(103, 0, 181, 0.4);
+}
+
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+
+/* box for title text */
+[data-title]:after {
+    content: attr(data-title);
+    /* position for title view box */
+    position: absolute;
+    bottom: -1.6em;
+    left: 100%;
+    z-index: 99999;
+    visibility: hidden;
+    /* optional */
+    white-space: nowrap;
+    /* stilization */
+    background-color: rgba(103, 0, 181, 0.4);
+    color: #111;
+    font-size: 150%;
+    padding: 1px 5px 2px 5px;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+}
+
+[data-title] {
+    position: relative;
 }

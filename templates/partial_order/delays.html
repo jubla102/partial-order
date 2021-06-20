@@ -27,6 +27,10 @@
             document.getElementById("added-delay").innerHTML = days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds.";
         }
 
+        function show_proceed_div() {
+            document.getElementById("proceed-div").style.visibility = "visible"
+        }
+
     </script>
 {% endblock %}
 
@@ -47,7 +51,6 @@
 
         <div class="scrollable-inner-delay" id="combination"></div>
 
-        <br>
         <div class="container justify-content-center">
             <div class="form-row justify-content-center mt-3">
                 <div class="col-xs-3 mt-2 days-width">
@@ -225,17 +228,26 @@
             </div>
         </div>
         <div class="col-xs-2 mt-4 centered">
-            <button type="button" class="btn btn-dark" id="add_delay" onclick="displayDelay(); visualizeDelay();">
+            <button type="button" class="btn btn-dark" id="add_delay"
+                    onclick="displayDelay(); visualizeDelay(); show_proceed_div();">
                 Add Delay
             </button>
         </div>
-        <div class="form-row mt-5 justify-content-center centered">
+        <div class="form-row mt-4 justify-content-center centered">
             <div class="col-8">
-                <label class="text-dark" for="exampleFormControlSelect1"> <b> Added delay (delta): <p
+                <label class="text-dark"> <b> Added delay (delta): <p
                         class="text-success" id="added-delay"></p></b> </label>
-
             </div>
         </div>
+        <div id="proceed-div">
+            <div class="form-row mt-2 justify-content-center centered">
+                <label class="text-dark"><b>Click proceed if you are fine with the added delay </b> </label>
+            </div>
+            <div class="form-row mt-4 justify-content-center centered">
+                <button type="button" class="btn btn-primary" id="proceed-btn">Proceed</button>
+            </div>
+        </div>
+
     </div>
     </div>
     <div id="text-width-calculation"></div>
@@ -243,7 +255,7 @@
     <!-- Info Popup Section -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Add Delays</h5>
@@ -251,10 +263,42 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body text-justify">
+                    In this tab the user can delays to the activities. These delays are then added to each trace that is
+                    present in the combination/variant displayed. Hence we will now have successfully converted a
+                    partial order into a complete order.
+                    <br><br>
+                    The delays can be added using the provided input fields:<br><br>
+                    <div class="text-center">
+                        <img src="../../media/info/add_delays/delay.PNG" alt="Partial Order Groups"
+                             width="330" height="150"><br>
+                    </div>
+                    The following section will show the webpage before and after clicking the 'Add Delay'
+                    button:<br><br>
+                    <h6>Before adding delay:</h6>
+                    <img src="../../media/info/add_delays/before_delay_combination.PNG" alt="Partial Order Groups"
+                         width="1110" height="95"><br>
+                    <div class="text-center">
+                        <img src="../../media/info/add_delays/delay.PNG" alt="Partial Order Groups"
+                             width="330" height="150"><br>
+                    </div>
+                    <h6>After adding delay:</h6>
+                    <img src="../../media/info/add_delays/after_delay_combination.PNG" alt="Partial Order Groups"
+                         width="1100" height="95"><br>
+                    <div class="text-center">
+                        <img src="../../media/info/add_delays/after_delay.PNG" alt="Partial Order Groups"
+                             width="370" height="330"><br><br>
+                    </div>
+                    The webpage displays the added delay in green as seen in the above image. This delay is called
+                    delta. A multiple of delta is added accordingly using an algorithm to make sure all the activities
+                    now have unique time stamps (eg: +1 delta, +2 delta). The amount of added delta can also be
+                    visualized in the image.<br><br>
+                    <h6>Further Steps:</h6>
+                    If the user is happy with the added delays, they can click on proceed, which will automatically
+                    redirect the application to the <b>Final Order</b> tab. This tab displays all the combination and
+                    all traces to which the delay was added and also displays the respective time stamps. The user also
+                    has to option to save and export the modified event log.
                 </div>
             </div>
         </div>
-    </div>
 {% endblock %}
