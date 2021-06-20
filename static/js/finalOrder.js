@@ -1,5 +1,7 @@
 let EVENT_WIDTH = 125
+const groupId = JSON.parse(document.getElementById('groupId').textContent);
 const combination = JSON.parse(document.getElementById('combination').textContent);
+const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
 let textWidths = {}
 
 let height = EVENT_HEIGHT * 2
@@ -9,7 +11,6 @@ axios.get('/partial-order/colors')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])
-            console.log(combination)
             let longestActivityWidth = textWidths[response.data['longestActivityName']]
             if (longestActivityWidth + 20 > EVENT_WIDTH) {
                 EVENT_WIDTH = longestActivityWidth + 20
@@ -19,6 +20,20 @@ axios.get('/partial-order/colors')
             drawTotalOrder(combination, colorMap)
         }
     );
+
+let saveButton = document.getElementById('save');
+
+saveButton.onclick = function () {
+    if (confirm("The order will be saved and added to the original log")) {
+        axios.post('/partial-order/save-delay', {
+            'groupId': JSON.stringify(groupId),
+            'combination': JSON.stringify(combination),
+            'caseIds': JSON.stringify(caseIds)
+        })
+        alert('The order was saved')
+        location.href = 'groups'
+    }
+}
 
 function drawTotalOrder(events, colorMap) {
 

@@ -83,3 +83,11 @@ def text_width(request):
         return HttpResponse()
     else:
         return HttpResponseNotFound()
+
+
+def save_delay(request):
+    if request.method == 'POST':
+        print(request.POST.dict())
+        return HttpResponse()
+    else:
+        return HttpResponseNotFound()

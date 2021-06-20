@@ -9,6 +9,7 @@ urlpatterns = [
     path('combinations/<group_id>', views.combinations, name='combinations'),
     path('delays', views.delays, name='delays'),
     path('final-order', views.final_order, name='final_order'),
+    path('save-delay', views.save_delay, name='save-delay'),
     path('colors', views.meta_data, name='colors'),
     path('text-widths', views.text_width, name='text-widths'),
 ]
