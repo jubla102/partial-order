@@ -49,7 +49,6 @@ function drawPartialOrders(groupNumber, events, colorMap) {
     }
 
     let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
-
     let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("height", height)
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
 }
@@ -106,6 +105,7 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             }
         }
     }
+
     let width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP + STROKE_SPACE
     svg.attr("width", width)
 }

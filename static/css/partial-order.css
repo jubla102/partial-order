@@ -49,17 +49,13 @@
     max-width: 150px;
 }
 
+.delay-row {
+    padding: 15px 15px 15px 15px;
+}
+
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
-}
-
-.scrollable-inner-delay {
-    overflow: scroll;
-    overflow-y: hidden;
-    padding: 20px;
-    height: 150px;
-    border-radius: 10px 10px 10px 10px;
 }
 
 .info-row {
