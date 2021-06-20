@@ -49,6 +49,10 @@
     max-width: 150px;
 }
 
+.delay-row {
+    padding: 15px 15px 15px 15px;
+}
+
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;

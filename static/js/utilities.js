@@ -5,6 +5,7 @@ const EVENTS_KEY = 'events'
 const ACTIVITY_KEY = 'concept:name'
 const TIMESTAMP_KEY = 'time:timestamp'
 const STROKE_SPACE = 4
+const CASE_IDS = 'caseIds'
 
 function redirectPost(url, data) {
     let form = document.createElement('form');

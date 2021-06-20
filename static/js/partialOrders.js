@@ -18,9 +18,7 @@ axios.get('/partial-order/po-groups')
 
             for (let i = 0; i < groupKeys.length; i++) {
                 $(`#partial-order-${i}`).click(function () {
-                    redirectPost("/partial-order/combinations", {
-                        "partialOrder": JSON.stringify(partialOrderGroups[groupKeys[i]][EVENTS_KEY])
-                    })
+                    location.href = `/partial-order/combinations/${groupKeys[i]}`
                 })
             }
             $('#spinner').hide()
@@ -49,7 +47,6 @@ function drawPartialOrders(groupNumber, events, colorMap) {
     }
 
     let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
-
     let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("height", height)
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
 }
@@ -106,6 +103,7 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             }
         }
     }
+
     let width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP + STROKE_SPACE
     svg.attr("width", width)
 }
