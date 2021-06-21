@@ -37,10 +37,6 @@ Write the event log dataframe to a xes file
 
 def write_to_xes(event_log_df):
     export_file_path = get_export_file_path()
-
-    if not os.path.exists(export_file_path):
-        copyfile(get_selected_file_path(), export_file_path)
-
     exporter.apply(event_log_df, export_file_path)
 
 
@@ -89,7 +85,6 @@ def save_delay_to_log(variant_dict_obj):
 
     # proceed only if the selected variant's group is present in the groups file
     if variant_dict[GROUP] in groups_dict[GROUPS]:
-
         # save the delay from the user
         time_delay = variant_dict[DELAY]
 
@@ -184,12 +179,3 @@ def save_delay_to_log(variant_dict_obj):
 
         # write event log to the modified xes file
         write_to_xes(event_log_df)
-
-
-if __name__ == '__main__':
-    # variant dictionary from the front end
-    variant_obj = {"group": "|a||bc|", "delay": 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
-
-    # this function takes the paths and then modifies the event log with the new timestamps and events in the order
-    # that the user has selected
-    save_delay_to_log(variant_obj)

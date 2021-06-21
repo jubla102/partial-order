@@ -35,7 +35,7 @@ saveButton.onclick = function () {
             'groupId': JSON.stringify(groupId),
             'events': JSON.stringify(events),
             'caseIds': JSON.stringify(caseIds),
-            'delay': JSON.stringify(delay)
+            'delay': delay
         })
         alert('The order was saved')
         // location.href = 'groups' // redirecting is currently disabled to let the user export the event log

@@ -93,12 +93,13 @@ def text_width(request):
 def save_delay(request):
     if request.method == 'POST':
         request_body = json.loads(request.body.decode('utf-8'))
-        groupId = request_body['groupId']
-        caseIds = request_body['caseIds']
-        events = request_body['events']
+        groupId = json.loads(request_body['groupId'])
+        caseIds = json.loads(request_body['caseIds'])
+        events = json.loads(request_body['events'])
         delay = request_body['delay']
 
-        variant_obj = {"group": groupId, "delay": delay, "caseIds": caseIds, "events": events}
+        variant_obj = {"group": groupId, "delay": delay, "caseIds": caseIds,
+                       "events": events}
         save_delay_to_log(variant_obj)
 
         return HttpResponse()
