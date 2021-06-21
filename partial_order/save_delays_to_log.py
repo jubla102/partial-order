@@ -37,7 +37,8 @@ Write the event log dataframe to a xes file
 
 def write_to_xes(event_log_df):
     export_file_path = get_export_file_path()
-    exporter.apply(event_log_df, export_file_path)
+    event_log = log_converter.apply(event_log_df, variant=log_converter.Variants.TO_EVENT_STREAM)
+    exporter.apply(event_log, export_file_path)
 
 
 """
@@ -96,7 +97,6 @@ def save_delay_to_log(variant_dict):
 
             index = event_log_df[event_log_df[CASE_CONCEPT_NAME] == caseId].index
 
-            startfirstwhile = datetime.now()
             # iterate over the  the log to reorder the rows in event_log_df in the order that the user has selected
             idx = 0
             while idx < num_events:
@@ -111,8 +111,6 @@ def save_delay_to_log(variant_dict):
 
                 idx += 1
 
-            end = datetime.now()
-            print('First while takes: ' + str(end - startfirstwhile))
             # store the timestamps in a list
             timestamps = event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId][DEFAULT_TIMESTAMP_KEY].tolist()
 
