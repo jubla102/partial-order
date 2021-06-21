@@ -1,4 +1,6 @@
 import json
+import os
+from wsgiref.util import FileWrapper
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
@@ -102,3 +104,17 @@ def save_delay(request):
         return HttpResponse()
     else:
         return HttpResponseNotFound()
+
+
+def download_modified_xes(request):
+    try:
+        event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
+        file = os.path.join(event_logs_path, settings.EVENT_LOG_NAME)
+        wrapper = FileWrapper(open(file, 'rb'))
+        response = HttpResponse(wrapper, content_type='application/force-download')
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file)
+        
+        return response
+    except Exception as e:
+        print(e)
+        return HttpResponse(status=500)
