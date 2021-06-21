@@ -38,7 +38,7 @@ saveButton.onclick = function () {
             'delay': JSON.stringify(delay)
         })
         alert('The order was saved')
-        location.href = 'groups'
+        // location.href = 'groups' // redirecting is currently disabled to let the user export the event log
     }
 }
 

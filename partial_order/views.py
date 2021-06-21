@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.general_functions import get_meta_data, get_form_data, get_group_from_file
+from partial_order.general_functions import get_meta_data, get_form_data, get_group_from_file, get_export_file_path
 from partial_order.save_delays_to_log import save_delay_to_log
 
 
@@ -108,12 +108,11 @@ def save_delay(request):
 
 def download_modified_xes(request):
     try:
-        event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-        file = os.path.join(event_logs_path, settings.EVENT_LOG_NAME)
+        file = get_export_file_path()
         wrapper = FileWrapper(open(file, 'rb'))
         response = HttpResponse(wrapper, content_type='application/force-download')
         response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file)
-        
+
         return response
     except Exception as e:
         print(e)
