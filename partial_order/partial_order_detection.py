@@ -1,6 +1,3 @@
-import json
-import os
-
 from django.conf import settings
 from django.http import JsonResponse
 from pm4py.objects.conversion.log import converter as log_converter
@@ -9,7 +6,7 @@ from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
-from partial_order.general_functions import get_groups_file_path, get_selected_file_path
+from partial_order.general_functions import get_selected_file_path
 
 
 def get_partial_orders_from_selected_file(request):
@@ -19,10 +16,8 @@ def get_partial_orders_from_selected_file(request):
 
 
 def get_groups_file():
-    temp_groups_file = get_groups_file_path()
-    if os.path.exists(temp_groups_file):
-        with open(temp_groups_file) as groups_file:
-            partial_order_groups = json.load(groups_file)
+    if len(settings.GROUPS) != 0:
+        partial_order_groups = settings.GROUPS
 
         partial_order_groups['metadata']['colors'] = settings.COLORS
         partial_order_groups['metadata']['longestActivityName'] = settings.LONGEST_ACTIVITY_NAME
@@ -37,8 +32,7 @@ def get_groups_file():
                                     'colors': settings.COLORS,
                                 }}
 
-        with open(temp_groups_file, 'w') as outfile_groups:
-            json.dump(partial_order_groups, outfile_groups, indent=4)
+        settings.GROUPS = partial_order_groups
 
     return partial_order_groups
 

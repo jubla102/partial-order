@@ -111,6 +111,7 @@ def upload_page(request):
                 settings.COLORS = get_colors(activities)
                 settings.LONGEST_ACTIVITY_NAME = get_longest_activity_name(activities)
                 settings.NUMBER_OF_TRACES = no_traces
+                settings.GROUPS = {}
 
                 eventlogs = [f for f in listdir(event_logs_path) if isfile(join(event_logs_path, f))]
 

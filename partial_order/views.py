@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.general_functions import get_meta_data, get_form_data, get_group_from_file, get_export_file_path
+from partial_order.general_functions import get_meta_data, get_form_data, get_export_file_path
 from partial_order.save_delays_to_log import save_delay_to_log
 
 
@@ -31,7 +31,7 @@ def groups(request):
 
 def combinations(request, group_id):
     template = loader.get_template('partial_order/combinations.html')
-    group = get_group_from_file(group_id)
+    group = settings.GROUPS['groups'][group_id]
     combinations = combinations_generation.get_order_combinations(group['events'])
     case_ids = group['caseIds']
 
