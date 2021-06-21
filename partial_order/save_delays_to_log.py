@@ -1,5 +1,6 @@
 import json
 import os.path
+from datetime import datetime
 from datetime import timedelta
 from shutil import copyfile
 
@@ -78,8 +79,6 @@ def save_delay_to_log(variant_dict):
         # sort the variant's group's caseIds in ascending order
         variant_dict[CASEIDS] = sorted(variant_dict[CASEIDS])
 
-        from datetime import datetime
-        startfirstforloop = datetime.now()
         # iterate over each caseId present in the selected group
         for caseId in variant_dict[CASEIDS]:
 
@@ -124,18 +123,14 @@ def save_delay_to_log(variant_dict):
             # therefore, the smallest possible value for the first duplicate timestamp is 1
             partial_ind = 1
 
-            startsecondwhile = datetime.now()
             # find the index of the first duplicate timestamp in the list of timestamps
             while not timestamps[partial_ind] == timestamps[partial_ind - 1]:
                 new_time_list.append(timestamps[partial_ind])
                 partial_ind += 1
 
-            end = datetime.now()
-            print('Second while takes: ' + str(end - startsecondwhile))
             # iterate over each timestamp in the list of timestamps and then add the corresponding delay
             # starting from the first duplicate timestamp
 
-            startinnerfor = datetime.now()
             for ind, timestamp in enumerate(timestamps[partial_ind:]):
                 if timestamp == timestamps[partial_ind + ind - 1]:
                     # increment the delta modifier when the current timestamp is also a duplicate
@@ -150,8 +145,6 @@ def save_delay_to_log(variant_dict):
                 # append the new timestamp to the list of new timestamps
                 new_time_list.append(new_time)
 
-            end = datetime.now()
-            print('Inner for loop takes: ' + str(end - startinnerfor))
             # get the index for the list of new timestamps from that of the dataframe for this caseId
             new_time_list_index = list(event_log_df[event_log_df[CASE_CONCEPT_NAME] == caseId]
                                        [DEFAULT_TIMESTAMP_KEY].index.values)
@@ -163,8 +156,6 @@ def save_delay_to_log(variant_dict):
             # this will add the new timestamps to the event_log_df
             event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId, DEFAULT_TIMESTAMP_KEY] = new_time_series
 
-        end = datetime.now()
-        print('the whole for loop: ' + str(end - startfirstforloop))
         # delete the user selected variant's group information from the json file containing all groups' information
         del settings.GROUPS[GROUPS][variant_dict[GROUP]]
 
