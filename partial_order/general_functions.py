@@ -38,6 +38,12 @@ def dupcheck(x):
     return False
 
 
+def get_export_file_path():
+    export_file_path = os.path.join(settings.MEDIA_ROOT, "exports")
+    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '-modified.xes'
+    return os.path.join(export_file_path, file_name)
+
+
 def generate_colors(activities_length):
     if (activities_length > 10):
         color_palette = sns.color_palette(None, 10).as_hex()

@@ -11,7 +11,7 @@ from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
 
 # CONSTANTS
-from partial_order.general_functions import get_groups_file_path, get_selected_file_path
+from partial_order.general_functions import get_groups_file_path, get_selected_file_path, get_export_file_path
 
 GROUP = 'group'
 GROUPS = 'groups'
@@ -25,8 +25,6 @@ Write the dictionary object to a json file
 
 
 def dump_to_json(data, groups_path):
-    if not os.path.isfile(groups_path + '.original.json'):
-        copyfile(groups_path, groups_path + '.original.json')
     with open(groups_path, 'w') as outfile:
         json.dump(data, outfile, indent=4)
 
@@ -36,13 +34,13 @@ Write the event log dataframe to a xes file
 """
 
 
-def write_to_xes(event_log_df, event_log_path):
-    log = log_converter.apply(event_log_df, variant=log_converter.Variants.TO_EVENT_LOG, parameters=None)
+def write_to_xes(event_log_df):
+    export_file_path = get_export_file_path()
 
-    if not os.path.isfile(event_log_path + '.modified.xes'):
-        copyfile(event_log_path, event_log_path + '.modified.xes')
+    if not os.path.isfile(export_file_path):
+        copyfile(get_selected_file_path(), export_file_path)
 
-    exporter.apply(log, event_log_path + '.modified.xes')
+    exporter.apply(event_log_df, export_file_path)
 
 
 """
@@ -53,10 +51,11 @@ Returns the event log as a dataframe object, sorted by timestamps
 def get_log(event_log_path):
     parameters = {"timestamp_sort": True}
 
-    # also creates a copy to save the original log if it doesn't already exist
-    if not os.path.isfile(event_log_path + '.modified.xes'):
-        copyfile(event_log_path, event_log_path + '.modified.xes')
-    event_log = importer.apply(event_log_path + '.modified.xes')
+    export_file_path = get_export_file_path()
+
+    if not os.path.isfile(export_file_path):
+        copyfile(event_log_path, export_file_path)
+    event_log = importer.apply(export_file_path)
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
     return df
 
@@ -67,9 +66,6 @@ Returns the groups.json file content as a dictionary object
 
 
 def get_groups(groups_path):
-    # create a copy of th original if it doesn't already exist
-    if not os.path.isfile(groups_path + '.original.json'):
-        copyfile(groups_path, groups_path + '.original.json')
     with open(groups_path) as test_groups_file:
         data = json.load(test_groups_file)
     return data
@@ -183,18 +179,12 @@ def save_delay_to_log(variant_dict_obj):
         dump_to_json(groups_dict, groups_path)
 
         # write event log to the modified xes file
-        write_to_xes(event_log_df, event_log_file_path)
+        write_to_xes(event_log_df)
 
 
 if __name__ == '__main__':
     # variant dictionary from the front end
     variant_obj = {"group": "|a||bc|", "delay": 360, "caseIds": ["1"], "events": ["a", "c", "b"]}
-
-    # complete path to the json file containing all groups' information
-    groups_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\temp\\groups_simple-test-1.json'
-
-    # complete path to the xes log file
-    event_log_file_path = 'C:\\Users\\avina\\Desktop\\RWTH\\SoSe21\\Process Discovery Using Python\\Main Repo\\partial-order\\media\\event_logs\\simple-test-1.xes'
 
     # this function takes the paths and then modifies the event log with the new timestamps and events in the order
     # that the user has selected
