@@ -4,6 +4,7 @@ from datetime import timedelta
 from shutil import copyfile
 
 import pandas as pd
+from django.conf import settings
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.exporter.xes import exporter
 from pm4py.objects.log.importer.xes import importer
@@ -37,7 +38,7 @@ Write the event log dataframe to a xes file
 def write_to_xes(event_log_df):
     export_file_path = get_export_file_path()
 
-    if not os.path.isfile(export_file_path):
+    if not os.path.exists(export_file_path):
         copyfile(get_selected_file_path(), export_file_path)
 
     exporter.apply(event_log_df, export_file_path)
@@ -53,7 +54,10 @@ def get_log(event_log_path):
 
     export_file_path = get_export_file_path()
 
-    if not os.path.isfile(export_file_path):
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, "exports")):
+        os.makedirs(os.path.join(settings.MEDIA_ROOT, "exports"))
+
+    if not os.path.exists(export_file_path):
         copyfile(event_log_path, export_file_path)
     event_log = importer.apply(export_file_path)
     df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
