@@ -1,4 +1,5 @@
 {% extends 'partial_order/partial_order_processing.html' %}
+{% load mathfilters %}
 
 {% block script %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
@@ -42,9 +43,29 @@
         </div>
         <br>
 
+        <h6 class="text-dark mt-2 final-order-info">Combination:</h6>
+
         <div class="delay-row">
             <div class="scrollable-inner">
                 <div id="combination"></div>
+            </div>
+        </div>
+
+        <div class="row final-order-info">
+            <div class="col">
+                <h6 class="text-dark mt-2">
+                    {% if caseIds|length == 1 %}
+                        The following case will be modified:
+                    {% else %}
+                        The following {{ caseIds|length }} cases will be modified:
+                    {% endif %}
+                    {% for caseId in caseIds %}
+                        {% if not forloop.counter0 == caseIds|length|sub:1 %}
+                            {{ caseId }},
+                        {% else %}
+                            {{ caseId }}
+                        {% endif %}
+                    {% endfor %}</h6>
             </div>
         </div>
 
