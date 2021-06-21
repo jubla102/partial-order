@@ -1,8 +1,8 @@
 import itertools
 
 import pandas as pd
+from django.conf import settings
 from pm4py.objects.conversion.log import converter as log_converter
-from pm4py.objects.log.importer.xes import importer
 from pm4py.statistics.traces.pandas import case_statistics
 from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
@@ -52,8 +52,7 @@ def get_order_combinations(partial_order_trace):
 
 def get_case_information():
     file = get_selected_file_path()
-    event_log = importer.apply(file)
-    df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME)
+    df = log_converter.apply(settings.EVENT_LOG, variant=log_converter.Variants.TO_DATA_FRAME)
     df_without_partial_orders = df.groupby(CASE_CONCEPT_NAME).filter(lambda x: x[DEFAULT_TIMESTAMP_KEY].is_unique)
     df_without_partial_orders.reset_index(drop=True, inplace=True)  # reset index
 

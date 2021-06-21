@@ -8,6 +8,7 @@
     <script type="text/javascript" src="../../static/js/delays.js" defer></script>
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
+        const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
         document.getElementById('combinations_tab').href = `combinations/${groupId}`
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -33,11 +34,32 @@
             document.getElementById("proceed-div").style.visibility = "visible"
         }
 
+        function redirectToFinalOrder() {
+            let days = document.getElementById("days").value
+            if (days === "")
+                days = 0
+            else
+                days = parseInt(days)
+            let hours = parseInt(document.getElementById("hours").value)
+            let minutes = parseInt(document.getElementById("minutes").value)
+            let seconds = parseInt(document.getElementById("seconds").value)
+
+            let delay = days * 86400 + hours * 3600 + minutes * 60 + seconds
+            let data = {
+                'groupId': JSON.stringify(groupId),
+                'combination': JSON.stringify(combination),
+                'caseIds': JSON.stringify(caseIds),
+                'delay': delay
+            }
+
+            redirectPost('/partial-order/final-order', data)
+        }
     </script>
 {% endblock %}
 
 {% block tab_content %}
     {{ combination|json_script:"combination" }}
+    {{ caseIds|json_script:"caseIds" }}
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center mb-2 info-row">
             <div class="col">
@@ -68,30 +90,11 @@
                     <select class="form-control picker" id="hours">
 
                         <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
-                        <option>20</option>
-                        <option>21</option>
-                        <option>22</option>
-                        <option>23</option>
-                        <option>24</option>
+                        {% with ''|center:24 as range %}
+                            {% for _ in range %}
+                                <option>{{ forloop.counter }}</option>
+                            {% endfor %}
+                        {% endwith %}
 
                     </select>
                 </div>
@@ -100,66 +103,11 @@
                     <select class="form-control picker" id="minutes">
 
                         <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
-                        <option>20</option>
-                        <option>21</option>
-                        <option>22</option>
-                        <option>23</option>
-                        <option>24</option>
-                        <option>25</option>
-                        <option>26</option>
-                        <option>27</option>
-                        <option>28</option>
-                        <option>29</option>
-                        <option>30</option>
-                        <option>31</option>
-                        <option>32</option>
-                        <option>33</option>
-                        <option>34</option>
-                        <option>35</option>
-                        <option>36</option>
-                        <option>37</option>
-                        <option>38</option>
-                        <option>39</option>
-                        <option>40</option>
-                        <option>41</option>
-                        <option>42</option>
-                        <option>43</option>
-                        <option>44</option>
-                        <option>45</option>
-                        <option>46</option>
-                        <option>47</option>
-                        <option>48</option>
-                        <option>49</option>
-                        <option>50</option>
-                        <option>51</option>
-                        <option>52</option>
-                        <option>53</option>
-                        <option>54</option>
-                        <option>55</option>
-                        <option>56</option>
-                        <option>57</option>
-                        <option>58</option>
-                        <option>59</option>
-                        <option>60</option>
+                        {% with ''|center:60 as range %}
+                            {% for _ in range %}
+                                <option>{{ forloop.counter }}</option>
+                            {% endfor %}
+                        {% endwith %}
 
                     </select>
                 </div>
@@ -168,66 +116,11 @@
                     <select class="form-control picker" id="seconds">
 
                         <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
-                        <option>20</option>
-                        <option>21</option>
-                        <option>22</option>
-                        <option>23</option>
-                        <option>24</option>
-                        <option>25</option>
-                        <option>26</option>
-                        <option>27</option>
-                        <option>28</option>
-                        <option>29</option>
-                        <option>30</option>
-                        <option>31</option>
-                        <option>32</option>
-                        <option>33</option>
-                        <option>34</option>
-                        <option>35</option>
-                        <option>36</option>
-                        <option>37</option>
-                        <option>38</option>
-                        <option>39</option>
-                        <option>40</option>
-                        <option>41</option>
-                        <option>42</option>
-                        <option>43</option>
-                        <option>44</option>
-                        <option>45</option>
-                        <option>46</option>
-                        <option>47</option>
-                        <option>48</option>
-                        <option>49</option>
-                        <option>50</option>
-                        <option>51</option>
-                        <option>52</option>
-                        <option>53</option>
-                        <option>54</option>
-                        <option>55</option>
-                        <option>56</option>
-                        <option>57</option>
-                        <option>58</option>
-                        <option>59</option>
-                        <option>60</option>
+                        {% with ''|center:60 as range %}
+                            {% for _ in range %}
+                                <option>{{ forloop.counter }}</option>
+                            {% endfor %}
+                        {% endwith %}
 
                     </select>
                 </div>
@@ -250,11 +143,12 @@
                 <label class="text-dark"><b>Click proceed if you are fine with the added delay </b> </label>
             </div>
             <div class="form-row mt-4 justify-content-center centered">
-                <button type="button" class="btn btn-primary" id="proceed-btn">Proceed</button>
+                <button type="button" class="btn btn-primary" id="proceed-btn" onclick="redirectToFinalOrder()">
+                    Proceed
+                </button>
             </div>
         </div>
 
-    </div>
     </div>
     <div id="text-width-calculation"></div>
 
@@ -308,4 +202,5 @@
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}
