@@ -48,27 +48,26 @@
             </div>
             <br>
             <div class="custom-container centered" id="confirm-final">
-                <br>
-                <h6 class="mt-2 text-dark"><i class="text-success">'Save'</i> will add the combination to the
-                    original log.</h6>
-                <h6 class="text-dark"><i class="text-danger">'Discard'</i> will delete the combination.</h6>
-                <h6 class="text-dark"> You can redo the process by either selecting a new group or a new
-                    combination.</h6>
-                <br>
-                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
-                       id='save' onclick="saved()"/>
-                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
-                       id='discard'
-                       onclick="discarded()"/>
-            </div>
 
+                <!-- todo: display traces here-->
+                <div class="scrollable-inner-delay" id="combination"></div>
+                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
+                       id='save' onclick="saved()" title="Save will add the combination to the
+                    original log"/>
+                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
+                       id='discard' onclick="discarded()" title="Discard will delete the combination."/>
+                <br><br>
+                <h6 class="text-dark mt-2"> You can redo the process by either selecting a new group or a new
+                    combination.</h6>
+            </div>
+            <br><br>
             <div class="custom-container centered" id="export-final">
-                <br>
-                <h6 class="mt-2 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
+                <h4 class="mt-4">Export</h4>
+                <h6 class="mt-4 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
                     the XES file of the modified event log.</h6>
                 <br>
                 <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
-                       id='save' onclick=""/>
+                       id='export' onclick=""/>
             </div>
 
         </div>

@@ -9,10 +9,13 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.importer.xes import factory as xes_importer_factory
-
-
 # Create your views here.
+from pm4py.util.xes_constants import DEFAULT_NAME_KEY
+
+from partial_order.general_functions import get_colors, get_longest_activity_name
+
 
 def upload_page(request):
     log_attributes = {}
@@ -95,7 +98,6 @@ def upload_page(request):
 
                 filename = request.POST["log_list"]
                 settings.EVENT_LOG_NAME = filename
-
                 file_dir = os.path.join(event_logs_path, filename)
 
                 xes_log = xes_importer_factory.apply(file_dir)
@@ -104,10 +106,17 @@ def upload_page(request):
                 log_attributes['no_traces'] = no_traces
                 log_attributes['no_events'] = no_events
 
+                df = log_converter.apply(xes_log, variant=log_converter.Variants.TO_DATA_FRAME)
+                activities = df[DEFAULT_NAME_KEY].unique().tolist()
+                settings.COLORS = get_colors(activities)
+                settings.LONGEST_ACTIVITY_NAME = get_longest_activity_name(activities)
+                settings.NUMBER_OF_TRACES = no_traces
+
                 eventlogs = [f for f in listdir(event_logs_path) if isfile(join(event_logs_path, f))]
 
                 return render(request, 'upload.html',
-                              {'eventlog_list': eventlogs, 'log_name': filename, 'log_attributes': log_attributes})
+                              {'eventlog_list': eventlogs, 'log_name': filename, 'log_attributes': log_attributes,
+                               'activities': activities})
 
             elif "downloadButton" in request.POST:  # for event logs
                 if "log_list" not in request.POST:

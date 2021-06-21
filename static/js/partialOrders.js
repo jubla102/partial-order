@@ -1,20 +1,28 @@
-const EVENT_WIDTH = 125
-const EVENT_HEIGHT = 50
-const GAP = 10
-const EVENT_DIAMETER = 25
-const EVENTS_KEY = 'events'
-const ACTIVITY_KEY = 'concept:name'
-const TIMESTAMP_KEY = 'time:timestamp'
-
+let EVENT_WIDTH = 125
+let textWidths = {}
 axios.get('/partial-order/po-groups')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data['colors']))
-            let partialOrderGroups = response.data['groups']
+            let colorMap = new Map(Object.entries(response.data['metadata']['colors']))
+            textWidths = JSON.parse(response.data['metadata']['textWidths'])
+            let longestActivityWidth = textWidths[response.data['metadata']['longestActivityName']]
 
+            if (longestActivityWidth + 20 > EVENT_WIDTH) {
+                EVENT_WIDTH = longestActivityWidth + 20
+            }
+
+            let partialOrderGroups = response.data['groups']
             let groupKeys = Object.keys(partialOrderGroups)
             for (let i = 0; i < groupKeys.length; i++) {
                 drawPartialOrders(i, partialOrderGroups[groupKeys[i]][EVENTS_KEY], colorMap)
             }
+
+            for (let i = 0; i < groupKeys.length; i++) {
+                $(`#partial-order-${i}`).click(function () {
+                    location.href = `/partial-order/combinations/${groupKeys[i]}`
+                })
+            }
+            $('#spinner').hide()
+            $('.partial-order-groups').removeAttr('hidden')
         }
     );
 
@@ -39,13 +47,7 @@ function drawPartialOrders(groupNumber, events, colorMap) {
     }
 
     let height = maxParallelEvents * EVENT_HEIGHT + (maxParallelEvents - 1) * GAP
-
     let svg = d3.selectAll(`#partial-order-${groupNumber}`).append("svg").attr("height", height)
-    $(`#partial-order-${groupNumber}`).click(function () {
-        redirectPost("/partial-order/combinations", {
-            "partialOrder": JSON.stringify(events)
-        })
-    })
     drawPartialOrder(svg, partialOrders, maxParallelEvents, colorMap)
 }
 
@@ -57,16 +59,16 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
         baseY = Math.floor(maxParallelEvents / 2) * (EVENT_HEIGHT + GAP)
     }
 
-    let width = 0
     let xOffset = 0
     let i = 0
     for (i; i < eventList.length; i++) {
         if ((i !== 0 && eventList[i].length % 2 === 0 && (eventList[i - 1].length % 2 !== 0)) ||
             (i !== 0 && eventList[i].length % 2 !== 0 && (eventList[i - 1].length % 2 === 0))
         ) {
-            xOffset = xOffset + GAP * 2
+            xOffset = xOffset + GAP * 3
         }
         for (let j = 0; j < eventList[i].length; j++) {
+            let activityName = eventList[i][j][ACTIVITY_KEY];
             let yOffset
             if (eventList[i].length % 2 === 0) {
                 yOffset = (eventList[i].length / 2 - 0.5) - j
@@ -77,22 +79,31 @@ function drawPartialOrder(svg, eventList, maxParallelEvents, colorMap) {
             let polygon
             if (i === 0) {
                 // starting events do not have a corner on the left
-                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT}`
+                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT / 2} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT}`
             } else {
                 // standard event, not starting and finishing
-                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_DIAMETER}`
+                polygon = `${xOffset + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${(xOffset + EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},${baseY - (yOffset * (EVENT_HEIGHT + GAP))} ${xOffset + EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT / 2} ${xOffset + EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT} ${xOffset + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${(baseY - (yOffset * (EVENT_HEIGHT + GAP))) + EVENT_HEIGHT / 2}`
             }
+
             svg.append('polygon')
                 .attr('points', polygon)
-                .attr('fill', colorMap.get(eventList[i][j][ACTIVITY_KEY]))
+                .attr('class', 'event')
+                .attr('fill', colorMap.get(activityName))
 
-            svg.append('text')
-                .attr('x', 30 + xOffset + i * (EVENT_WIDTH + GAP))
-                .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 30)
-                .attr('stroke', 'black')
-                .text(eventList[i][j][ACTIVITY_KEY])
+            if (i === 0) {
+                svg.append('text')
+                    .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidths[activityName] / 2)
+                    .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 31)
+                    .text(activityName)
+            } else {
+                svg.append('text')
+                    .attr('x', xOffset + i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidths[activityName] / 2)
+                    .attr('y', baseY - (yOffset * (EVENT_HEIGHT + GAP)) + 31)
+                    .text(activityName)
+            }
         }
     }
-    width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP
+
+    let width = xOffset + i * (EVENT_WIDTH + GAP) + EVENT_DIAMETER - GAP + STROKE_SPACE
     svg.attr("width", width)
 }

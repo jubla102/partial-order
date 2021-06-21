@@ -64,7 +64,7 @@
 		</event>
 	</trace>
 	<trace>
-		<string key="concept:name" value="3"/>
+	<string key="concept:name" value="3"/>
 		<event>
 			<string key="concept:name" value="a"/>
 			<string key="lifecycle:transition" value="complete"/>
@@ -73,174 +73,26 @@
 		<event>
 			<string key="concept:name" value="c"/>
 			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:01:00.000+02:00"/>
+			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
 		</event>
 		<event>
-			<string key="concept:name" value="d"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:02:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="g"/>
+			<string key="concept:name" value="b"/>
 			<string key="lifecycle:transition" value="complete"/>
 			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="concept:name" value="e"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<date key="time:timestamp" value="2021-05-04T12:04:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="concept:name" value="f"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<date key="time:timestamp" value="2021-05-04T12:05:00.000+02:00"/>
 		</event>
 	</trace>
 	<trace>
 		<string key="concept:name" value="4"/>
-		<event>
-			<string key="concept:name" value="a"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:00:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="c"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="d"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="g"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:04:00.000+02:00"/>
-		</event>
-	</trace>
-	<trace>
-		<string key="concept:name" value="5"/>
-		<event>
-			<string key="concept:name" value="a"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:00:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:01:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="d"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:02:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="f"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T12:03:00.000+02:00"/>
-		</event>
-	</trace>
-	<trace>
-		<string key="concept:name" value="6"/>
-		<event>
-			<string key="concept:name" value="a"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T18:20:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="c"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T18:33:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="g"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T18:33:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="d"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T18:33:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T18:55:00.000+02:00"/>
-		</event>
-	</trace>
-	<trace>
-		<string key="concept:name" value="7"/>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T01:00:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="a"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T01:03:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="e"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T01:03:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="c"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T01:03:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="f"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T01:04:00.000+02:00"/>
-		</event>
-	</trace>
-	<trace>
-		<string key="concept:name" value="8"/>
-		<event>
-			<string key="concept:name" value="f"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-07T09:15:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="e"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-07T09:15:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="c"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-07T09:15:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-07T09:21:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="a"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-07T09:23:00.000+02:00"/>
-		</event>
-	</trace>
-	<trace>
-		<string key="concept:name" value="9"/>
-		<event>
-			<string key="concept:name" value="a"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-08T08:00:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="b"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-08T08:00:00.000+02:00"/>
-		</event>
-		<event>
-			<string key="concept:name" value="d"/>
-			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-08T08:59:00.000+02:00"/>
-		</event>
-	</trace>
-	<trace>
-		<string key="concept:name" value="10"/>
 		<event>
 			<string key="concept:name" value="a"/>
 			<string key="lifecycle:transition" value="complete"/>
@@ -259,7 +111,7 @@
 		<event>
 			<string key="concept:name" value="e"/>
 			<string key="lifecycle:transition" value="complete"/>
-			<date key="time:timestamp" value="2021-05-04T13:03:00.000+02:00"/>
+			<date key="time:timestamp" value="2021-05-04T13:02:00.000+02:00"/>
 		</event>
 		<event>
 			<string key="concept:name" value="f"/>

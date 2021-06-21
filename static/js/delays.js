@@ -1,39 +1,86 @@
-const EVENT_WIDTH = 125
-const EVENT_HEIGHT = 50
-const GAP = 10
-const EVENT_DIAMETER = 25
-const ACTIVITY_KEY = 'concept:name'
-
+let EVENT_WIDTH = 125
 const combination = JSON.parse(document.getElementById('combination').textContent);
+let textWidths = {}
+
+let height = EVENT_HEIGHT * 2
+let width = 0
+let svg
 axios.get('/partial-order/colors')
     .then((response) => {
-            let colorMap = new Map(Object.entries(response.data))
+            let colorMap = new Map(Object.entries(response.data['colors']))
+            textWidths = JSON.parse(response.data['textWidths'])
+            let longestActivityWidth = textWidths[response.data['longestActivityName']]
+            if (longestActivityWidth + 20 > EVENT_WIDTH) {
+                EVENT_WIDTH = longestActivityWidth + 20
+            }
+            width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
+            svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
             drawTotalOrder(combination, colorMap)
         }
     );
 
 function drawTotalOrder(events, colorMap) {
-    let height = EVENT_HEIGHT
-    let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP + EVENT_DIAMETER
-    let svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
 
     for (let i = 0; i < events.length; i++) {
+        let activityName = events[i][ACTIVITY_KEY];
         let polygon
         if (i === 0) {
             // starting events do not have a corner on the left
-            polygon = `${i * (EVENT_WIDTH + GAP)},0 ${(EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},0 ${EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_DIAMETER} ${EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT}`
+            polygon = `${i * (EVENT_WIDTH + GAP)},0 ${(EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},0 ${EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT / 2} ${EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT}`
         } else {
             // standard event, not starting and finishing
-            polygon = `${i * (EVENT_WIDTH + GAP)},0 ${(EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},0 ${EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_DIAMETER} ${EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_DIAMETER}`
+            polygon = `${i * (EVENT_WIDTH + GAP)},0 ${(EVENT_WIDTH) + i * (EVENT_WIDTH + GAP)},0 ${EVENT_WIDTH + EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT / 2} ${EVENT_WIDTH + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT} ${EVENT_DIAMETER + i * (EVENT_WIDTH + GAP)},${EVENT_HEIGHT / 2}`
         }
         svg.append('polygon')
             .attr('points', polygon)
-            .attr('fill', colorMap.get(events[i][ACTIVITY_KEY]))
+            .attr('fill', colorMap.get(activityName))
 
-        svg.append('text')
-            .attr('x', 30 + i * (EVENT_WIDTH + GAP))
-            .attr('y', 30)
-            .attr('stroke', 'black')
-            .text(events[i][ACTIVITY_KEY])
+        if (i === 0) {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH) / 2) - textWidths[activityName] / 2)
+                .attr('y', 31)
+                .text(activityName)
+        } else {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - textWidths[activityName] / 2)
+                .attr('y', 31)
+                .text(activityName)
+        }
+
     }
+}
+
+function visualizeDelay() {
+    let i = 0, count = 1;
+    while (combination[i][TIMESTAMP_KEY] !== combination[i + 1][TIMESTAMP_KEY])
+        i++
+    i += 1
+    while (i < combination.length - 1) {
+        let text = '+' + count + ' delta'
+        if (combination[i][TIMESTAMP_KEY] !== combination[i + 1][TIMESTAMP_KEY]) {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth(text) / 2)
+                .attr('y', 75)
+                .attr('fill', '#28a745')
+                .attr('font-weight', 'bolder')
+                .text(text)
+            i++
+        } else {
+            svg.append('text')
+                .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth(text) / 2)
+                .attr('y', 75)
+                .attr('fill', '#28a745')
+                .attr('font-weight', 'bolder')
+                .text(text)
+
+            count++
+            i++
+        }
+    }
+    svg.append('text')
+        .attr('x', i * (EVENT_WIDTH + GAP) + ((EVENT_WIDTH + EVENT_DIAMETER) / 2) - getTextWidth('+' + count + ' delta') / 2)
+        .attr('y', 75)
+        .attr('fill', '#28a745')
+        .attr('font-weight', 'bolder')
+        .text('+' + count + ' delta')
 }

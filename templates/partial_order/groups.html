@@ -5,8 +5,8 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
     <script type="text/javascript" src="../../static/js/partialOrders.js" defer></script>
-    <script type="text/javascript" src="../../static/js/postRedirect.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -24,7 +24,7 @@
 {% block tab_content %}
 
     <div class="tab-pane fade show active">
-        <div class="form-row justify-content-center">
+        <div class="form-row justify-content-center info-row">
             <div class="col">
                 <h4 class="mt-4 tab-headline">Please select a Partial Order Group</h4>
             </div>
@@ -35,11 +35,10 @@
             </div>
         </div>
         <br>
-
         {% if log_name != ':notset:' %}
-            <p class="text-success"><b>'{{ log_name }}' is being used as the input.</b></p>
+            <p class="text-success info-subtitle"><b>'{{ log_name }}' is being used as the input.</b></p>
         {% else %}
-            <p class="text-danger"><b>You have not set any event log as input. Use the "Event Data" tab
+            <p class="text-danger info-subtitle"><b>You have not set any event log as input. Use the "Event Data" tab
                 to set an event log as input!</b></p>
         {% endif %}
 
@@ -47,39 +46,42 @@
 
         <br>
         {% if log_name != ':notset:' %}
-            {% for group in groups %}
-                <div class="container-fluid">
-                    <div class="row flex-nowrap partial-order-row partial-order-group">
-                        <div class="col-1 align-self-center case-info">
-                            <div class="row">
-                                <div class="col-12 inner-case-info">
-                                    {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+            <div class="spinner-border text-primary" id="spinner"></div>
+
+            <div class="partial-order-groups" hidden>
+                {% for group in groups %}
+                    <div class="container-fluid">
+                        <div class="row flex-nowrap partial-order-row partial-order-group">
+                            <div class="col-1 align-self-center case-info">
+                                <div class="row">
+                                    <div class="col-12 inner-case-info">
+                                        {{ group.numberOfCases }} {{ group.numberOfCases|pluralize:"case,cases" }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 inner-case-info">
+                                        <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
+                                        {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
+                                        the
+                                        log
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12 inner-case-info">
-                                    <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                    {{ group.numberOfCases |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
-                                    the
-                                    log
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-11 align-self-center">
                             <div class="scrollable-inner">
                                 <div class="polygon" id="partial-order-{{ forloop.counter0 }}"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+
         {% endif %}
     </div>
 
     <!-- Info Popup Section -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Partial Order Combinations</h5>
@@ -87,8 +89,64 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body text-justify">
+                    <h6>What is a Partial Order Group?</h6>
+                    A <i>partial order group</i> is a group that consists of all the traces of the
+                    event log which have the same set of activities in a particular sequence (ordering) and also
+                    have the same activities which cause the order to be become partial orders.
+                    <br>
+                    A <i>partial order</i> is a trace that contains two or more activities with the same time
+                    stamps
+                    causing the exact ordering of the activities to be indeterminable.
+                    <br><br>
+                    <h6>Visual Definition:</h6>
+                    If an activity <i>'A'</i> is followed by <i>'B'</i> in the
+                    visualization, it means <i>'B'</i> occurred <u>after</u> <i>'A'</i>. The ordering of
+                    activities that do not cause the trace to become a partial order is retained as it is. The
+                    activities that have the same time stamps and hence cause the trace to become a partial order are
+                    stacked on top of each other, since an ordering cannot be decided. A <i>partial order group</i>
+                    contains all such traces that have the same activities.
+                    <br><br>
+                    <h6> - Example:</h6>
+                    Consider the following event log in a table:<br><br>
+                    <div class="text-center">
+                        <img src="../../media/info/partial_order_groups/table.PNG" alt="Table containing the event log"
+                             class="text-center">
+                    </div>
+                    <br>
+                    <i> Note: The timestamps indicated in bold are same and hence the corresponding
+                        activities will cause partial orders.<br>
+                        - concept:name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= case_id<br>
+                        - case:concept:name &nbsp;= activity<br>
+                        - time:timestamps &nbsp;&nbsp;&nbsp;&nbsp;= timestamp</i><br>
+                    <br>
+                    The generated partial order groups are as follows:
+                    <br><br>
+                    <img src="../../media/info/partial_order_groups/groups.PNG" alt="Partial Order Groups"
+                         width="750" height="400"><br>
+                    <i>Note: We use the chevron style representation for visualizing these activities (shape of the
+                        activities).</i>
+                    <br><br>
+                    As seen from the figure above, we have two partial order groups. Also, notice on the left the
+                    <i>statistics</i> of the traces contained in the group, which gives information on the number of
+                    traces and percentage of traces in the event log. We also notice that we have only 3 cases
+                    displayed, as obviously case_id 2 is not a partial order as all activities have
+                    unique timestamps.<br><br>
+                    In the first case we have 2 traces, case_id 1 and 3, clubbed into one partial order
+                    group since they both have:<br>
+                    <ol>
+                        <li>Same set of activities.</li>
+                        <li>All activities except the ones causing partial orders have the same ordering.</li>
+                        <li>The activities causing partial order are the same.</li>
+                    </ol>
+                    The activities <i>a</i>, <i>e</i>, and, <i>f</i> have different time stamps and hence their ordering
+                    is retained. The activities <i>b</i> and <i>c</i> have equal time stamps causing a partial order.
+                    These activities are therefore stacked on top of each other.<br><br>
+                    <h6>Further Steps:</h6>
+                    Each partial order group is selectable (grey color appears when hovered on the group; can be seen in
+                    the figure). Selecting a group will automatically redirects the application to the
+                    <b>Combinations</b> tab, which displays all possible combinations in which the activities can be
+                    ordered to convert the partial orders to complete orders.
                 </div>
             </div>
         </div>
