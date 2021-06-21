@@ -86,8 +86,10 @@
                         combinations that can be generated using the activities present in the selected partial
                         order group. We do this to eliminate the <i>stacked activities</i>, and hence partial
                         orders.<br>
-                        For a given partial order group containing a total of <b>'n'</b> stacked activities,
-                        there are <b>n!</b> number of possible combinations.
+                        For a given partial order group if there are <i>n<sub>1</sub></i>, <i>n<sub>2</sub></i>,
+                        <i>n<sub>3</sub></i>,...<i>n<sub>x</sub></i> stacked activity groups, then there are:
+                        <br><i>( n<sub>1</sub> )!</i> * <i>( n<sub>2</sub> )!</i> * <i>( n<sub>3</sub> )!</i>...*...
+                        <i>( n<sub>x</sub> )!</i> number of possible combinations.
                         <br><br>
                         <h6>Example:</h6>
                         <img src="../../media/info/partial_order_groups/groups.PNG" alt="Partial Order Groups"
@@ -96,8 +98,8 @@
                         we get the following possible combinations:<br><br>
                         <img src="../../media/info/combinations/combinations.PNG" alt="Combinations"
                              width="700" height="250"><br>
-                        The total number of stacked activities in the selected partial order group is 2, and hence we
-                        get 2! = 2 combinations.<br><br>
+                        The number of stacked activity groups in the selected partial order group are 1, and it has 2
+                        activities, hence we get 2! = 2 combinations.<br><br>
                         The <i>statistics</i> on the left gives information about the existence of that particular
                         combination in the event log. Information like number and percentage of traces having the same
                         combination are displayed. A combination is nothing but a variant. Since, every possible

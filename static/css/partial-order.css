@@ -2,7 +2,7 @@
     background-color: rgba(13, 20, 41, 0.6);
 }
 
-.final-order-info {
+.save-and-export {
     padding-left: 15px;
 }
 
@@ -54,12 +54,23 @@
 }
 
 .delay-row {
-    padding: 15px 15px 15px 15px;
+    padding: 15px 15px 10px 15px;
+}
+
+.scrollable {
+    overflow: scroll;
+    height: 100px;
+    width: 300px;
+    /*background-color: #CCC;*/
+    overflow-y: auto;
+    border: 1px solid black;
+    border-radius: 10px 10px 10px 10px;
 }
 
 .scrollable-inner {
     overflow: scroll;
     overflow-y: hidden;
+
 }
 
 .scrollable-inner-delay {
@@ -136,7 +147,7 @@
 
 #export-final.custom-container {
     margin: 10px auto 0;
-    height: 20vh;
+    height: 15vh;
     border-radius: 10px 10px 10px 10px;
 }
 

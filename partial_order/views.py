@@ -59,8 +59,8 @@ def delays(request):
                          'caseIds': caseIds}, request))
 
 
-def final_order(request):
-    template = loader.get_template('partial_order/final_order.html')
+def save_and_export(request):
+    template = loader.get_template('partial_order/save_and_export.html')
     if request.method == 'POST':
         groupId = get_form_data(request, 'groupId')
         combination = get_form_data(request, 'combination')

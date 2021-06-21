@@ -6,7 +6,7 @@ const delay = JSON.parse(document.getElementById('delay').textContent)
 
 let textWidths = {}
 
-let height = EVENT_HEIGHT * 2
+let height = EVENT_HEIGHT * 1.8
 let width = 0
 let svg
 axios.get('/partial-order/colors')
@@ -24,7 +24,7 @@ axios.get('/partial-order/colors')
     );
 
 let saveButton = document.getElementById('save');
-
+let discardButton = document.getElementById('discard')
 saveButton.onclick = function () {
     let events = []
     combination.forEach(event => {
@@ -38,6 +38,7 @@ saveButton.onclick = function () {
             'delay': delay
         })
         alert('The order was saved')
+        discardButton.disabled = true;
         // location.href = 'groups' // redirecting is currently disabled to let the user export the event log
     }
 }
