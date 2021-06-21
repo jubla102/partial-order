@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from pm4py.objects.conversion.log import converter as log_converter
-from pm4py.objects.log.importer.xes import factory as xes_importer_factory
+from pm4py.objects.log.importer.xes import factory as xes_importer_factory, importer
 # Create your views here.
 from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 
@@ -99,14 +99,13 @@ def upload_page(request):
                 filename = request.POST["log_list"]
                 settings.EVENT_LOG_NAME = filename
                 file_dir = os.path.join(event_logs_path, filename)
-
-                xes_log = xes_importer_factory.apply(file_dir)
-                no_traces = len(xes_log)
-                no_events = sum([len(trace) for trace in xes_log])
+                settings.EVENT_LOG = importer.apply(file_dir)
+                no_traces = len(settings.EVENT_LOG)
+                no_events = sum([len(trace) for trace in settings.EVENT_LOG])
                 log_attributes['no_traces'] = no_traces
                 log_attributes['no_events'] = no_events
 
-                df = log_converter.apply(xes_log, variant=log_converter.Variants.TO_DATA_FRAME)
+                df = log_converter.apply(settings.EVENT_LOG, variant=log_converter.Variants.TO_DATA_FRAME)
                 activities = df[DEFAULT_NAME_KEY].unique().tolist()
                 settings.COLORS = get_colors(activities)
                 settings.LONGEST_ACTIVITY_NAME = get_longest_activity_name(activities)
