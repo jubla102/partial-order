@@ -7,8 +7,6 @@ from pm4py.statistics.traces.pandas import case_statistics
 from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
 
-from partial_order.general_functions import get_selected_file_path
-
 
 def get_order_combinations(partial_order_trace):
     df = pd.DataFrame(partial_order_trace)
@@ -47,11 +45,11 @@ def get_order_combinations(partial_order_trace):
 
         combinations.append({'events': combination, 'frequency': get_frequency(key, case_information)})
 
+    print('number of combinations: ' + str(len(combinations)))
     return combinations
 
 
 def get_case_information():
-    file = get_selected_file_path()
     df = log_converter.apply(settings.EVENT_LOG, variant=log_converter.Variants.TO_DATA_FRAME)
     df_without_partial_orders = df.groupby(CASE_CONCEPT_NAME).filter(lambda x: x[DEFAULT_TIMESTAMP_KEY].is_unique)
     df_without_partial_orders.reset_index(drop=True, inplace=True)  # reset index
