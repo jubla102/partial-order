@@ -1,15 +1,16 @@
 {% extends 'partial_order/partial_order_processing.html' %}
 
 {% block script %}
+    {% load static %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
-    <script type="text/javascript" src="../../static/js/delays.js" defer></script>
+    <script type="text/javascript" src="{% static 'js/utilities.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'js/delays.js' %}" defer></script>
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
         const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
-        document.getElementById('combinations_tab').href = `combinations/${groupId}`
+        document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -170,23 +171,25 @@
                     <br><br>
                     The delays can be added using the provided input fields:<br><br>
                     <div class="text-center">
-                        <img src="../../media/info/add_delays/delay.PNG" alt="Partial Order Groups"
+                        <img src="{% static 'images/info/add_delays/delay.PNG' %}" alt="Partial Order Groups"
                              width="330" height="150"><br>
                     </div>
                     The following section will show the webpage before and after clicking the 'Add Delay'
                     button:<br><br>
                     <h6>Before adding delay:</h6>
-                    <img src="../../media/info/add_delays/before_delay_combination.PNG" alt="Partial Order Groups"
+                    <img src="{% static 'images/info/add_delays/before_delay_combination.PNG' %}"
+                         alt="Partial Order Groups"
                          width="1110" height="95"><br>
                     <div class="text-center">
-                        <img src="../../media/info/add_delays/delay.PNG" alt="Partial Order Groups"
+                        <img src="{% static 'images/info/add_delays/delay.PNG' %}" alt="Partial Order Groups"
                              width="330" height="150"><br>
                     </div>
                     <h6>After adding delay:</h6>
-                    <img src="../../media/info/add_delays/after_delay_combination.PNG" alt="Partial Order Groups"
+                    <img src="{% static 'images/info/add_delays/after_delay_combination.PNG' %}"
+                         alt="Partial Order Groups"
                          width="1100" height="95"><br>
                     <div class="text-center">
-                        <img src="../../media/info/add_delays/after_delay.PNG" alt="Partial Order Groups"
+                        <img src="{% static 'images/info/add_delays/after_delay.PNG' %}" alt="Partial Order Groups"
                              width="370" height="330"><br><br>
                     </div>
                     The webpage displays the added delay in green as seen in the above image. This delay is called
