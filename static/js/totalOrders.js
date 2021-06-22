@@ -28,11 +28,7 @@ function drawTotalOrders(combinationsNumber, events, colorMap) {
     let svg = d3.selectAll(`#combination-${combinationsNumber}`).append("svg").attr("width", width).attr("height", height)
 
     $(`#combination-${combinationsNumber}`).click(function () {
-        redirectPost('/partial-order/delays', {
-            'groupId': JSON.stringify(groupId),
-            'combination': JSON.stringify(events),
-            'caseIds': JSON.stringify(caseIds)
-        })
+        location.href = `/partial-order/delays/${groupId}/${combinationsNumber}`
     })
 
     for (let i = 0; i < events.length; i++) {

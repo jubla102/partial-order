@@ -44,19 +44,17 @@ def combinations(request, group_id):
             request))
 
 
-def delays(request):
+def delays(request, group_id, combination_id):
     template = loader.get_template('partial_order/delays.html')
-    if request.method == 'POST':
-        groupId = get_form_data(request, 'groupId')
-        combination = get_form_data(request, 'combination')
-        caseIds = get_form_data(request, 'caseIds')
-    else:
-        return HttpResponseNotFound()
+
+    group = settings.GROUPS['groups'][group_id]
+    combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
+    case_ids = group['caseIds']
 
     return HttpResponse(
-        template.render({'groupId': groupId,
+        template.render({'groupId': group_id,
                          'combination': combination,
-                         'caseIds': caseIds}, request))
+                         'caseIds': case_ids}, request))
 
 
 def final_order(request):
