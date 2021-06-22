@@ -60,6 +60,10 @@ Deletes the group information from the groups file and then writes the new times
 def save_delay_to_log(variant_dict):
     event_log_df = get_log()
 
+    # group event_log_df by case Ids and then sort the groups by timestamp, followed by event names
+    event_log_df = event_log_df.groupby([CASE_CONCEPT_NAME]).apply(
+        lambda x: x.sort_values([DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY], ascending=True)).reset_index(drop=True)
+
     # proceed only if the selected variant's group is present in the groups file
     if variant_dict[GROUP] in settings.GROUPS[GROUPS]:
         # save the delay from the user
