@@ -65,7 +65,7 @@ def save_delay_to_log(variant_dict):
         lambda x: x.sort_values([DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY], ascending=True)).reset_index(drop=True)
 
     # proceed only if the selected variant's group is present in the groups file
-    if variant_dict[GROUP] in settings.GROUPS[GROUPS]:
+    if variant_dict[GROUP] in settings.GROUPS[GROUPS] and variant_dict[DELAY] > 0:
         # save the delay from the user
         time_delay = variant_dict[DELAY]
 
