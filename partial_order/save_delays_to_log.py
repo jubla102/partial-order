@@ -154,3 +154,7 @@ def save_delay_to_log(variant_dict):
 
         # write event log to the modified xes file
         write_to_xes(event_log_df)
+
+    """
+    TODO: Pass a flag on completion of group deletion fo the front end
+    """
