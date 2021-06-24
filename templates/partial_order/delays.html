@@ -9,6 +9,7 @@
     <script type="text/javascript" src="{% static 'js/delays.js' %}" defer></script>
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
+        let combinationId = '{{ combinationId }}'
         const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
         document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
 
@@ -47,13 +48,10 @@
 
             let delay = days * 86400 + hours * 3600 + minutes * 60 + seconds
             let data = {
-                'groupId': JSON.stringify(groupId),
-                'combination': JSON.stringify(combination),
-                'caseIds': JSON.stringify(caseIds),
                 'delay': delay
             }
 
-            redirectPost('/partial-order/final-order', data)
+            redirectPost(`/partial-order/final-order/${groupId}/${combinationId}`, data)
         }
     </script>
 {% endblock %}
@@ -61,6 +59,7 @@
 {% block tab_content %}
     {{ combination|json_script:"combination" }}
     {{ caseIds|json_script:"caseIds" }}
+
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center mb-2 info-row">
             <div class="col">
@@ -74,82 +73,101 @@
         </div>
         <br>
 
-        <div class="delay-row">
-            <div class="scrollable-inner">
-                <div id="combination"></div>
-            </div>
-        </div>
+        {% if groupId is None %}
+            <p class="text-danger info-subtitle"><b>
+                {% url 'groups' as groups_path %}
+                {% url 'combinations/<group_id>' as combinations_path %}
+                {% if groups_path in request.META.HTTP_REFERER %}
+                    You have not selected a partial order group. Use the 'Partial Order
+                    Groups' tab
+                    to select one and then continue in the 'Combinations' tab!
+                {% elif combinations_path in request.META.HTTP_REFERER %}
+                    You have not selected a combination. Use the 'Combinations' tab
+                    to select one!
+                {% endif %}
+            </b>
 
-        <div class="container justify-content-center">
-            <div class="form-row justify-content-center mt-3">
-                <div class="col-xs-3 mt-2 days-width">
-                    <label class="text-dark" for="exampleFormControlTextarea1"> <b> Days </b> </label>
-                    <input type="number" min="0" class="form-control picker" placeholder="0" id="days">
-                </div>
-                <div class="col-xs-3 mt-2">
-                    <label class="text-dark" for="exampleFormControlSelect1"> <b> Hours </b> </label>
-                    <select class="form-control picker" id="hours">
+            </p>
 
-                        <option>0</option>
-                        {% with ''|center:24 as range %}
-                            {% for _ in range %}
-                                <option>{{ forloop.counter }}</option>
-                            {% endfor %}
-                        {% endwith %}
 
-                    </select>
-                </div>
-                <div class="col-xs-3 mt-2">
-                    <label class="text-dark" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
-                    <select class="form-control picker" id="minutes">
+        {% else %}
 
-                        <option>0</option>
-                        {% with ''|center:60 as range %}
-                            {% for _ in range %}
-                                <option>{{ forloop.counter }}</option>
-                            {% endfor %}
-                        {% endwith %}
-
-                    </select>
-                </div>
-                <div class="col-xs-3 mt-2">
-                    <label class="text-dark" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
-                    <select class="form-control picker" id="seconds">
-
-                        <option>0</option>
-                        {% with ''|center:60 as range %}
-                            {% for _ in range %}
-                                <option>{{ forloop.counter }}</option>
-                            {% endfor %}
-                        {% endwith %}
-
-                    </select>
+            <div class="delay-row">
+                <div class="scrollable-inner">
+                    <div id="combination"></div>
                 </div>
             </div>
-        </div>
-        <div class="col-xs-2 mt-4 centered">
-            <button type="button" class="btn btn-dark" id="add_delay"
-                    onclick="displayDelay(); visualizeDelay(); show_proceed_div();">
-                Add Delay
-            </button>
-        </div>
-        <div id="proceed-div">
-            <div class="form-row mt-4 justify-content-center centered">
-                <div class="col-8">
-                    <label class="text-dark"> <b> Added delay (delta): <p
-                            class="text-success" id="added-delay"></p></b> </label>
+
+            <div class="container justify-content-center">
+                <div class="form-row justify-content-center mt-3">
+                    <div class="col-xs-3 mt-2 days-width">
+                        <label class="text-dark" for="exampleFormControlTextarea1"> <b> Days </b> </label>
+                        <input type="number" min="0" class="form-control picker" placeholder="0" id="days">
+                    </div>
+                    <div class="col-xs-3 mt-2">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Hours </b> </label>
+                        <select class="form-control picker" id="hours">
+
+                            <option>0</option>
+                            {% with ''|center:24 as range %}
+                                {% for _ in range %}
+                                    <option>{{ forloop.counter }}</option>
+                                {% endfor %}
+                            {% endwith %}
+
+                        </select>
+                    </div>
+                    <div class="col-xs-3 mt-2">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
+                        <select class="form-control picker" id="minutes">
+
+                            <option>0</option>
+                            {% with ''|center:60 as range %}
+                                {% for _ in range %}
+                                    <option>{{ forloop.counter }}</option>
+                                {% endfor %}
+                            {% endwith %}
+
+                        </select>
+                    </div>
+                    <div class="col-xs-3 mt-2">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
+                        <select class="form-control picker" id="seconds">
+
+                            <option>0</option>
+                            {% with ''|center:60 as range %}
+                                {% for _ in range %}
+                                    <option>{{ forloop.counter }}</option>
+                                {% endfor %}
+                            {% endwith %}
+
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="form-row mt-2 justify-content-center centered">
-                <label class="text-dark"><b>Click proceed if you are fine with the added delay </b> </label>
-            </div>
-            <div class="form-row mt-4 justify-content-center centered">
-                <button type="button" class="btn btn-primary" id="proceed-btn" onclick="redirectToFinalOrder()">
-                    Proceed
+            <div class="col-xs-2 mt-4 centered">
+                <button type="button" class="btn btn-dark" id="add_delay"
+                        onclick="displayDelay(); visualizeDelay(); show_proceed_div();">
+                    Add Delay
                 </button>
             </div>
-        </div>
-
+            <div id="proceed-div">
+                <div class="form-row mt-4 justify-content-center centered">
+                    <div class="col-8">
+                        <label class="text-dark"> <b> Added delay (delta): <p
+                                class="text-success" id="added-delay"></p></b> </label>
+                    </div>
+                </div>
+                <div class="form-row mt-2 justify-content-center centered">
+                    <label class="text-dark"><b>Click proceed if you are fine with the added delay </b> </label>
+                </div>
+                <div class="form-row mt-4 justify-content-center centered">
+                    <button type="button" class="btn btn-primary" id="proceed-btn" onclick="redirectToFinalOrder()">
+                        Proceed
+                    </button>
+                </div>
+            </div>
+        {% endif %}
     </div>
     <div id="text-width-calculation"></div>
 

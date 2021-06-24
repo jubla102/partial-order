@@ -29,11 +29,16 @@ def groups(request):
              'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
 
 
-def combinations(request, group_id):
+def combinations(request, group_id=None):
     template = loader.get_template('partial_order/combinations.html')
-    group = settings.GROUPS['groups'][group_id]
-    combinations = combinations_generation.get_order_combinations(group['events'])
-    case_ids = group['caseIds']
+
+    if group_id is None:
+        combinations = None
+        case_ids = None
+    else:
+        group = settings.GROUPS['groups'][group_id]
+        combinations = combinations_generation.get_order_combinations(group['events'])
+        case_ids = group['caseIds']
 
     return HttpResponse(
         template.render(
@@ -44,33 +49,39 @@ def combinations(request, group_id):
             request))
 
 
-def delays(request, group_id, combination_id):
+def delays(request, group_id=None, combination_id=None):
     template = loader.get_template('partial_order/delays.html')
 
-    group = settings.GROUPS['groups'][group_id]
-    combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
-    case_ids = group['caseIds']
+    if group_id is None:
+        combination = None
+        case_ids = None
+    else:
+        group = settings.GROUPS['groups'][group_id]
+        combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
+        case_ids = group['caseIds']
 
     return HttpResponse(
         template.render({'groupId': group_id,
+                         'combinationId': combination_id,
                          'combination': combination,
                          'caseIds': case_ids}, request))
 
 
-def final_order(request):
+def final_order(request, group_id, combination_id):
     template = loader.get_template('partial_order/final_order.html')
     if request.method == 'POST':
-        groupId = get_form_data(request, 'groupId')
-        combination = get_form_data(request, 'combination')
-        caseIds = get_form_data(request, 'caseIds')
+        group = settings.GROUPS['groups'][group_id]
+        combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
+        case_ids = group['caseIds']
         delay = get_form_data(request, 'delay')
     else:
         return HttpResponseNotFound()
 
     return HttpResponse(
-        template.render({'groupId': groupId,
+        template.render({'groupId': group_id,
+                         'combinationId': combination_id,
                          'combination': combination,
-                         'caseIds': caseIds,
+                         'caseIds': case_ids,
                          'delay': delay}, request))
 
 

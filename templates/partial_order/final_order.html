@@ -2,12 +2,19 @@
 {% load mathfilters %}
 
 {% block script %}
+    {% load static %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
-    <script type="text/javascript" src="../../static/js/finalOrder.js" defer></script>
+    <script type="text/javascript" src="{% static 'js/utilities.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'js/finalOrder.js' %}" defer></script>
     <script type="text/javascript">
+        let groupId = '{{ groupId }}'
+        let combinationId = '{{ combinationId }}'
+        console.log(`die comb id is: ${combinationId}`)
+        console.log(`die group id is: ${groupId}`)
+        document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
+        document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {

@@ -1,5 +1,4 @@
 let EVENT_WIDTH = 125
-const groupId = JSON.parse(document.getElementById('groupId').textContent)
 const combination = JSON.parse(document.getElementById('combination').textContent)
 const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
 const delay = JSON.parse(document.getElementById('delay').textContent)
