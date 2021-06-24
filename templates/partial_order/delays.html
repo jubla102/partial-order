@@ -11,7 +11,12 @@
         let groupId = '{{ groupId }}'
         let combinationId = '{{ combinationId }}'
         const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
-        document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
+
+        if (groupId !== 'None') {
+            document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
+        } else {
+            document.getElementById('combinations_tab').href = `/partial-order/combinations`
+        }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -73,15 +78,15 @@
         </div>
         <br>
 
-        {% if groupId is None %}
+        {% if groupId is None or combination_id is None %}
             <p class="text-danger info-subtitle"><b>
                 {% url 'groups' as groups_path %}
-                {% url 'combinations/<group_id>' as combinations_path %}
+                {% url 'combinations/<group_id>' as combinations_with_group_path %}
                 {% if groups_path in request.META.HTTP_REFERER %}
                     You have not selected a partial order group. Use the 'Partial Order
                     Groups' tab
                     to select one and then continue in the 'Combinations' tab!
-                {% elif combinations_path in request.META.HTTP_REFERER %}
+                {% elif combinations_with_group_path in request.META.HTTP_REFERER %}
                     You have not selected a combination. Use the 'Combinations' tab
                     to select one!
                 {% endif %}

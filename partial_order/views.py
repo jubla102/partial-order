@@ -52,7 +52,7 @@ def combinations(request, group_id=None):
 def delays(request, group_id=None, combination_id=None):
     template = loader.get_template('partial_order/delays.html')
 
-    if group_id is None:
+    if group_id is None or combination_id is None:
         combination = None
         case_ids = None
     else:

@@ -8,6 +8,14 @@
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
     <script type="text/javascript" src="../../static/js/totalOrders.js" defer></script>
     <script type="text/javascript">
+        let groupId = '{{ groupId }}'
+        document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+
+        if (groupId !== 'None') {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+        } else {
+            document.getElementById('delays_tab').href = `/partial-order/delays`
+        }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {

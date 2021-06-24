@@ -1,7 +1,6 @@
 let EVENT_WIDTH = 125
-const groupId = JSON.parse(document.getElementById('groupId').textContent)
-const combinations = JSON.parse(document.getElementById('combinations').textContent)
 const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
+const combinations = JSON.parse(document.getElementById('combinations').textContent)
 let textWidths = {}
 axios.get('/partial-order/colors')
     .then((response) => {

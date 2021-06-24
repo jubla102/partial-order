@@ -11,8 +11,6 @@
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
         let combinationId = '{{ combinationId }}'
-        console.log(`die comb id is: ${combinationId}`)
-        console.log(`die group id is: ${groupId}`)
         document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
         document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
 
