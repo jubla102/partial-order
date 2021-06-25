@@ -6,7 +6,7 @@
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
-    <script type="text/javascript" src="../../static/js/finalOrder.js" defer></script>
+    <script type="text/javascript" src="../../static/js/saveAndExport.js" defer></script>
     <script type="text/javascript">
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -65,9 +65,9 @@
             <div class="col centered">
                 <h6 class="text-dark">
                     {% if caseIds|length == 1 %}
-                        The following case will be modified:
+                        The traces with following case ID will be modified:
                     {% else %}
-                        The following {{ caseIds|length }} cases will be modified:
+                        The traces with the following case IDs will be modified:
                     {% endif %}</h6>
             </div>
         </div>
@@ -85,38 +85,36 @@
         <br>
         <div class="custom-container centered" id="confirm-final">
             <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
-                   id='save' onclick="saved()" title="Save will add the combination to the
+                   id='save' onclick="saved()" title="'Save' will add the combination to the
                     original log"/>
             <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
-                   id='discard' onclick="discarded()" title="Discard will delete the combination."/>
+                   id='discard' onclick="discarded()" title="'Discard' will delete the combination."/>
             <br><br>
+            <p id="end" class="hidden">To proceed further you can manually go to the 'Partial Order Groups' tab. </p>
         </div>
         <br>
 
 
     </div>
     <div id="text-width-calculation"></div>
+
     <!-- Wait until modified -->
-    <div class="alert alert-primary" role="alert" id="alert">
-        Please wait, your changes are being saved.
-    </div>
-    <div class="modal fade bd-example-modal-lg" id="flag_modal" tabindex="-1" role="dialog"
+    <div class="modal fade hide bd-example-modal-lg" id="flag_modal" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Export as XES</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="modal-header justify-content-center centered">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Please wait...</h5>
                 </div>
-                <div class="modal-body">
+                <div class="d-flex justify-content-center centered">
+                    <div class="spinner-border text-primary mt-3"></div>
+                </div>
+                <div class="modal-body justify-content-center centered">
                     Please wait until the dialog box automatically disappears.
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Export Alert -->
     <div class="modal fade bd-example-modal-lg" id="exportCautionModal" tabindex="-1" role="dialog"
@@ -136,10 +134,11 @@
             </div>
         </div>
     </div>
+
     <!-- Info Modal -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Save and Export</h5>
@@ -148,7 +147,38 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    In this tab the user can see a summary of to which case ids will the delay be added. There is an
+                    option to save or discard changes.
+                    <br>The page on load must look similar to the image below:<br><br>
+                    <div class="text-center">
+                        <img src="../../media/info/save_and_export/page.PNG" alt="Table containing the event log"
+                             class="text-center" width="780" height="320">
+                    </div>
+                    <br>
+                    The user can see the case ids that will modified (to which the delay will be added). They have the
+                    option to save the delays to proceed with the modification by clicking the <i>Save</i> button or can
+                    discard all the changes using the <i>Discard</i> button. Clicking the discard button will
+                    automatically redirect you to the <i>Partial Order Groups</i> tab. This can be visualized below.
+                    <br>
+                    <div class="text-center">
+                        <img src="../../media/info/save_and_export/case_id_and_save.PNG"
+                             alt="Table containing the event log"
+                             class="text-center" width="500" height="300">
+                    </div>
+                    <br>
+                    The user can export the modified log using the <i>Export</i> button in the top right corner to the
+                    left of the <i>Info</i> button as seen below. The XES file is automatically downloaded on clicking
+                    the export button.
+                    <br><br>
+                    <div class="text-center">
+                        <img src="../../media/info/save_and_export/export.PNG"
+                             alt="Table containing the event log"
+                             class="text-center" width="200" height="70">
+                    </div>
+                    <br>
+                    <i><b>Note:</b> After saving the order, the 'Save' and 'Discard' buttons are disabled and a copy of
+                        the modified log is created in the 'Event Data' pane where files are uploaded and set.</i> To
+                    proceed further you can manually go to the 'Partial Order Groups' tab.
                 </div>
             </div>
         </div>

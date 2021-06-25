@@ -102,7 +102,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-EVENT_LOG_NAME = ':notset:'
+EVENT_LOG_NAME = 'one-group.xes'
 
 ROLE_APPLIED = False
 ROLE_FILE = ''
@@ -123,4 +123,3 @@ LONGEST_ACTIVITY_NAME = ''
 TEXT_WIDTHS = {}
 GROUPS = {}
 EVENT_LOG = None
-MODIFY_DONE = False

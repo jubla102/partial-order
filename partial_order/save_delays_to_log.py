@@ -20,7 +20,6 @@ EVENTS = 'events'
 CASEIDS = 'caseIds'
 DELAY = 'delay'
 
-
 """
 Write the event log dataframe to a xes file
 """
@@ -154,4 +153,3 @@ def save_delay_to_log(variant_dict):
 
         # write event log to the modified xes file
         write_to_xes(event_log_df)
-        settings.MODIFY_DONE = True

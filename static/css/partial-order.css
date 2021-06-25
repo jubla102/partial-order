@@ -178,7 +178,7 @@
     color: black;
 }
 
-#proceed-div {
+#proceed-div, #display-delay-div {
     visibility: hidden;
 }
 
@@ -196,4 +196,8 @@
 #export:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(103, 0, 181, 0.4);
+}
+
+.hidden {
+    visibility: hidden;
 }

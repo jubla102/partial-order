@@ -100,17 +100,11 @@ def save_delay(request):
 
         variant_obj = {"group": groupId, "delay": delay, "caseIds": caseIds,
                        "events": events}
-        save_delay_to_log(variant_obj)
 
+        save_delay_to_log(variant_obj)
         return HttpResponse()
     else:
         return HttpResponseNotFound()
-
-
-def is_modification_done(request):
-    if request.method == 'GET':
-        flag = settings.MODIFY_DONE
-        return JsonResponse({'flag': flag}, safe=False)
 
 
 def download_modified_xes(request):

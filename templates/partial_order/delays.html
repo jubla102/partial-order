@@ -20,14 +20,28 @@
         element.classList.add("active");
 
         function displayDelay() {
+            let display_delay = document.getElementById("added-delay")
+            let display_delay_div = document.getElementById("display-delay-div")
 
             let days = document.getElementById("days").value
+            if (days === "")
+                days = 0;
+
             let hours = document.getElementById("hours").value
             let minutes = document.getElementById("minutes").value
             let seconds = document.getElementById("seconds").value
-            if (days === "")
-                days = 0;
-            document.getElementById("added-delay").innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
+
+            if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+                display_delay_div.style.visibility = "visible"
+                display_delay.className = "text-danger"
+                display_delay.innerHTML = "Zero delay cannot be added"
+            } else {
+                display_delay_div.style.visibility = "visible"
+                display_delay.className = "text-success"
+                display_delay.innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
+                show_proceed_div();
+                visualizeDelay();
+            }
         }
 
         function show_proceed_div() {
@@ -45,14 +59,15 @@
             let seconds = parseInt(document.getElementById("seconds").value)
 
             let delay = days * 86400 + hours * 3600 + minutes * 60 + seconds
-            let data = {
-                'groupId': JSON.stringify(groupId),
-                'combination': JSON.stringify(combination),
-                'caseIds': JSON.stringify(caseIds),
-                'delay': delay
+            if (delay > 0) {
+                let data = {
+                    'groupId': JSON.stringify(groupId),
+                    'combination': JSON.stringify(combination),
+                    'caseIds': JSON.stringify(caseIds),
+                    'delay': delay
+                }
+                redirectPost('/partial-order/save-and-export', data)
             }
-
-            redirectPost('/partial-order/save-and-export', data)
         }
     </script>
 {% endblock %}
@@ -128,17 +143,19 @@
         </div>
         <div class="col-xs-2 mt-4 centered">
             <button type="button" class="btn btn-dark" id="add_delay"
-                    onclick="displayDelay(); visualizeDelay(); show_proceed_div();">
+                    onclick="displayDelay()">
                 Add Delay
             </button>
         </div>
-        <div id="proceed-div">
+        <div id="display-delay-div">
             <div class="form-row mt-4 justify-content-center centered">
                 <div class="col-8">
                     <label class="text-dark"> <b> Added delay (delta): <p
                             class="text-success" id="added-delay"></p></b> </label>
                 </div>
             </div>
+        </div>
+        <div id="proceed-div">
             <div class="form-row mt-2 justify-content-center centered">
                 <label class="text-dark"><b>Click proceed if you are fine with the added delay </b> </label>
             </div>
