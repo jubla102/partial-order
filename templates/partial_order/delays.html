@@ -101,11 +101,11 @@
                 {% url 'combinations/<group_id>' as combinations_with_group_path %}
                 {{ combinations_with_group_path }}
                 {% if groups_path in request.META.HTTP_REFERER %}
-                    You have not selected a partial order group. Use the 'Partial Order
+                    You have not selected a partial order group. Go to the 'Partial Order
                     Groups' tab
-                    to select one and then continue in the 'Combinations' tab!
+                    to select one and continue from there!
                 {% elif combinations_with_group_path in request.META.HTTP_REFERER %}
-                    You have not selected a combination. Use the 'Combinations' tab
+                    You have not selected a combination. Go to the 'Combinations' tab
                     to select one!
                 {% endif %}
             </b>

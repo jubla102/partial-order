@@ -54,15 +54,16 @@
         <br>
 
         {% if groupId is None %}
-            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Use the 'Partial Order
+            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Go to the 'Partial
+                Order
                 Groups' tab
-                to select one!</b></p>
+                to select one and continue from there!</b></p>
         {% elif combinationId is None %}
-            <p class="text-danger info-subtitle"><b>You have not selected a combination. Use the 'Combinations' tab
-                to select one!</b></p>
+            <p class="text-danger info-subtitle"><b>You have not selected a combination. Go to the 'Combinations' tab
+                to select one and continue from there!</b></p>
         {% elif delay is None %}
-            <p class="text-danger info-subtitle"><b>You have not selected a delay. Use the 'Delay' tab
-                to set one!</b></p>
+            <p class="text-danger info-subtitle"><b>You have not set a delay. Go to the 'Delay' tab
+                to set it!</b></p>
         {% else %}
 
             <h6 class="text-dark mt-2 final-order-info">Combination:</h6>
