@@ -10,16 +10,17 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="groups_tab" href="/partial-order/groups">Partial Order Groups</a>
+            <a class="nav-link active" id="groups_tab" href="{% url 'groups' %}">Partial Order Groups</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="combinations_tab" href="/combinations">Combinations</a>
+            <a class="nav-link" id="combinations_tab" href="{% url 'combinations_error' %}">Combinations</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="delays_tab" href="/delays">Add Delays</a>
+            <a class="nav-link" id="delays_tab" href="{% url 'delays_without_group_combination' %}">Add Delays</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="final_tab" href="/save_and_export">Save and Export</a>
+            <a class="nav-link" id="final_tab" href="{% url 'final_order_error' %}">Final Order</a>
         </li>
     </ul>
 

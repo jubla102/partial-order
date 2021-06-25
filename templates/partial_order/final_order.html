@@ -1,0 +1,140 @@
+{% extends 'partial_order/partial_order_processing.html' %}
+{% load mathfilters %}
+
+{% block script %}
+    {% load static %}
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/utilities.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'js/finalOrder.js' %}" defer></script>
+    <script type="text/javascript">
+        let groupId = '{{ groupId }}'
+        let combinationId = '{{ combinationId }}'
+        document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
+
+        if (combinationId !== 'None') {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
+        } else {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+        }
+
+        let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
+        ids.forEach(function (id) {
+            let element = document.getElementById(id);
+            element.classList.remove("active");
+        });
+        let element = document.getElementById("final_tab");
+        element.classList.add("active");
+
+        function discarded() {
+            if (confirm("Doing this will discard all the changes and delete modifications so far, do you wish to proceed?"))
+                location.href = 'groups'
+        }
+
+    </script>
+{% endblock %}
+
+{% block tab_content %}
+    {{ groupId|json_script:"groupId" }}
+    {{ combination|json_script:"combination" }}
+    {{ caseIds|json_script:"caseIds" }}
+    {{ delay|json_script:"delay" }}
+    <div class="tab-pane fade show active">
+        <div class="form-row justify-content-center mb-2 info-row">
+            <div class=" col">
+                <h4 class="mt-4 tab-headline">Confirm the Order</h4>
+            </div>
+            <div class="col mt-3">
+                <button type="button" class="btn btn-info float-right" data-toggle="modal"
+                        data-target="#exampleModalLong">Info
+                </button>
+            </div>
+        </div>
+        <br>
+
+        {% if groupId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Go to the 'Partial
+                Order
+                Groups' tab
+                to select one and continue from there!</b></p>
+        {% elif combinationId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a combination. Go to the 'Combinations' tab
+                to select one and continue from there!</b></p>
+        {% elif delay is None %}
+            <p class="text-danger info-subtitle"><b>You have not set a delay. Go to the 'Delay' tab
+                to set it!</b></p>
+        {% else %}
+
+            <h6 class="text-dark mt-2 final-order-info">Combination:</h6>
+
+            <div class="delay-row">
+                <div class="scrollable-inner">
+                    <div id="combination"></div>
+                </div>
+            </div>
+
+            <div class="row final-order-info">
+                <div class="col">
+                    <h6 class="text-dark mt-2">
+                        {% if caseIds|length == 1 %}
+                            The following case will be modified:
+                        {% else %}
+                            The following {{ caseIds|length }} cases will be modified:
+                        {% endif %}
+                        {% for caseId in caseIds %}
+                            {% if not forloop.counter0 == caseIds|length|sub:1 %}
+                                {{ caseId }},
+                            {% else %}
+                                {{ caseId }}
+                            {% endif %}
+                        {% endfor %}</h6>
+                </div>
+            </div>
+
+            <br>
+            <div class="custom-container centered" id="confirm-final">
+                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
+                       id='save' onclick="saved()" title="Save will add the combination to the
+                    original log"/>
+                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
+                       id='discard' onclick="discarded()" title="Discard will delete the combination."/>
+                <br><br>
+                <h6 class="text-dark mt-2"> You can redo the process by either selecting a new group or a new
+                    combination.</h6>
+            </div>
+            <br><br>
+            <div class="custom-container centered" id="export-final">
+                <h4 class="mt-4">Export</h4>
+                <h6 class="mt-4 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
+                    the XES file of the modified event log.</h6>
+                <br>
+                <a href="{% url 'download' %}">
+                    <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
+                           id='export' onclick=""/>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    <div id="text-width-calculation"></div>
+
+    <!-- Info Popup Section -->
+    <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Final Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

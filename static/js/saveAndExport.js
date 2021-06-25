@@ -1,10 +1,8 @@
 let EVENT_WIDTH = 125
-const groupId = JSON.parse(document.getElementById('groupId').textContent)
 const combination = JSON.parse(document.getElementById('combination').textContent)
 const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
 const delay = JSON.parse(document.getElementById('delay').textContent)
 
-let flag = false
 let textWidths = {}
 let height = EVENT_HEIGHT * 1.8
 let width = 0
@@ -13,10 +11,8 @@ let svg
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-axios.get('/partial-order/colors')
+axios.get('/partial-order/metadata')
     .then((response) => {
-            console.log(response)
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])
             let longestActivityWidth = textWidths[response.data['longestActivityName']]

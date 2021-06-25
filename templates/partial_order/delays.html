@@ -1,15 +1,37 @@
 {% extends 'partial_order/partial_order_processing.html' %}
 
 {% block script %}
+    {% load static %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
-    <script type="text/javascript" src="../../static/js/delays.js" defer></script>
+    <script type="text/javascript" src="{% static 'js/utilities.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'js/delays.js' %}" defer></script>
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
+        let combinationId = '{{ combinationId }}'
         const caseIds = JSON.parse(document.getElementById('caseIds').textContent);
-        document.getElementById('combinations_tab').href = `combinations/${groupId}`
+
+        if (groupId !== 'None') {
+            document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
+        } else {
+            document.getElementById('combinations_tab').href = `/partial-order/combinations`
+        }
+
+        if (groupId !== 'None') {
+            if (combinationId !== 'None') {
+                let delay = getDelay()
+                if (delay !== 0) {
+                    document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
+                } else {
+                    document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}/${combinationId}`
+                }
+            } else {
+                document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}`
+            }
+        } else {
+            document.getElementById('final_tab').href = `/partial-order/final-order`
+        }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -18,6 +40,19 @@
         });
         let element = document.getElementById("delays_tab");
         element.classList.add("active");
+
+        function getDelay() {
+            let days = document.getElementById("days").value
+            if (days === "")
+                days = 0
+            else
+                days = parseInt(days)
+            let hours = parseInt(document.getElementById("hours").value)
+            let minutes = parseInt(document.getElementById("minutes").value)
+            let seconds = parseInt(document.getElementById("seconds").value)
+
+            return days * 86400 + hours * 3600 + minutes * 60 + seconds
+        }
 
         function displayDelay() {
             let display_delay = document.getElementById("added-delay")
@@ -49,25 +84,9 @@
         }
 
         function redirectToFinalOrder() {
-            let days = document.getElementById("days").value
-            if (days === "")
-                days = 0
-            else
-                days = parseInt(days)
-            let hours = parseInt(document.getElementById("hours").value)
-            let minutes = parseInt(document.getElementById("minutes").value)
-            let seconds = parseInt(document.getElementById("seconds").value)
+            let delay = getDelay()
 
-            let delay = days * 86400 + hours * 3600 + minutes * 60 + seconds
-            if (delay > 0) {
-                let data = {
-                    'groupId': JSON.stringify(groupId),
-                    'combination': JSON.stringify(combination),
-                    'caseIds': JSON.stringify(caseIds),
-                    'delay': delay
-                }
-                redirectPost('/partial-order/save-and-export', data)
-            }
+            location.href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
         }
     </script>
 {% endblock %}
@@ -75,6 +94,7 @@
 {% block tab_content %}
     {{ combination|json_script:"combination" }}
     {{ caseIds|json_script:"caseIds" }}
+
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center mb-2 info-row">
             <div class="col">
@@ -88,54 +108,74 @@
         </div>
         <br>
 
-        <div class="delay-row">
-            <div class="scrollable-inner">
-                <div id="combination"></div>
+        {% if groupId is None or combinationId is None %}
+
+            <p class="text-danger info-subtitle"><b>
+                {% url 'groups' as groups_path %}
+                {% url 'combinations/<group_id>' as combinations_with_group_path %}
+                {{ combinations_with_group_path }}
+                {% if groups_path in request.META.HTTP_REFERER %}
+                    You have not selected a partial order group. Go to the 'Partial Order
+                    Groups' tab
+                    to select one and continue from there!
+                {% elif combinations_with_group_path in request.META.HTTP_REFERER %}
+                    You have not selected a combination. Go to the 'Combinations' tab
+                    to select one!
+                {% endif %}
+            </b>
+
+            </p>
+
+        {% else %}
+
+            <div class="delay-row">
+                <div class="scrollable-inner">
+                    <div id="combination"></div>
+                </div>
             </div>
-        </div>
 
-        <div class="container justify-content-center">
-            <div class="form-row justify-content-center mt-3">
-                <div class="col-xs-3 mt-2 days-width">
-                    <label class="text-dark" for="exampleFormControlTextarea1"> <b> Days </b> </label>
-                    <input type="number" min="0" class="form-control picker" placeholder="0" id="days">
-                </div>
-                <div class="col-xs-3 mt-2">
-                    <label class="text-dark" for="exampleFormControlSelect1"> <b> Hours </b> </label>
-                    <select class="form-control picker" id="hours">
+            <div class="container justify-content-center">
+                <div class="form-row justify-content-center mt-3">
+                    <div class="col-xs-3 mt-2 days-width">
+                        <label class="text-dark" for="exampleFormControlTextarea1"> <b> Days </b> </label>
+                        <input type="number" min="0" class="form-control picker" placeholder="0" id="days">
+                    </div>
+                    <div class="col-xs-3 mt-2">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Hours </b> </label>
+                        <select class="form-control picker" id="hours">
 
-                        <option>0</option>
-                        {% with ''|center:24 as range %}
-                            {% for _ in range %}
-                                <option>{{ forloop.counter }}</option>
-                            {% endfor %}
-                        {% endwith %}
+                            <option>0</option>
+                            {% with ''|center:24 as range %}
+                                {% for _ in range %}
+                                    <option>{{ forloop.counter }}</option>
+                                {% endfor %}
+                            {% endwith %}
 
-                    </select>
-                </div>
-                <div class="col-xs-3 mt-2">
-                    <label class="text-dark" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
-                    <select class="form-control picker" id="minutes">
+                        </select>
+                    </div>
+                    <div class="col-xs-3 mt-2">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Minutes </b> </label>
+                        <select class="form-control picker" id="minutes">
 
-                        <option>0</option>
-                        {% with ''|center:60 as range %}
-                            {% for _ in range %}
-                                <option>{{ forloop.counter }}</option>
-                            {% endfor %}
-                        {% endwith %}
+                            <option>0</option>
+                            {% with ''|center:60 as range %}
+                                {% for _ in range %}
+                                    <option>{{ forloop.counter }}</option>
+                                {% endfor %}
+                            {% endwith %}
 
-                    </select>
-                </div>
-                <div class="col-xs-3 mt-2">
-                    <label class="text-dark" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
-                    <select class="form-control picker" id="seconds">
+                        </select>
+                    </div>
+                    <div class="col-xs-3 mt-2">
+                        <label class="text-dark" for="exampleFormControlSelect1"> <b> Seconds </b> </label>
+                        <select class="form-control picker" id="seconds">
 
-                        <option>0</option>
-                        {% with ''|center:60 as range %}
-                            {% for _ in range %}
-                                <option>{{ forloop.counter }}</option>
-                            {% endfor %}
-                        {% endwith %}
+                            <option>0</option>
+                            {% with ''|center:60 as range %}
+                                {% for _ in range %}
+                                    <option>{{ forloop.counter }}</option>
+                                {% endfor %}
+                            {% endwith %}
 
                     </select>
                 </div>
@@ -187,23 +227,25 @@
                     <br><br>
                     The delays can be added using the provided input fields:<br><br>
                     <div class="text-center">
-                        <img src="../../media/info/add_delays/delay.PNG" alt="Partial Order Groups"
+                        <img src="{% static 'images/info/add_delays/delay.PNG' %}" alt="Partial Order Groups"
                              width="330" height="150"><br>
                     </div>
                     The following section will show the webpage before and after clicking the 'Add Delay'
                     button:<br><br>
                     <h6>Before adding delay:</h6>
-                    <img src="../../media/info/add_delays/before_delay_combination.PNG" alt="Partial Order Groups"
+                    <img src="{% static 'images/info/add_delays/before_delay_combination.PNG' %}"
+                         alt="Partial Order Groups"
                          width="1110" height="95"><br>
                     <div class="text-center">
-                        <img src="../../media/info/add_delays/delay.PNG" alt="Partial Order Groups"
+                        <img src="{% static 'images/info/add_delays/delay.PNG' %}" alt="Partial Order Groups"
                              width="330" height="150"><br>
                     </div>
                     <h6>After adding delay:</h6>
-                    <img src="../../media/info/add_delays/after_delay_combination.PNG" alt="Partial Order Groups"
+                    <img src="{% static 'images/info/add_delays/after_delay_combination.PNG' %}"
+                         alt="Partial Order Groups"
                          width="1100" height="95"><br>
                     <div class="text-center">
-                        <img src="../../media/info/add_delays/after_delay.PNG" alt="Partial Order Groups"
+                        <img src="{% static 'images/info/add_delays/after_delay.PNG' %}" alt="Partial Order Groups"
                              width="370" height="330"><br><br>
                     </div>
                     The webpage displays the added delay in green as seen in the above image. This delay is called

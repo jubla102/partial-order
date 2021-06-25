@@ -5,7 +5,7 @@ let textWidths = {}
 let height = EVENT_HEIGHT * 2
 let width = 0
 let svg
-axios.get('/partial-order/colors')
+axios.get('/partial-order/metadata')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])
