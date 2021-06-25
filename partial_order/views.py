@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.general_functions import get_meta_data, get_form_data, get_export_file_path
+from partial_order.general_functions import get_meta_data, get_export_file_path
 from partial_order.save_delays_to_log import save_delay_to_log
 
 
@@ -67,15 +67,13 @@ def delays(request, group_id=None, combination_id=None):
                          'caseIds': case_ids}, request))
 
 
-def final_order(request, group_id, combination_id):
+def final_order(request, group_id=None, combination_id=None):
     template = loader.get_template('partial_order/final_order.html')
-    if request.method == 'POST':
-        group = settings.GROUPS['groups'][group_id]
-        combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
-        case_ids = group['caseIds']
-        delay = get_form_data(request, 'delay')
-    else:
-        return HttpResponseNotFound()
+
+    group = settings.GROUPS['groups'][group_id]
+    combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
+    case_ids = group['caseIds']
+    delay = request.GET.get('delay')
 
     return HttpResponse(
         template.render({'groupId': group_id,

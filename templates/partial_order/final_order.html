@@ -48,55 +48,74 @@
         </div>
         <br>
 
-        <h6 class="text-dark mt-2 final-order-info">Combination:</h6>
+        {% if groupId is None or combinationId is None %}
 
-        <div class="delay-row">
-            <div class="scrollable-inner">
-                <div id="combination"></div>
+            <p class="text-danger info-subtitle"><b>
+                {% url 'groups' as groups_path %}
+                {% url 'combinations/<group_id>' as combinations_with_group_path %}
+                {{ combinations_with_group_path }}
+                {% if groups_path in request.META.HTTP_REFERER %}
+                    You have not selected a partial order group in the 'Partial Order
+                    Groups' tab. After that, select a combination and enter a delay.
+                {% elif combinations_with_group_path in request.META.HTTP_REFERER %}
+                    You have not selected a combination. Use the 'Combinations' tab
+                    to select one!
+                {% endif %}
+            </b>
+
+            </p>
+
+        {% else %}
+
+            <h6 class="text-dark mt-2 final-order-info">Combination:</h6>
+
+            <div class="delay-row">
+                <div class="scrollable-inner">
+                    <div id="combination"></div>
+                </div>
             </div>
-        </div>
 
-        <div class="row final-order-info">
-            <div class="col">
-                <h6 class="text-dark mt-2">
-                    {% if caseIds|length == 1 %}
-                        The following case will be modified:
-                    {% else %}
-                        The following {{ caseIds|length }} cases will be modified:
-                    {% endif %}
-                    {% for caseId in caseIds %}
-                        {% if not forloop.counter0 == caseIds|length|sub:1 %}
-                            {{ caseId }},
+            <div class="row final-order-info">
+                <div class="col">
+                    <h6 class="text-dark mt-2">
+                        {% if caseIds|length == 1 %}
+                            The following case will be modified:
                         {% else %}
-                            {{ caseId }}
+                            The following {{ caseIds|length }} cases will be modified:
                         {% endif %}
-                    {% endfor %}</h6>
+                        {% for caseId in caseIds %}
+                            {% if not forloop.counter0 == caseIds|length|sub:1 %}
+                                {{ caseId }},
+                            {% else %}
+                                {{ caseId }}
+                            {% endif %}
+                        {% endfor %}</h6>
+                </div>
             </div>
-        </div>
 
-        <br>
-        <div class="custom-container centered" id="confirm-final">
-            <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
-                   id='save' onclick="saved()" title="Save will add the combination to the
-                    original log"/>
-            <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
-                   id='discard' onclick="discarded()" title="Discard will delete the combination."/>
-            <br><br>
-            <h6 class="text-dark mt-2"> You can redo the process by either selecting a new group or a new
-                combination.</h6>
-        </div>
-        <br><br>
-        <div class="custom-container centered" id="export-final">
-            <h4 class="mt-4">Export</h4>
-            <h6 class="mt-4 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
-                the XES file of the modified event log.</h6>
             <br>
-            <a href="/partial-order/download-modified-xes">
-                <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
-                       id='export' onclick=""/>
-            </a>
-        </div>
-
+            <div class="custom-container centered" id="confirm-final">
+                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
+                       id='save' onclick="saved()" title="Save will add the combination to the
+                    original log"/>
+                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
+                       id='discard' onclick="discarded()" title="Discard will delete the combination."/>
+                <br><br>
+                <h6 class="text-dark mt-2"> You can redo the process by either selecting a new group or a new
+                    combination.</h6>
+            </div>
+            <br><br>
+            <div class="custom-container centered" id="export-final">
+                <h4 class="mt-4">Export</h4>
+                <h6 class="mt-4 text-dark ">By clicking <i class="text-purple">'Export'</i> you will be able to download
+                    the XES file of the modified event log.</h6>
+                <br>
+                <a href="{% url 'download' %}">
+                    <input type="submit" class="btn purple-dark" name="groupButton" value="Export"
+                           id='export' onclick=""/>
+                </a>
+            </div>
+        {% endif %}
     </div>
     <div id="text-width-calculation"></div>
 

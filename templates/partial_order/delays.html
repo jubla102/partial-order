@@ -56,7 +56,7 @@
                 'delay': delay
             }
 
-            redirectPost(`/partial-order/final-order/${groupId}/${combinationId}`, data)
+            location.href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
         }
     </script>
 {% endblock %}
@@ -79,6 +79,7 @@
         <br>
 
         {% if groupId is None or combinationId is None %}
+
             <p class="text-danger info-subtitle"><b>
                 {% url 'groups' as groups_path %}
                 {% url 'combinations/<group_id>' as combinations_with_group_path %}
@@ -94,7 +95,6 @@
             </b>
 
             </p>
-
 
         {% else %}
 
