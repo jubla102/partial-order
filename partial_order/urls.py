@@ -12,5 +12,7 @@ urlpatterns = [
     path('save-delay', views.save_delay, name='save-delay'),
     path('colors', views.meta_data, name='colors'),
     path('text-widths', views.text_width, name='text-widths'),
-    path('download-modified-xes', views.download_modified_xes, name='download')
+    path('download-modified-xes', views.download_modified_xes, name='download'),
+    path('is-modification-done', views.is_modification_done, name='is-modification-done')
+
 ]

@@ -4,8 +4,8 @@ const combination = JSON.parse(document.getElementById('combination').textConten
 const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
 const delay = JSON.parse(document.getElementById('delay').textContent)
 
+let flag
 let textWidths = {}
-
 let height = EVENT_HEIGHT * 1.8
 let width = 0
 let svg
@@ -39,6 +39,34 @@ saveButton.onclick = function () {
         })
         alert('The order was saved')
         discardButton.disabled = true;
+        saveButton.disabled = true;
+        //if (media / event_logs / Sepsis_Cases - Event_Log.xes)
+        //$("#exportCautionModal").modal()
+        console.log('ready to modal')
+        ///$("#flag_modal").modal()
+        //alert('Please wait, your changes are being saved.')
+        $("#alert").alert()
+        console.log('after modal display')
+        axios.get('/partial-order/is-modification-done')
+            .then((response) => {
+                    flag = JSON.parse(response.data['flag'])
+                }
+            );
+        console.log(flag)
+        /*while (flag != true) {
+            axios.get('/partial-order/is-modification-done')
+                .then((response) => {
+                        flag = JSON.parse(response.data['flag'])
+                    }
+                );
+        }*/
+        console.log('modal hiding begin')
+        //$("#alert").hide()
+        setTimeout(() => {
+            $("#alert").alert('close')
+        }, 10000);
+
+        console.log('modal hiding end')
         // location.href = 'groups' // redirecting is currently disabled to let the user export the event log
     }
 }

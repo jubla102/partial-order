@@ -107,6 +107,12 @@ def save_delay(request):
         return HttpResponseNotFound()
 
 
+def is_modification_done(request):
+    if request.method == 'GET':
+        flag = settings.MODIFY_DONE
+        return JsonResponse({'flag': flag}, safe=False)
+
+
 def download_modified_xes(request):
     try:
         file = get_export_file_path()

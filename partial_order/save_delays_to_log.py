@@ -1,6 +1,5 @@
 import json
 import os.path
-from datetime import datetime
 from datetime import timedelta
 from shutil import copyfile
 
@@ -159,3 +158,4 @@ def save_delay_to_log(variant_dict):
 
         # write event log to the modified xes file
         write_to_xes(event_log_df)
+        settings.MODIFY_DONE = True
