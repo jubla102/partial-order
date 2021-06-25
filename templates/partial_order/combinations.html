@@ -13,10 +13,10 @@
 
         if (groupId !== 'None') {
             document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
-            document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}`
+            document.getElementById('final_tab').href = `/partial-order/save-and-export/${groupId}`
         } else {
             document.getElementById('delays_tab').href = `/partial-order/delays`
-            document.getElementById('final_tab').href = `/partial-order/final-order`
+            document.getElementById('final_tab').href = `/partial-order/save-and-export`
         }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -113,11 +113,11 @@
                         <i>( n<sub>x</sub> )!</i> number of possible combinations.
                         <br><br>
                         <h6>Example:</h6>
-                        <img src="../../media/info/partial_order_groups/groups.PNG" alt="Partial Order Groups"
+                        <img src="../../static/images/info/partial_order_groups/groups.PNG" alt="Partial Order Groups"
                              width="750" height="400"><br>
                         On selecting the first partial order group from the previous tab (as seen in the figure above),
                         we get the following possible combinations:<br><br>
-                        <img src="../../media/info/combinations/combinations.PNG" alt="Combinations"
+                        <img src="../../static/images/info/combinations/combinations.PNG" alt="Combinations"
                              width="700" height="250"><br>
                         The number of stacked activity groups in the selected partial order group are 1, and it has 2
                         activities, hence we get 2! = 2 combinations.<br><br>

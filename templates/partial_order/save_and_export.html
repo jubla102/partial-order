@@ -2,12 +2,22 @@
 {% load mathfilters %}
 
 {% block script %}
+    {% load static %}
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-polygon.v2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
-    <script type="text/javascript" src="../../static/js/saveAndExport.js" defer></script>
+    <script type="text/javascript" src="{% static 'js/utilities.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'js/saveAndExport.js' %}" defer></script>
     <script type="text/javascript">
+        let groupId = '{{ groupId }}'
+        let combinationId = '{{ combinationId }}'
+        document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
+
+        if (combinationId !== 'None') {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
+        } else {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+        }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -53,48 +63,60 @@
             </div>
         </div>
 
-        <h6 class="text-dark mt-2 save-and-export">Combination:</h6>
+        {% if groupId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Go to the 'Partial
+                Order
+                Groups' tab
+                to select one and continue from there!</b></p>
+        {% elif combinationId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a combination. Go to the 'Combinations' tab
+                to select one and continue from there!</b></p>
+        {% elif delay is None %}
+            <p class="text-danger info-subtitle"><b>You have not set a delay. Go to the 'Delay' tab
+                to set it!</b></p>
+        {% else %}
 
-        <div class="delay-row">
-            <div class="scrollable-inner">
-                <div id="combination"></div>
+            <h6 class="text-dark mt-2 save-and-export">Combination:</h6>
+
+            <div class="delay-row">
+                <div class="scrollable-inner">
+                    <div id="combination"></div>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row save-and-export">
-            <div class="col centered">
-                <h6 class="text-dark">
-                    {% if caseIds|length == 1 %}
-                        The traces with following case ID will be modified:
-                    {% else %}
-                        The traces with the following case IDs will be modified:
-                    {% endif %}</h6>
+
+            <br>
+            <div class="row save-and-export">
+                <div class="col centered">
+                    <h6 class="text-dark">
+                        {% if caseIds|length == 1 %}
+                            The traces with following case ID will be modified:
+                        {% else %}
+                            The traces with the following case IDs will be modified:
+                        {% endif %}</h6>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row save-and-export justify-content-center centered">
-            <div class="scrollable">
-                {% for caseId in caseIds %}
-                    {{ caseId|linebreaks }}
-                {% endfor %}
+            <br>
+            <div class="row justify-content-center centered">
+                <div class="scrollable">
+                    {% for caseId in caseIds %}
+                        {{ caseId|linebreaks }}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <p>{{ flag }}</p>
-        </div>
-        <br>
-        <div class="custom-container centered" id="confirm-final">
-            <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
-                   id='save' onclick="saved()" title="'Save' will add the combination to the
+
+            <br>
+            <div class="custom-container centered" id="confirm-final">
+                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
+                       id='save' onclick="saved()" title="'Save' will add the combination to the
                     original log"/>
-            <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
-                   id='discard' onclick="discarded()" title="'Discard' will delete the combination."/>
-            <br><br>
-            <p id="end" class="hidden">To proceed further you can manually go to the 'Partial Order Groups' tab. </p>
-        </div>
-        <br>
-
-
+                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
+                       id='discard' onclick="discarded()" title="'Discard' will delete the combination."/>
+                <br><br>
+                <p id="end" class="hidden">To proceed further you can manually go to the 'Partial Order Groups'
+                    tab. </p>
+            </div>
+            <br>
+        {% endif %}
     </div>
     <div id="text-width-calculation"></div>
 
@@ -151,7 +173,8 @@
                     option to save or discard changes.
                     <br>The page on load must look similar to the image below:<br><br>
                     <div class="text-center">
-                        <img src="../../media/info/save_and_export/page.PNG" alt="Table containing the event log"
+                        <img src="../../static/images/info/save_and_export/page.PNG"
+                             alt="Table containing the event log"
                              class="text-center" width="780" height="320">
                     </div>
                     <br>
@@ -161,7 +184,7 @@
                     automatically redirect you to the <i>Partial Order Groups</i> tab. This can be visualized below.
                     <br>
                     <div class="text-center">
-                        <img src="../../media/info/save_and_export/case_id_and_save.PNG"
+                        <img src="../../static/images/info/save_and_export/case_id_and_save.PNG"
                              alt="Table containing the event log"
                              class="text-center" width="500" height="300">
                     </div>
@@ -171,14 +194,14 @@
                     the export button.
                     <br><br>
                     <div class="text-center">
-                        <img src="../../media/info/save_and_export/export.PNG"
+                        <img src="../../static/images/info/save_and_export/export.PNG"
                              alt="Table containing the event log"
                              class="text-center" width="200" height="70">
                     </div>
                     <br>
                     <i><b>Note:</b> After saving the order, the 'Save' and 'Discard' buttons are disabled and a copy of
-                        the modified log is created in the 'Event Data' pane where files are uploaded and set.</i> To
-                    proceed further you can manually go to the 'Partial Order Groups' tab.
+                        the modified log is created in the 'Event Data' pane where files are uploaded and set. To
+                        proceed further you can manually go to the 'Partial Order Groups' tab.</i>
                 </div>
             </div>
         </div>

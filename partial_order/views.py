@@ -67,8 +67,8 @@ def delays(request, group_id=None, combination_id=None):
                          'caseIds': case_ids}, request))
 
 
-def final_order(request, group_id=None, combination_id=None):
-    template = loader.get_template('partial_order/final_order.html')
+def save_and_export(request, group_id=None, combination_id=None):
+    template = loader.get_template('partial_order/save_and_export.html')
 
     if group_id is None or combination_id is None:
         combination = None

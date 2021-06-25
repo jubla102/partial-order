@@ -11,6 +11,7 @@ let svg
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 axios.get('/partial-order/metadata')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
@@ -54,7 +55,6 @@ saveButton.onclick = function () {
         saveButton.disabled = true;
         end.hidden = false
         //$("#exportCautionModal").modal()
-        // location.href = 'groups' // redirecting is currently disabled to let the user export the event log
     }
 }
 
