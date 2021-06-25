@@ -78,10 +78,11 @@
         </div>
         <br>
 
-        {% if groupId is None or combination_id is None %}
+        {% if groupId is None or combinationId is None %}
             <p class="text-danger info-subtitle"><b>
                 {% url 'groups' as groups_path %}
                 {% url 'combinations/<group_id>' as combinations_with_group_path %}
+                {{ combinations_with_group_path }}
                 {% if groups_path in request.META.HTTP_REFERER %}
                     You have not selected a partial order group. Use the 'Partial Order
                     Groups' tab

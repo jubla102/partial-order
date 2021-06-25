@@ -34,7 +34,6 @@
     {{ combinations|json_script:"combinations" }}
     {{ caseIds|json_script:"caseIds" }}
 
-
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center info-row">
             <div class="col">
@@ -48,15 +47,14 @@
         </div>
         <br>
         {% if groupId is None %}
-
-            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Use the "Partial Order
-                Groups" tab
+            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Use the 'Partial Order
+                Groups' tab
                 to select one!</b></p>
 
         {% else %}
+            <p class="info-subtitle"><b>You can modify the combination by adding delays in the
+                'Add Delays' tab. </b></p>
 
-            <h6 class="mt-4 info-subtitle">You can modify the combination by adding delays in the
-                <i>'Add Delays'</i> tab. </h6>
             <br>
             <div class="d-flex justify-content-center">
                 <div class="spinner-border text-primary" id="spinner"></div>
