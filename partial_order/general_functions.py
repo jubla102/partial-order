@@ -39,7 +39,7 @@ def dupcheck(x):
 
 
 def get_export_file_path():
-    export_file_path = os.path.join(settings.MEDIA_ROOT, "exports")
+    export_file_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
     file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '-modified.xes'
     return os.path.join(export_file_path, file_name)
 
