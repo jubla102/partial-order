@@ -18,6 +18,21 @@
             document.getElementById('combinations_tab').href = `/partial-order/combinations`
         }
 
+        if (groupId !== 'None') {
+            if (combinationId !== 'None') {
+                let delay = getDelay()
+                if (delay !== 0) {
+                    document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
+                } else {
+                    document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}/${combinationId}`
+                }
+            } else {
+                document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}`
+            }
+        } else {
+            document.getElementById('final_tab').href = `/partial-order/final-order`
+        }
+
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
             let element = document.getElementById(id);
@@ -25,6 +40,19 @@
         });
         let element = document.getElementById("delays_tab");
         element.classList.add("active");
+
+        function getDelay() {
+            let days = document.getElementById("days").value
+            if (days === "")
+                days = 0
+            else
+                days = parseInt(days)
+            let hours = parseInt(document.getElementById("hours").value)
+            let minutes = parseInt(document.getElementById("minutes").value)
+            let seconds = parseInt(document.getElementById("seconds").value)
+
+            return days * 86400 + hours * 3600 + minutes * 60 + seconds
+        }
 
         function displayDelay() {
 
@@ -42,19 +70,7 @@
         }
 
         function redirectToFinalOrder() {
-            let days = document.getElementById("days").value
-            if (days === "")
-                days = 0
-            else
-                days = parseInt(days)
-            let hours = parseInt(document.getElementById("hours").value)
-            let minutes = parseInt(document.getElementById("minutes").value)
-            let seconds = parseInt(document.getElementById("seconds").value)
-
-            let delay = days * 86400 + hours * 3600 + minutes * 60 + seconds
-            let data = {
-                'delay': delay
-            }
+            let delay = getDelay()
 
             location.href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
         }

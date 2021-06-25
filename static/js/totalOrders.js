@@ -2,7 +2,7 @@ let EVENT_WIDTH = 125
 const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
 const combinations = JSON.parse(document.getElementById('combinations').textContent)
 let textWidths = {}
-axios.get('/partial-order/colors')
+axios.get('/partial-order/metadata')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
             textWidths = JSON.parse(response.data['textWidths'])

@@ -70,10 +70,15 @@ def delays(request, group_id=None, combination_id=None):
 def final_order(request, group_id=None, combination_id=None):
     template = loader.get_template('partial_order/final_order.html')
 
-    group = settings.GROUPS['groups'][group_id]
-    combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
-    case_ids = group['caseIds']
-    delay = request.GET.get('delay')
+    if group_id is None or combination_id is None:
+        combination = None
+        case_ids = None
+        delay = None
+    else:
+        group = settings.GROUPS['groups'][group_id]
+        combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
+        case_ids = group['caseIds']
+        delay = request.GET.get('delay')
 
     return HttpResponse(
         template.render({'groupId': group_id,

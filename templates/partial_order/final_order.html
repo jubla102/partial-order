@@ -12,7 +12,12 @@
         let groupId = '{{ groupId }}'
         let combinationId = '{{ combinationId }}'
         document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
-        document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
+
+        if (combinationId !== 'None') {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
+        } else {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+        }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -48,23 +53,16 @@
         </div>
         <br>
 
-        {% if groupId is None or combinationId is None %}
-
-            <p class="text-danger info-subtitle"><b>
-                {% url 'groups' as groups_path %}
-                {% url 'combinations/<group_id>' as combinations_with_group_path %}
-                {{ combinations_with_group_path }}
-                {% if groups_path in request.META.HTTP_REFERER %}
-                    You have not selected a partial order group in the 'Partial Order
-                    Groups' tab. After that, select a combination and enter a delay.
-                {% elif combinations_with_group_path in request.META.HTTP_REFERER %}
-                    You have not selected a combination. Use the 'Combinations' tab
-                    to select one!
-                {% endif %}
-            </b>
-
-            </p>
-
+        {% if groupId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Use the 'Partial Order
+                Groups' tab
+                to select one!</b></p>
+        {% elif combinationId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a combination. Use the 'Combinations' tab
+                to select one!</b></p>
+        {% elif delay is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a delay. Use the 'Delay' tab
+                to set one!</b></p>
         {% else %}
 
             <h6 class="text-dark mt-2 final-order-info">Combination:</h6>
