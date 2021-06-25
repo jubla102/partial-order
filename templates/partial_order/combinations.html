@@ -8,6 +8,16 @@
     <script type="text/javascript" src="../../static/js/utilities.js" defer></script>
     <script type="text/javascript" src="../../static/js/totalOrders.js" defer></script>
     <script type="text/javascript">
+        let groupId = '{{ groupId }}'
+        document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+
+        if (groupId !== 'None') {
+            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+            document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}`
+        } else {
+            document.getElementById('delays_tab').href = `/partial-order/delays`
+            document.getElementById('final_tab').href = `/partial-order/final-order`
+        }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
         ids.forEach(function (id) {
@@ -25,6 +35,7 @@
     {{ groupId|json_script:"groupId" }}
     {{ combinations|json_script:"combinations" }}
     {{ caseIds|json_script:"caseIds" }}
+
     <div class="tab-pane fade show active">
         <div class="form-row justify-content-center info-row">
             <div class="col">
@@ -36,15 +47,23 @@
                 </button>
             </div>
         </div>
-        <h6 class="mt-4 info-subtitle">You can modify the combination by adding delays in the
-            <i>'Add Delays'</i> tab. </h6>
         <br>
+        {% if groupId is None %}
+            <p class="text-danger info-subtitle"><b>You have not selected a partial order group. Go to the 'Partial
+                Order
+                Groups' tab
+                to select one!</b></p>
 
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border text-primary" id="spinner"></div>
-        </div>
+        {% else %}
+            <p class="info-subtitle"><b>You can modify the combination by adding delays in the
+                'Add Delays' tab. </b></p>
 
-        <div class="partial-order-groups" hidden>
+            <br>
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" id="spinner"></div>
+            </div>
+
+            <div class="partial-order-groups" hidden>
             {% for combination in combinations %}
                 <div class="container-fluid">
                     <div class="row flex-nowrap partial-order-row partial-order-group">
@@ -57,7 +76,8 @@
                             <div class="row">
                                 <div class="col-12 inner-case-info">
                                     <!-- Fraction of cases is multiplied by 100 to get the percentage value and rounded to 2 decimal places -->
-                                    {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of the
+                                    {{ combination.frequency |div:totalNumberOfTraces|mul:100|floatformat:2 }} % of
+                                    the
                                     log
                                 </div>
                             </div>
@@ -68,6 +88,7 @@
                     </div>
                 </div>
             {% endfor %}
+        {% endif %}
         </div>
         <!-- Info Popup Section -->
         <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
@@ -90,25 +111,33 @@
                         there are <b>n!</b> number of possible combinations.
                         <br><br>
                         <h6>Example:</h6>
-                        <img src="../../media/info/partial_order_groups/groups.PNG" alt="Partial Order Groups"
+                        <img src="../../static/images/info/partial_order_groups/groups.PNG"
+                             alt="Partial Order Groups"
                              width="750" height="400"><br>
-                        On selecting the first partial order group from the previous tab (as seen in the figure above),
+                        On selecting the first partial order group from the previous tab (as seen in the figure
+                        above),
                         we get the following possible combinations:<br><br>
-                        <img src="../../media/info/combinations/combinations.PNG" alt="Combinations"
+                        <img src="../../static/images/info/combinations/combinations.PNG" alt="Combinations"
                              width="700" height="250"><br>
-                        The total number of stacked activities in the selected partial order group is 2, and hence we
+                        The total number of stacked activities in the selected partial order group is 2, and hence
+                        we
                         get 2! = 2 combinations.<br><br>
                         The <i>statistics</i> on the left gives information about the existence of that particular
-                        combination in the event log. Information like number and percentage of traces having the same
+                        combination in the event log. Information like number and percentage of traces having the
+                        same
                         combination are displayed. A combination is nothing but a variant. Since, every possible
                         combination is generated here, there can be combinations/variants (hence also traces) which
-                        may not be present in the event log. In such cases the the number and percentage of traces are
-                        simply 0, which is true in this case. There does not exist a complete ordered trace <i>< a, b,
+                        may not be present in the event log. In such cases the the number and percentage of traces
+                        are
+                        simply 0, which is true in this case. There does not exist a complete ordered trace <i>< a,
+                        b,
                         c, e, f ></i> in the event log.<br><br>
                         <h6>Further Steps:</h6>
                         Each combination is selectable (grey color appears when hovered on the combination; can be
-                        seen in the figure). Selecting a combination will automatically redirect the application to the
-                        <b>Add Delays</b> tab, where delays can be added to the activities, so that the activities can
+                        seen in the figure). Selecting a combination will automatically redirect the application to
+                        the
+                        <b>Add Delays</b> tab, where delays can be added to the activities, so that the activities
+                        can
                         be ordered along with the modified timestamps attached to them.
 
                     </div>
