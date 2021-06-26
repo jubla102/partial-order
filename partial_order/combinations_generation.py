@@ -46,6 +46,7 @@ def get_order_combinations(partial_order_trace):
         combinations.append({'events': combination, 'frequency': get_frequency(key, case_information)})
 
     combinations.sort(key=lambda x: x['frequency'], reverse=True)
+    
     return combinations
 
 
