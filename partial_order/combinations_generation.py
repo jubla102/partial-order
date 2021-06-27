@@ -45,15 +45,14 @@ def get_order_combinations(partial_order_trace):
 
         combinations.append({'events': combination, 'frequency': get_frequency(key, case_information)})
 
+    combinations.sort(key=lambda x: x['frequency'], reverse=True)
+    
     return combinations
 
 
 def get_case_information():
     df = log_converter.apply(settings.EVENT_LOG, variant=log_converter.Variants.TO_DATA_FRAME)
-    df_without_partial_orders = df.groupby(CASE_CONCEPT_NAME).filter(lambda x: x[DEFAULT_TIMESTAMP_KEY].is_unique)
-    df_without_partial_orders.reset_index(drop=True, inplace=True)  # reset index
-
-    variants_count = case_statistics.get_variant_statistics(df_without_partial_orders)
+    variants_count = case_statistics.get_variant_statistics(df)
     return sorted(variants_count, key=lambda x: x[CASE_CONCEPT_NAME], reverse=True)
 
 
@@ -63,9 +62,3 @@ def get_frequency(key, case_information):
             return information[CASE_CONCEPT_NAME]
 
     return 0
-
-
-if __name__ == '__main__':
-    info = get_case_information()
-    key = 'ER Registration,ER Triage,ER Sepsis Triage'
-    print(get_frequency(key, info))

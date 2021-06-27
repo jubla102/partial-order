@@ -29,5 +29,6 @@ function getTextWidth(text) {
     let textWidth = textObj.node().getComputedTextLength()
     textObj.remove()
 
-    return textWidth;
+    // +4 is added to compensate for the deviation of getComputedTextLength()
+    return textWidth + 4;
 }

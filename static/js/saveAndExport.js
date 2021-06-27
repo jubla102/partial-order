@@ -30,21 +30,19 @@ let saveButton = document.getElementById('save');
 let discardButton = document.getElementById('discard')
 let end = document.getElementById('end')
 
-saveButton.onclick = function () {
+function save() {
     let events = []
     combination.forEach(event => {
         events.push(event[ACTIVITY_KEY])
     })
     if (confirm("The order will be saved and added to the original log")) {
         $('#flag_modal').modal({backdrop: 'static', keyboard: false})
-        console.log(`starting at: ${new Date()}`)
         axios.post('/partial-order/save-delay', {
             'groupId': JSON.stringify(groupId),
             'events': JSON.stringify(events),
             'caseIds': JSON.stringify(caseIds),
             'delay': delay
         }).then(() => {
-                console.log(`ending at: ${new Date()}`)
                 $('#flag_modal').modal('hide')
                 $('#flag_modal').on('shown.bs.modal', function () {
                     $('#flag_modal').modal('hide')
@@ -54,7 +52,6 @@ saveButton.onclick = function () {
         discardButton.disabled = true;
         saveButton.disabled = true;
         end.hidden = false
-        //$("#exportCautionModal").modal()
     }
 }
 
