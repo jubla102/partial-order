@@ -97,10 +97,12 @@
             </div>
             <br>
             <div class="row justify-content-center centered">
-                <div class="scrollable">
-                    {% for caseId in caseIds %}
-                        {{ caseId|linebreaks }}
-                    {% endfor %}
+                <div id="border-custom">
+                    <div class="scrollable">
+                        {% for caseId in caseIds %}
+                            {{ ''|linebreaks }}{{ caseId }}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
