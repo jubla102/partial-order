@@ -22,15 +22,15 @@
             if (combinationId !== 'None') {
                 let delay = getDelay()
                 if (delay !== 0) {
-                    document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
+                    document.getElementById('final_tab').href = `/partial-order/save-and-export/${groupId}/${combinationId}?delay=${delay}`
                 } else {
-                    document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}/${combinationId}`
+                    document.getElementById('final_tab').href = `/partial-order/save-and-export/${groupId}/${combinationId}`
                 }
             } else {
-                document.getElementById('final_tab').href = `/partial-order/final-order/${groupId}`
+                document.getElementById('final_tab').href = `/partial-order/save-and-export/${groupId}`
             }
         } else {
-            document.getElementById('final_tab').href = `/partial-order/final-order`
+            document.getElementById('final_tab').href = `/partial-order/save-and-export`
         }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
@@ -55,24 +55,38 @@
         }
 
         function displayDelay() {
+            let display_delay = document.getElementById("added-delay")
+            let display_delay_div = document.getElementById("display-delay-div")
 
             let days = document.getElementById("days").value
+            if (days === "")
+                days = 0;
+
             let hours = document.getElementById("hours").value
             let minutes = document.getElementById("minutes").value
             let seconds = document.getElementById("seconds").value
-            if (days === "")
-                days = 0;
-            document.getElementById("added-delay").innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
+
+            if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+                display_delay_div.style.visibility = "visible"
+                display_delay.className = "text-danger"
+                display_delay.innerHTML = "Zero delay cannot be added"
+            } else {
+                display_delay_div.style.visibility = "visible"
+                display_delay.className = "text-success"
+                display_delay.innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
+                show_proceed_div();
+                visualizeDelay();
+            }
         }
 
         function show_proceed_div() {
             document.getElementById("proceed-div").style.visibility = "visible"
         }
 
-        function redirectToFinalOrder() {
+        function redirectToSaveAndExport() {
             let delay = getDelay()
 
-            location.href = `/partial-order/final-order/${groupId}/${combinationId}?delay=${delay}`
+            location.href = `/partial-order/save-and-export/${groupId}/${combinationId}?delay=${delay}`
         }
     </script>
 {% endblock %}
@@ -169,22 +183,24 @@
             </div>
             <div class="col-xs-2 mt-4 centered">
                 <button type="button" class="btn btn-dark" id="add_delay"
-                        onclick="displayDelay(); visualizeDelay(); show_proceed_div();">
+                        onclick="displayDelay()">
                     Add Delay
                 </button>
             </div>
-            <div id="proceed-div">
+            <div id="display-delay-div">
                 <div class="form-row mt-4 justify-content-center centered">
                     <div class="col-8">
                         <label class="text-dark"> <b> Added delay (delta): <p
                                 class="text-success" id="added-delay"></p></b> </label>
                     </div>
                 </div>
+            </div>
+            <div id="proceed-div">
                 <div class="form-row mt-2 justify-content-center centered">
                     <label class="text-dark"><b>Click proceed if you are fine with the added delay </b> </label>
                 </div>
                 <div class="form-row mt-4 justify-content-center centered">
-                    <button type="button" class="btn btn-primary" id="proceed-btn" onclick="redirectToFinalOrder()">
+                    <button type="button" class="btn btn-primary" id="proceed-btn" onclick="redirectToSaveAndExport()">
                         Proceed
                     </button>
                 </div>
@@ -239,11 +255,12 @@
                     visualized in the image.<br><br>
                     <h6>Further Steps:</h6>
                     If the user is happy with the added delays, they can click on the <i>proceed</i> button,
-                    which will automatically redirect the application to the <b>Final Order</b> tab. This tab displays
-                    the combination and all traces to which the delay was added and also displays the respective time
-                    stamps. The user also has the option to save and export the modified event log.
+                    which will automatically redirect the application to the <b>Save and Export</b> tab. This tab
+                    displays the combination and all traces to which the delay was added and also displays the
+                    respective time stamps. The user also has the option to save and export the modified event log.
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock %}

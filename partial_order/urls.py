@@ -9,7 +9,7 @@ urlpatterns = [
     path('po-groups', partial_order_detection.get_partial_orders_from_selected_file, name='po-groups'),
     path('combinations/<group_id>', views.combinations, name='combinations'),
     path('delays/<group_id>/<combination_id>', views.delays, name='delays'),
-    path('final-order/<group_id>/<combination_id>', views.final_order, name='final_order'),
+    path('save-and-export/<group_id>/<combination_id>', views.save_and_export, name='save_and_export'),
 
     # api
     path('save-delay', views.save_delay, name='save-delay'),
@@ -21,6 +21,6 @@ urlpatterns = [
     path('combinations', views.combinations, name='combinations_error'),
     path('delays/<group_id>', views.delays, name='delays_without_group'),
     path('delays', views.delays, name='delays_without_group_combination'),
-    path('final-order/<group_id>', views.final_order, name='final_order_with_group'),
-    path('final-order', views.final_order, name='final_order_error')
+    path('save-and-export/<group_id>', views.save_and_export, name='save_and_export_with_group'),
+    path('save-and-export', views.save_and_export, name='save_and_export_error')
 ]

@@ -4,10 +4,14 @@ const caseIds = JSON.parse(document.getElementById('caseIds').textContent)
 const delay = JSON.parse(document.getElementById('delay').textContent)
 
 let textWidths = {}
-
-let height = EVENT_HEIGHT * 2
+let height = EVENT_HEIGHT * 1.8
 let width = 0
 let svg
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 axios.get('/partial-order/metadata')
     .then((response) => {
             let colorMap = new Map(Object.entries(response.data['colors']))
@@ -23,21 +27,31 @@ axios.get('/partial-order/metadata')
     );
 
 let saveButton = document.getElementById('save');
+let discardButton = document.getElementById('discard')
+let end = document.getElementById('end')
 
-saveButton.onclick = function () {
+function save() {
     let events = []
     combination.forEach(event => {
         events.push(event[ACTIVITY_KEY])
     })
     if (confirm("The order will be saved and added to the original log")) {
+        $('#flag_modal').modal({backdrop: 'static', keyboard: false})
         axios.post('/partial-order/save-delay', {
             'groupId': JSON.stringify(groupId),
             'events': JSON.stringify(events),
             'caseIds': JSON.stringify(caseIds),
             'delay': delay
-        })
-        alert('The order was saved')
-        // location.href = 'groups' // redirecting is currently disabled to let the user export the event log
+        }).then(() => {
+                $('#flag_modal').modal('hide')
+                $('#flag_modal').on('shown.bs.modal', function () {
+                    $('#flag_modal').modal('hide')
+                });
+            }
+        );
+        discardButton.disabled = true;
+        saveButton.disabled = true;
+        end.hidden = false
     }
 }
 
