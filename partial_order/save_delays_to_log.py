@@ -20,6 +20,9 @@ EVENTS = 'events'
 CASEIDS = 'caseIds'
 DELAY = 'delay'
 
+pd.options.mode.chained_assignment = None  # default='warn'
+
+
 """
 Write the event log dataframe to a xes file
 """
