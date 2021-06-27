@@ -87,7 +87,7 @@ def final_order(request, group_id=None, combination_id=None):
                          'combinationId': combination_id,
                          'combination': combination,
                          'caseIds': case_ids,
-                         'delay': delay}, request))
+                         'delay': int(delay)}, request))
 
 
 def meta_data(request):
