@@ -1,13 +1,10 @@
-import os.path
 from datetime import timedelta
-from shutil import copyfile
 
 import numpy as np
 import pandas as pd
 from django.conf import settings
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.exporter.xes import exporter
-from pm4py.objects.log.importer.xes import importer
 from pm4py.util.constants import CASE_CONCEPT_NAME
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY
 
@@ -17,21 +14,20 @@ from partial_order.general_functions import get_selected_file_path, get_export_f
 GROUP = 'group'
 GROUPS = 'groups'
 EVENTS = 'events'
-CASEIDS = 'caseIds'
+CASE_IDS = 'caseIds'
 DELAY = 'delay'
 
 pd.options.mode.chained_assignment = None  # default='warn'
-
 
 """
 Returns the event log as a dataframe object, sorted by timestamps
 """
 
 
-def get_log():
+def get_log_as_df():
     parameters = {"timestamp_sort": True}
-    event_log = settings.EVENT_LOG
-    df = log_converter.apply(event_log, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
+    df = log_converter.apply(settings.EVENT_LOG, variant=log_converter.Variants.TO_DATA_FRAME, parameters=parameters)
+
     return df
 
 
@@ -56,8 +52,7 @@ Deletes the group information from the groups file and then writes the new times
 
 
 def save_delay_to_log(variant_dict):
-
-    event_log_df = get_log()
+    event_log_df = get_log_as_df()
 
     # proceed only if the selected variant's group is present in the groups file
     if variant_dict[GROUP] in settings.GROUPS[GROUPS] and variant_dict[DELAY] > 0:
@@ -68,10 +63,10 @@ def save_delay_to_log(variant_dict):
         sequence = variant_dict[EVENTS]
 
         # sort the variant's group's caseIds in ascending order
-        variant_dict[CASEIDS] = sorted(variant_dict[CASEIDS])
+        variant_dict[CASE_IDS] = sorted(variant_dict[CASE_IDS])
 
         # iterate over each caseId present in the selected group
-        for caseId in variant_dict[CASEIDS]:
+        for caseId in variant_dict[CASE_IDS]:
 
             # create a sub data frame for the current caseId
             case_df = event_log_df.loc[event_log_df[CASE_CONCEPT_NAME] == caseId]

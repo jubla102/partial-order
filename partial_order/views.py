@@ -17,7 +17,7 @@ def groups(request):
     number_of_groups = 0
     groups = None
     if settings.EVENT_LOG_NAME != ':notset:':
-        partial_order_ds = partial_order_detection.get_groups_file()
+        partial_order_ds = partial_order_detection.get_groups_data_structure()
         number_of_groups = len(partial_order_ds['groups'])
         groups = partial_order_ds['groups'].values()
 
@@ -128,5 +128,4 @@ def download_modified_xes(request):
 
         return response
     except Exception as e:
-        print(e)
         return HttpResponse(status=500)
