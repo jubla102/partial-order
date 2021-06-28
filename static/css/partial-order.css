@@ -118,8 +118,12 @@
     width: 80px;
 }
 
-#save, #discard, #add_delay, #proceed-btn {
+#add_delay, #proceed-btn {
     width: 150px;
+}
+
+#save, #discard {
+    width: 100px;
 }
 
 .picker {
@@ -145,8 +149,3 @@
     outline: none;
     box-shadow: 0 0 0 3px rgba(103, 0, 181, 0.4);
 }
-
-.hidden {
-    visibility: hidden;
-}
-

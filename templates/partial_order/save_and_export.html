@@ -97,22 +97,22 @@
             </div>
             <br>
             <div class="row justify-content-center centered">
-                <div id="border-custom">
-                    <div class="scrollable">
-                        {% for caseId in caseIds %}
-                            {{ ''|linebreaks }}{{ caseId }}
-                        {% endfor %}
-                    </div>
+
+                <div class="scrollable">
+                    {% for caseId in caseIds %}
+                        <option>{{ caseId }}</option>
+                    {% endfor %}
                 </div>
+
             </div>
 
             <br>
             <div class="custom-container centered" id="confirm-final">
-                <input type="submit" class="btn btn-success centered mr-4" name="groupButton" value="Save"
-                       id='save' onclick="save()" title="'Save' will add the combination to the
+                <input type="submit" class="btn btn-success centered m-1" name="groupButton" value="Save"
+                       id="save" onclick="save()" title="'Save' will add the combination to the
                     original log"/>
-                <input type="submit" class="btn btn-danger centered ml-4" name="groupButton" value="Discard"
-                       id='discard' onclick="discarded()" title="'Discard' will delete the combination."/>
+                <input type="submit" class="btn btn-danger centered m-1" name="groupButton" value="Discard"
+                       id="discard" onclick="discarded()" title="'Discard' will delete the combination."/>
                 <br><br>
                 <p id="end" hidden>To proceed further you can manually go to the 'Partial Order Groups'
                     tab. </p>
