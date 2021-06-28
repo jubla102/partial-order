@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.template import loader
 
 from partial_order import partial_order_detection, combinations_generation
-from partial_order.general_functions import get_meta_data, get_export_file_path
+from partial_order.general_functions import get_meta_data, get_export_file_path, MODIFIED_FILE_EXTENSION
 from partial_order.save_delays_to_log import save_delay_to_log
 
 
@@ -16,17 +16,21 @@ def groups(request):
 
     number_of_groups = 0
     groups = None
+    modified_file_exists = False
     if settings.EVENT_LOG_NAME != ':notset:':
         partial_order_ds = partial_order_detection.get_groups_data_structure()
         number_of_groups = len(partial_order_ds['groups'])
         groups = partial_order_ds['groups'].values()
+        if os.path.exists(get_export_file_path()) or MODIFIED_FILE_EXTENSION in settings.EVENT_LOG_NAME:
+            modified_file_exists = True
 
     return HttpResponse(
         template.render(
             {'log_name': settings.EVENT_LOG_NAME,
              'groups': groups,
              'numberOfGroups': range(number_of_groups),
-             'totalNumberOfTraces': settings.NUMBER_OF_TRACES}, request))
+             'totalNumberOfTraces': settings.NUMBER_OF_TRACES,
+             'modifiedFileExists': modified_file_exists}, request))
 
 
 def combinations(request, group_id=None):
