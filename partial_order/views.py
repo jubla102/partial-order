@@ -19,7 +19,7 @@ def groups(request):
     if settings.EVENT_LOG_NAME != ':notset:':
         partial_order_ds = partial_order_detection.get_groups_file()
         number_of_groups = len(partial_order_ds['groups'])
-        groups = list(partial_order_ds['groups'].values())
+        groups = partial_order_ds['groups'].values()
 
     return HttpResponse(
         template.render(
