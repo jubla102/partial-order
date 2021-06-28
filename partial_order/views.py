@@ -19,7 +19,7 @@ def groups(request):
     if settings.EVENT_LOG_NAME != ':notset:':
         partial_order_ds = partial_order_detection.get_groups_file()
         number_of_groups = len(partial_order_ds['groups'])
-        groups = list(partial_order_ds['groups'].values())
+        groups = partial_order_ds['groups'].values()
 
     return HttpResponse(
         template.render(
@@ -78,14 +78,14 @@ def save_and_export(request, group_id=None, combination_id=None):
         group = settings.GROUPS['groups'][group_id]
         combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
         case_ids = group['caseIds']
-        delay = request.GET.get('delay')
+        delay = int(request.GET.get('delay'))
 
     return HttpResponse(
         template.render({'groupId': group_id,
                          'combinationId': combination_id,
                          'combination': combination,
                          'caseIds': case_ids,
-                         'delay': int(delay)}, request))
+                         'delay': delay}, request))
 
 
 def meta_data(request):
