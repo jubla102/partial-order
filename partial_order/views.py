@@ -21,8 +21,6 @@ def groups(request):
         number_of_groups = len(partial_order_ds['groups'])
         groups = list(partial_order_ds['groups'].values())
 
-    groups.sort(key=lambda x: x['numberOfCases'], reverse=True)
-
     return HttpResponse(
         template.render(
             {'log_name': settings.EVENT_LOG_NAME,
