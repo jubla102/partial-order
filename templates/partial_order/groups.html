@@ -35,8 +35,10 @@
             </div>
         </div>
         <br>
-        {% if log_name != ':notset:' %}
+        {% if log_name != ':notset:' and groups %}
             <p class="text-success info-subtitle"><b>'{{ log_name }}' is being used as the input.</b></p>
+        {%  elif log_name != ':notset:' and not groups %}
+            <p class="text-danger info-subtitle"><b>The event log {{ log_name }} has no partial orders.</b></p>
         {% else %}
             <p class="text-danger info-subtitle"><b>You have not set any event log as input. Use the 'Event Data' tab
                 to set an event log as input!</b></p>
@@ -77,7 +79,6 @@
             </div>
 
         {% endif %}
-    </div>
 
     <!-- Info Popup Section -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"
