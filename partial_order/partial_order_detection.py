@@ -38,8 +38,9 @@ def get_partial_order_groups(df):
     df = df.sort_values(by=[CASE_CONCEPT_NAME, DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY])
     groups = {}
     df.groupby(CASE_CONCEPT_NAME).apply(lambda x: check_for_partial_order(x, groups))
+    sorted_groups = {k: v for k, v in sorted(groups.items(), key=lambda item: item[1]['numberOfCases'], reverse=True)}
 
-    return groups
+    return sorted_groups
 
 
 def check_for_partial_order(case, partial_order_groups):
