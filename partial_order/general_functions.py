@@ -4,6 +4,8 @@ import os
 import seaborn as sns
 from django.conf import settings
 
+MODIFIED_FILE_EXTENSION = '.modified.xes'
+
 
 def get_selected_file_path():
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
@@ -40,7 +42,7 @@ def dupcheck(x):
 
 def get_export_file_path():
     export_file_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '.modified.xes'
+    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + MODIFIED_FILE_EXTENSION
     return os.path.join(export_file_path, file_name)
 
 
