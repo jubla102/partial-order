@@ -19,7 +19,7 @@ class TestPartialOrderDetection(unittest.TestCase):
         event_log_absolute_path = os.path.join(TestPartialOrderDetection.EVENT_LOG_ROOT, filename)
         df = pd.read_csv(event_log_absolute_path, sep=";")
         event_log = log_converter.apply(df, variant=log_converter.Variants.TO_EVENT_LOG)
-        partial_order_groups = partial_order_detection.get_partial_order_groups(event_log)
+        partial_order_groups = partial_order_detection.get_sorted_partial_order_groups(event_log)
 
         self.assertEqual(groups, partial_order_groups['totalNumberOfTraces'])
 
@@ -31,7 +31,7 @@ class TestPartialOrderDetection(unittest.TestCase):
         event_log_absolute_path = os.path.join(TestPartialOrderDetection.EVENT_LOG_ROOT, filename)
         df = pd.read_csv(event_log_absolute_path, sep=";")
         event_log = log_converter.apply(df, variant=log_converter.Variants.TO_EVENT_LOG)
-        partial_order_groups = partial_order_detection.get_partial_order_groups(event_log)
+        partial_order_groups = partial_order_detection.get_sorted_partial_order_groups(event_log)
 
         self.assertEqual(groups, len(partial_order_groups['groups']))
 
@@ -39,15 +39,15 @@ class TestPartialOrderDetection(unittest.TestCase):
         event_log_absolute_path = os.path.join(TestPartialOrderDetection.EVENT_LOG_ROOT, "two-partial-order-groups.csv")
         df = pd.read_csv(event_log_absolute_path, sep=";")
         event_log = log_converter.apply(df, variant=log_converter.Variants.TO_EVENT_LOG)
-        partial_order_groups = partial_order_detection.get_partial_order_groups(event_log)
-        
+        partial_order_groups = partial_order_detection.get_sorted_partial_order_groups(event_log)
+
         self.assertEqual(2, partial_order_groups['groups']['|a||bc||e||f|']['numberOfCases'])
 
     def test_one_cases_in_group(self):
         event_log_absolute_path = os.path.join(TestPartialOrderDetection.EVENT_LOG_ROOT, "two-partial-order-groups.csv")
         df = pd.read_csv(event_log_absolute_path, sep=";")
         event_log = log_converter.apply(df, variant=log_converter.Variants.TO_EVENT_LOG)
-        partial_order_groups = partial_order_detection.get_partial_order_groups(event_log)
+        partial_order_groups = partial_order_detection.get_sorted_partial_order_groups(event_log)
 
         self.assertEqual(1, partial_order_groups['groups']['|a||cd||g|']['numberOfCases'])
 

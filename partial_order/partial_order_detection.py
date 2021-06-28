@@ -6,13 +6,13 @@ from pm4py.util.xes_constants import DEFAULT_NAME_KEY
 from pm4py.util.xes_constants import DEFAULT_TIMESTAMP_KEY
 
 
-def get_partial_orders_from_selected_file(request):
-    partial_order_groups = get_groups_file()
+def groups(request):
+    partial_order_groups = get_groups_data_structure()
 
     return JsonResponse(partial_order_groups, safe=False)
 
 
-def get_groups_file():
+def get_groups_data_structure():
     if len(settings.GROUPS) != 0:
         partial_order_groups = settings.GROUPS
 
@@ -22,7 +22,7 @@ def get_groups_file():
     else:
         df = log_converter.apply(settings.EVENT_LOG, variant=log_converter.Variants.TO_DATA_FRAME)
         df[DEFAULT_TIMESTAMP_KEY] = df[DEFAULT_TIMESTAMP_KEY].astype(str)
-        partial_order_groups = {'groups': get_partial_order_groups(df),
+        partial_order_groups = {'groups': get_sorted_partial_order_groups(df),
                                 'metadata': {
                                     'longestActivityName': settings.LONGEST_ACTIVITY_NAME,
                                     'colors': settings.COLORS,
@@ -33,7 +33,7 @@ def get_groups_file():
     return partial_order_groups
 
 
-def get_partial_order_groups(df):
+def get_sorted_partial_order_groups(df):
     df = df[[CASE_CONCEPT_NAME, DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY]]
     df = df.sort_values(by=[CASE_CONCEPT_NAME, DEFAULT_TIMESTAMP_KEY, DEFAULT_NAME_KEY])
     groups = {}
