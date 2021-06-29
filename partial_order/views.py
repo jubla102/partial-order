@@ -82,7 +82,10 @@ def save_and_export(request, group_id=None, combination_id=None):
         group = settings.GROUPS['groups'][group_id]
         combination = combinations_generation.get_order_combinations(group['events'])[int(combination_id)]['events']
         case_ids = group['caseIds']
-        delay = int(request.GET.get('delay'))
+        if request.GET.get('delay'):
+            delay = int(request.GET.get('delay'))
+        else:
+            delay = None
 
     return HttpResponse(
         template.render({'groupId': group_id,

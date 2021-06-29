@@ -66,7 +66,9 @@
             let minutes = document.getElementById("minutes").value
             let seconds = document.getElementById("seconds").value
 
-            if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+            let delay = getDelay()
+
+            if (delay === 0) {
                 display_delay_div.style.visibility = "visible"
                 display_delay.className = "text-danger"
                 display_delay.innerHTML = "Zero delay cannot be added"
@@ -74,12 +76,13 @@
                 display_delay_div.style.visibility = "visible"
                 display_delay.className = "text-success"
                 display_delay.innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
-                show_proceed_div();
+                document.getElementById('final_tab').href = `/partial-order/save-and-export/${groupId}/${combinationId}?delay=${delay}`
+                showProceed();
                 visualizeDelay();
             }
         }
 
-        function show_proceed_div() {
+        function showProceed() {
             document.getElementById("proceed-div").style.visibility = "visible"
         }
 
