@@ -40,19 +40,19 @@ def get_export_file_path():
 
 
 def generate_colors(activities_length):
-    if (activities_length > 10):
+    if activities_length > 10:
         color_palette = sns.color_palette(None, 10).as_hex()
         activities_length -= 10
     else:
         color_palette = sns.color_palette(None, activities_length).as_hex()
         return color_palette
-    if (activities_length > 10):
+    if activities_length > 10:
         color_palette = color_palette + sns.color_palette("pastel", 10).as_hex()
         activities_length -= 10
     else:
         color_palette = color_palette + sns.color_palette("pastel", activities_length).as_hex()
         return color_palette
-    if (activities_length >= 1):
+    if activities_length >= 1:
         color_palette = color_palette + sns.color_palette("bright", activities_length).as_hex()
         return color_palette
 
