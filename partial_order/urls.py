@@ -6,7 +6,7 @@ from partial_order import views
 urlpatterns = [
     # views for happy path
     path('groups', views.groups, name='groups'),
-    path('po-groups', partial_order_detection.get_partial_orders_from_selected_file, name='po-groups'),
+    path('po-groups', partial_order_detection.groups, name='po-groups'),
     path('combinations/<group_id>', views.combinations, name='combinations'),
     path('delays/<group_id>/<combination_id>', views.delays, name='delays'),
     path('save-and-export/<group_id>/<combination_id>', views.save_and_export, name='save_and_export'),

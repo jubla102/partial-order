@@ -4,6 +4,8 @@ import os
 import seaborn as sns
 from django.conf import settings
 
+MODIFIED_FILE_EXTENSION = '.modified.xes'
+
 
 def get_selected_file_path():
     event_logs_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
@@ -31,33 +33,26 @@ def get_meta_data():
             'textWidths': settings.TEXT_WIDTHS}
 
 
-def dupcheck(x):
-    for elem in x:
-        if x.count(elem) > 1:
-            return True
-    return False
-
-
 def get_export_file_path():
     export_file_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
-    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + '-modified.xes'
+    file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + MODIFIED_FILE_EXTENSION
     return os.path.join(export_file_path, file_name)
 
 
 def generate_colors(activities_length):
-    if (activities_length > 10):
+    if activities_length > 10:
         color_palette = sns.color_palette(None, 10).as_hex()
         activities_length -= 10
     else:
         color_palette = sns.color_palette(None, activities_length).as_hex()
         return color_palette
-    if (activities_length > 10):
+    if activities_length > 10:
         color_palette = color_palette + sns.color_palette("pastel", 10).as_hex()
         activities_length -= 10
     else:
         color_palette = color_palette + sns.color_palette("pastel", activities_length).as_hex()
         return color_palette
-    if (activities_length >= 1):
+    if activities_length >= 1:
         color_palette = color_palette + sns.color_palette("bright", activities_length).as_hex()
         return color_palette
 
