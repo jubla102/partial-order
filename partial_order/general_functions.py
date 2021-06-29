@@ -33,13 +33,6 @@ def get_meta_data():
             'textWidths': settings.TEXT_WIDTHS}
 
 
-def dupcheck(x):
-    for elem in x:
-        if x.count(elem) > 1:
-            return True
-    return False
-
-
 def get_export_file_path():
     export_file_path = os.path.join(settings.MEDIA_ROOT, "event_logs")
     file_name = os.path.splitext(settings.EVENT_LOG_NAME)[0] + MODIFIED_FILE_EXTENSION
