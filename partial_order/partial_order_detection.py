@@ -49,7 +49,7 @@ def check_for_partial_order(case, partial_order_groups):
         case.groupby(DEFAULT_TIMESTAMP_KEY).apply(lambda x: create_group_hash_list(x, events))
         key = ''.join(events)
 
-        case_id = case[CASE_CONCEPT_NAME][0]
+        case_id = case[CASE_CONCEPT_NAME].iloc[0]
         if key in partial_order_groups:
             partial_order_groups[key]['caseIds'].append(case_id)
 
