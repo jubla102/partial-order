@@ -133,18 +133,18 @@
     visibility: hidden;
 }
 
-#export {
+#export-btn {
     width: 75px;
     height: 38px;
     border-color: rgba(103, 0, 181, 0.1);
 }
 
-#export:hover {
+#export-btn:hover {
     background-color: rgba(103, 0, 181, 1);
     color: white;
 }
 
-#export:focus {
+#export-btn:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(103, 0, 181, 0.4);
 }
