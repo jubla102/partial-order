@@ -57,8 +57,9 @@
         function displayDelay() {
             let display_delay = document.getElementById("added-delay")
             let display_delay_div = document.getElementById("display-delay-div")
+            let proceed_div = document.getElementById("proceed-div")
 
-            let days = document.getElementById("days").value
+            days = document.getElementById("days").value
             if (days === "")
                 days = 0;
 
@@ -69,10 +70,12 @@
             let delay = getDelay()
 
             if (delay === 0) {
+                proceed_div.style.visibility = "hidden"
                 display_delay_div.style.visibility = "visible"
                 display_delay.className = "text-danger"
                 display_delay.innerHTML = "Zero delay cannot be added"
             } else {
+                proceed_div.style.visibility = "visible"
                 display_delay_div.style.visibility = "visible"
                 display_delay.className = "text-success"
                 display_delay.innerHTML = days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds";
