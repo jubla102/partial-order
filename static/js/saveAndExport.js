@@ -52,6 +52,8 @@ function save() {
         discardButton.disabled = true;
         saveButton.disabled = true;
         end.hidden = false
+        document.getElementById('combinations_tab').href = `/partial-order/combinations`
+        document.getElementById('delays_tab').href = `/partial-order/delays`
     }
 }
 
