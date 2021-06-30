@@ -36,7 +36,9 @@
         </div>
         <br>
         {% if log_name != ':notset:' and groups %}
-            <p class="text-success info-subtitle"><b>'{{ log_name }}' is being used as the input.</b></p>
+            <p class="text-success info-subtitle"><b>
+                '{{ log_name }}' contains {{ groups|length }} partial order
+                group{{ groups|length|pluralize:"s" }}.</b></p>
         {% elif log_name != ':notset:' and not groups and not modifiedFileExists %}
             <p class="text-danger info-subtitle"><b>The event log {{ log_name }} does not contain any partial
                 orders.</b></p>
