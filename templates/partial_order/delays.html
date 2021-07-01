@@ -14,11 +14,6 @@
 
         if (groupId !== 'None') {
             document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
-        } else {
-            document.getElementById('combinations_tab').href = `/partial-order/combinations`
-        }
-
-        if (groupId !== 'None') {
             if (combinationId !== 'None') {
                 let delay = getDelay()
                 if (delay !== 0) {
@@ -31,6 +26,7 @@
             }
         } else {
             document.getElementById('final_tab').href = `/partial-order/save-and-export`
+            document.getElementById('combinations_tab').href = `/partial-order/combinations`
         }
 
         let ids = ['groups_tab', 'combinations_tab', 'delays_tab', 'final_tab'];
