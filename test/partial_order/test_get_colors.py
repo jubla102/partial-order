@@ -9,31 +9,19 @@ class TestGetColors(TestCase):
     """
 
     def test_get_colors_6(self):
-        """
-        Mock activities list with 6 activities
-        """
-        mock_activities = ['A', 'BB', 'C', 'DDD', 'EEEEEEE', 'FFFF']
+        activities = ['A', 'BB', 'C', 'DDD', 'EEEEEEE', 'FFFF']
+        colors = general_functions.get_colors(activities)
 
-        colors = general_functions.get_colors(mock_activities)
-
-        self.assertEqual(len(mock_activities), len(colors))
+        self.assertEqual(len(activities), len(colors))
 
     def test_get_colors_10(self):
-        """
-        Mock activities list with 10 activities
-        """
-        mock_activities = ['A', 'BB', 'C', 'DDD', 'EEEEEEE', 'FFFF', 'SSDA', 'AA', 'DW', 'EFG']
+        activities = ['A', 'BB', 'C', 'DDD', 'EEEEEEE', 'FFFF', 'SSDA', 'AA', 'DW', 'EFG']
+        colors = general_functions.get_colors(activities)
 
-        colors = general_functions.get_colors(mock_activities)
-
-        self.assertEqual(len(mock_activities), len(colors))
+        self.assertEqual(len(activities), len(colors))
 
     def test_get_colors_12(self):
-        """
-        Mock activities list with 6 activities
-        """
-        mock_activities = ['A', 'BB', 'C', 'DDD', 'EEEEEEE', 'FFFF', 'SSDA', 'AA', 'DW', 'EFG', '123', 'k s']
+        activities = ['A', 'BB', 'C', 'DDD', 'EEEEEEE', 'FFFF', 'SSDA', 'AA', 'DW', 'EFG', '123', 'k s']
+        colors = general_functions.get_colors(activities)
 
-        colors = general_functions.get_colors(mock_activities)
-
-        self.assertEqual(len(mock_activities), len(colors))
+        self.assertEqual(len(activities), len(colors))
