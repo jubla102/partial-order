@@ -24,7 +24,7 @@ axios.get('/partial-order/metadata')
 function drawTotalOrders(combinationsNumber, events, colorMap) {
     let height = EVENT_HEIGHT
     let width = events.length * EVENT_WIDTH + (events.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
-    let svg = d3.selectAll(`#combination-${combinationsNumber}`).append("svg").attr("width", width).attr("height", height)
+    let svg = d3.selectAll(`#combination-${combinationsNumber}`).append('svg').attr('width', width).attr('height', height)
 
     $(`#combination-${combinationsNumber}`).click(function () {
         location.href = `/partial-order/delays/${groupId}/${combinationsNumber}`

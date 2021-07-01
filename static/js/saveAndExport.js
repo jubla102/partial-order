@@ -21,7 +21,7 @@ axios.get('/partial-order/metadata')
                 EVENT_WIDTH = longestActivityWidth + 20
             }
             width = combination.length * EVENT_WIDTH + (combination.length - 1) * GAP + EVENT_DIAMETER + STROKE_SPACE
-            svg = d3.selectAll(`#combination`).append("svg").attr("width", width).attr("height", height)
+            svg = d3.selectAll(`#combination`).append('svg').attr('width', width).attr('height', height)
             drawTotalOrder(combination, colorMap)
         }
     );
@@ -35,7 +35,7 @@ function save() {
     combination.forEach(event => {
         events.push(event[ACTIVITY_KEY])
     })
-    if (confirm("The order will be saved and added to the original log")) {
+    if (confirm('The order will be saved and added to the original log')) {
         $('#flag_modal').modal({backdrop: 'static', keyboard: false})
         axios.post('/partial-order/save-delay', {
             'groupId': JSON.stringify(groupId),
