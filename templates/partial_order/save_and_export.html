@@ -11,12 +11,17 @@
     <script type="text/javascript">
         let groupId = '{{ groupId }}'
         let combinationId = '{{ combinationId }}'
-        document.getElementById('combinations_tab').href = `/partial-order/combinations/${groupId}`
 
-        if (combinationId !== 'None') {
-            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
+        if (groupId === 'None') {
+            document.getElementById('delays_tab').href = `/partial-order/delays`
+            document.getElementById('combinations_tab').href = `/partial-order/combinations`
         } else {
-            document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+            if (combinationId !== 'None') {
+                document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}/${combinationId}`
+            } else {
+                document.getElementById('delays_tab').href = `/partial-order/delays/${groupId}`
+            }
+            document.getElementById('combinations_tab').href = `/partial-order/combinations/${combinationId}`
         }
 
         let ids = ["groups_tab", "combinations_tab", "delays_tab", "final_tab"];
